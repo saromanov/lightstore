@@ -9,7 +9,6 @@ import
 	//"runtime"
 	//"errors"
 )
-
 const 
 (
 	param = 0
@@ -32,7 +31,7 @@ func Insert(key string, data interface{}){
 }
 
 func Get(key string){
-
+	
 }
 
 type Store struct{
@@ -48,7 +47,7 @@ type User struct {
 }
 
 
-func (st*Store) Get() {
+func (st*Store) Get(value string) {
 	st.lock.Lock()
 	defer st.lock.Unlock()
 
@@ -65,13 +64,18 @@ func (st*Store) Set(key string){
 	case Dict:
 		fmt.Println("A")
 	default:
-		ust := &User{0.6, "Another"}
+		ust := &User{0.6, key}
 		st.mainstore.(*skiplist.SkipList).Insert(ust)
 	}
 }
 
-func (*Store) Remove(){
-
+func (st*Store) Remove(key string){
+	switch st.mainstore.(type){
+	case Dict:
+		fmt.Println("not implemented yet")
+	default:
+		st.mainstore.(*skiplist.SkipList).Delete(key)
+	}
 }
 
 func (st*Store) CloseLightStore(){
@@ -125,9 +129,22 @@ func test_sync(){
 }
 
 func main() {
+	/*fmt.Println(runtime.NumCPU())
+	fmt.Println(runtime.NumGoroutine())*/
+	/*us := make([]*User, 7)
+    us[0] = &User{6.6, "hi"}
+    us[1] = &User{3.1, "hi"}
+    us[2] = &User{4.5, "hi"}
+    us[3] = &User{7.3, "hi"}
+	sl := skiplist.New()
+	sl.Insert(us[0])
+	sl.Insert(us[1])
+	sl.Insert(us[2])
+	sl.Insert(us[3])*/
 
 	st:= InitLightStore(Settings{innerdata: "skiplist"})
 	st.Set("first")
-	st.Get()
+	st.Set("New value")
+	st.Get("first")
 	st.CloseLightStore()
 }
