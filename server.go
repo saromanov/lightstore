@@ -8,24 +8,28 @@ import
 	"github.com/ant0ine/go-json-rest/rest"
 	"log"
 	"sync"
-	"fmt"
 
 )
 var lock = sync.RWMutex{}
 var store = new(Store)
 
 type Item struct{
-	key string
-	value interface{}
+	Key string
+	Value interface{}
 }
 
 func GetbyKey(w rest.ResponseWriter, r *rest.Request){
-	lock.RLock()
-	defer lock.RUnlock()
 
 	key := r.PathParam("key")
+	lock.RLock()
+	value := store.Get(key)
+	if value == nil {
+		rest.Error(w, "Value code required", 400)
+		return
+	}
+	lock.RUnlock()
 
-	w.WriteJson(store.Get(key))
+	w.WriteJson(value)
 }
 
 func StoreData(w rest.ResponseWriter, r *rest.Request){
@@ -36,8 +40,20 @@ func StoreData(w rest.ResponseWriter, r *rest.Request){
 		return
 	}
 
-	fmt.Println(item.key)
-	w.WriteJson(&item)
+	lock.RLock()
+	if item.Key == "" {
+		rest.Error(w, "Key code required", 400)
+		return
+	}
+
+	if item.Value == nil {
+		rest.Error(w, "Value code required", 400)
+		return
+	}
+	store.Set(item.Key, item.Value)
+	lock.RUnlock()
+
+	w.WriteJson("Element was append")
 }
 
 func DeleteData(w rest.ResponseWriter, r *rest.Request){
@@ -48,7 +64,7 @@ func InitServer(typestore string){
 	api := rest.NewApi()
 	api.Use(rest.DefaultDevStack...)
 	router, err := rest.MakeRouter(
-		&rest.Route{"GET", "/get", GetbyKey},
+		&rest.Route{"GET", "/get/:key", GetbyKey},
 		&rest.Route{"POST", "/set",StoreData},
 		&rest.Route{"POST", "/remove", DeleteData},
 	)
