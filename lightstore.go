@@ -22,16 +22,6 @@ type Settings struct {
 	Innerdata string
 }
 
-type Dict struct {
-	Value map[string] interface{}
-}
-
-func Newdict()(*Dict){
-	d := new(Dict)
-	d.Value = make(map[string] interface{})
-	return new (Dict)
-}
-
 
 type Store struct{
 	items int
@@ -40,26 +30,18 @@ type Store struct{
 	lock *sync.Mutex
 }
 
-type User struct {
-    score float64
-    id    string
-}
-
-type Value struct {
-	id float64
-	key string
-	value interface {}
-}
 func (st*Store) Get(value string)interface{} {
 	st.lock.Lock()
 	defer st.lock.Unlock()
-
 	switch st.mainstore.(type){
-	case Dict:
-		fmt.Println("not implement yet")
-	case BMtree:
-		fmt.Println("This is bmtree")
-	default:
+	case *Dict:
+		result, ok := st.mainstore.(*Dict).Get(value)
+		if ok {
+			return result;
+		}
+	case *BMtree:
+		fmt.Println("Not implemented yet")
+	case *skiplist.SkipList:
 		result, ok := st.mainstore.(*skiplist.SkipList).Get(value)
 		if ok {
 			return result
@@ -70,9 +52,9 @@ func (st*Store) Get(value string)interface{} {
 
 func (st*Store) Set(key string, value interface{}){
 	switch st.mainstore.(type){
-	case Dict:
-		fmt.Println("A")
-	default:
+	case *Dict:
+		st.mainstore.(*Dict).Set(key, value)
+	case *skiplist.SkipList:
 		st.mainstore.(*skiplist.SkipList).Set(key, value)
 	}
 }
@@ -81,8 +63,8 @@ func (st*Store) Remove(key string){
 	switch st.mainstore.(type){
 	case Dict:
 		fmt.Println("not implemented yet")
-	/*default:
-		st.mainstore.(*skiplist.SkipList).Delete(key)*/
+	default:
+		st.mainstore.(*skiplist.SkipList).Delete(key)
 	}
 }
 
@@ -98,14 +80,17 @@ func InitLightStore(settings Settings)(*Store){
 	store := new(Store)
 	fmt.Println("Start working: ", time.Now())
 	store.items = 0;
+	/* SkipList datastructure as main store */
 	if settings.Innerdata =="skiplist"{
 		store.mainstore = skiplist.NewStringMap()
 	}
 
+	/* Simple map as main store */
 	if settings.Innerdata =="dict"{
-		store.mainstore = Newdict()
+		store.mainstore = NewDict()
 	}
 
+	/*B-tree structure as main store */
 	if settings.Innerdata == "b-tree" {
 		store.mainstore = InitBMTree()
 	}
