@@ -18,6 +18,7 @@ type Item struct{
 	Value interface{}
 }
 
+
 func GetbyKey(w rest.ResponseWriter, r *rest.Request){
 
 	key := r.PathParam("key")
@@ -32,6 +33,7 @@ func GetbyKey(w rest.ResponseWriter, r *rest.Request){
 	w.WriteJson(value)
 }
 
+//Append {Key:value} to dict
 func StoreData(w rest.ResponseWriter, r *rest.Request){
 	item := Item{}
 	err := r.DecodeJsonPayload(&item)
@@ -56,23 +58,47 @@ func StoreData(w rest.ResponseWriter, r *rest.Request){
 	w.WriteJson("Element was append")
 }
 
-func DeleteData(w rest.ResponseWriter, r *rest.Request){
-
+//Get key from store and immediately remove
+func GetbyKeyAndRemove(w rest.ResponseWriter, r *rest.Request){
+	key := r.PathParam("key")
+	lock.RLock()
+	value := store.Get(key)
+	if value == nil {
+		rest.Error(w, "Value code required", 400)
+		return
+	}
+	store.Remove(key)
+	lock.RUnlock()
+	w.WriteJson(value)
 }
 
-func InitServer(typestore string){
+func DeleteData(w rest.ResponseWriter, r *rest.Request){
+	key := r.PathParam("key")
+	lock.RLock()
+	store.Remove(key)
+	lock.RUnlock()
+	w.WriteJson("Element was removed")
+}
+
+
+func InitLightStore(typestore string, addr string){
+	/*
+		Type store can be skiplist or b-tree or simple dict
+	*/
 	api := rest.NewApi()
 	api.Use(rest.DefaultDevStack...)
 	router, err := rest.MakeRouter(
 		&rest.Route{"GET", "/get/:key", GetbyKey},
 		&rest.Route{"POST", "/set",StoreData},
-		&rest.Route{"POST", "/remove", DeleteData},
+		&rest.Route{"DELETE", "/remove/:key", DeleteData},
+		//Get and delete
+		&rest.Route{"POST", "/gad", GetbyKeyAndRemove},
 	)
 
 	if err != nil {
 		log.Fatal(err)
 	}
-	store = InitLightStore(Settings{Innerdata: typestore})
+	store = InitStore(Settings{Innerdata: typestore})
 	api.SetApp(router)
-	http.ListenAndServe(":8080", api.MakeHandler())
+	http.ListenAndServe(addr, api.MakeHandler())
 }

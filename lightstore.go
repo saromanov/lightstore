@@ -62,7 +62,7 @@ func (st*Store) Set(key string, value interface{}){
 func (st*Store) Remove(key string){
 	switch st.mainstore.(type){
 	case Dict:
-		fmt.Println("not implemented yet")
+		st.mainstore.(*Dict).Remove(key)
 	default:
 		st.mainstore.(*skiplist.SkipList).Delete(key)
 	}
@@ -72,9 +72,9 @@ func (st*Store) CloseLightStore(){
 	fmt.Println("End working: ", time.Now())
 }
 
-func InitLightStore(settings Settings)(*Store){
+func InitStore(settings Settings)(*Store){
 	/*
-		Type store can be skiplist or b-tree
+		Type store can be skiplist or b-tree or simple dict
 	*/
 	mutex := &sync.Mutex{}
 	store := new(Store)
