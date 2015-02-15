@@ -3,8 +3,6 @@ package lightstore
 import
 (
 	"net/http"
-	/*"net/url"
-	"time"*/
 	"github.com/ant0ine/go-json-rest/rest"
 	"log"
 	"sync"
@@ -16,6 +14,20 @@ var store = new(Store)
 type Item struct{
 	Key string
 	Value interface{}
+}
+
+func checkData(w rest.ResponseWriter, item Item) bool {
+	if item.Key == "" {
+		rest.Error(w, "Key code required", 400)
+		return false
+	}
+
+	if item.Value == nil {
+		rest.Error(w, "Value code required", 400)
+		return false
+	}
+
+	return true
 }
 
 
@@ -43,16 +55,10 @@ func StoreData(w rest.ResponseWriter, r *rest.Request){
 	}
 
 	lock.RLock()
-	if item.Key == "" {
-		rest.Error(w, "Key code required", 400)
-		return
-	}
 
-	if item.Value == nil {
-		rest.Error(w, "Value code required", 400)
-		return
+	if checkData(w, item){
+		store.Set(item.Key, item.Value)
 	}
-	store.Set(item.Key, item.Value)
 	lock.RUnlock()
 
 	w.WriteJson("Element was append")
@@ -80,6 +86,43 @@ func DeleteData(w rest.ResponseWriter, r *rest.Request){
 	w.WriteJson("Element was removed")
 }
 
+//Append data to store by key
+func AppendData(w rest.ResponseWriter, r *rest.Request){
+	item := Item{}
+	err := r.DecodeJsonPayload(&item)
+	if err != nil {
+		rest.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	lock.RLock()
+	value := store.Get(item.Key)
+	if value == nil {
+		data := []interface{}{item.Value}
+		data = append(data, item.Value)
+		store.Set(item.Key, data)
+		w.WriteJson("Data was append and create")
+	} else {
+		items := store.Get(item.Key)
+		switch items.(type){
+		case []interface{}:
+			items = append(items.([]interface{}), item.Value)
+			store.Set(item.Key, items)
+			w.WriteJson("Data was append to list")
+		default:
+			data := []interface{}{store.Get(item.Key)}
+			data = append(data, item.Value)
+			store.Set(item.Key, data)
+			w.WriteJson("Data was append and new list was created")
+		}
+	}
+
+	lock.RUnlock()
+}
+
+func PingPong(w rest.ResponseWriter, r *rest.Request){
+	w.WriteJson("Pong")
+}
 
 func InitLightStore(typestore string, addr string){
 	/*
@@ -93,6 +136,10 @@ func InitLightStore(typestore string, addr string){
 		&rest.Route{"DELETE", "/remove/:key", DeleteData},
 		//Get and delete
 		&rest.Route{"POST", "/gad", GetbyKeyAndRemove},
+		//Append data to list
+		&rest.Route{"POST", "/append", AppendData},
+		//Ping the server
+		&rest.Route{"GET", "/ping", PingPong},
 	)
 
 	if err != nil {

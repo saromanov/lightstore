@@ -15,6 +15,15 @@ type BMtree struct{
 	root[]Node
 }
 
+//In the case, in key is string
+func CompareKey(str1, str2 string)string{
+	if(str1[0] > str2[0]){
+		return str1
+	}else {
+		return str2
+	}
+}
+
 func InitBMTree()(*BMtree){
 	bmt := new(BMtree)
 	return bmt
@@ -64,7 +73,7 @@ func SortList(item []int)([]int) {
 /*
 	Append new element
 */
-func(node *Node) add(item interface{}){
+func(node *Node) Add(key string, item interface{}){
 	//Для добавления ключа нужно разбитие дерева
 	if(node.GetKeyMaxDegree() > node.degree){
 		//Node is full, split on 2 parts
