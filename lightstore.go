@@ -28,6 +28,14 @@ type Store struct{
 	mainstore interface{}
 	mainstorename string
 	lock *sync.Mutex
+	stat *Statistics
+}
+
+type Statistics struct {
+	//Total number of reads
+	num_reads int
+	//Total number of writes
+	num_writes int
 }
 
 func (st*Store) Get(value string)interface{} {
@@ -37,6 +45,7 @@ func (st*Store) Get(value string)interface{} {
 	case *Dict:
 		result, ok := st.mainstore.(*Dict).Get(value)
 		if ok {
+			st.stat.num_reads += 1
 			return result;
 		}
 	case *BMtree:
@@ -44,6 +53,7 @@ func (st*Store) Get(value string)interface{} {
 	case *skiplist.SkipList:
 		result, ok := st.mainstore.(*skiplist.SkipList).Get(value)
 		if ok {
+			st.stat.num_reads += 1
 			return result
 		}
 	}
@@ -57,6 +67,7 @@ func (st*Store) Set(key string, value interface{}){
 	case *skiplist.SkipList:
 		st.mainstore.(*skiplist.SkipList).Set(key, value)
 	}
+	st.stat.num_writes += 1
 }
 
 func (st*Store) Remove(key string){
@@ -66,6 +77,11 @@ func (st*Store) Remove(key string){
 	default:
 		st.mainstore.(*skiplist.SkipList).Delete(key)
 	}
+}
+
+//Return statistics of usage
+func (st*Store) Stat()(int,int){
+	return st.stat.num_writes, st.stat.num_reads
 }
 
 func (st*Store) CloseLightStore(){
@@ -95,5 +111,6 @@ func InitStore(settings Settings)(*Store){
 		store.mainstore = InitBMTree()
 	}
 	store.lock = mutex
+	store.stat = new(Statistics)
 	return store
 }

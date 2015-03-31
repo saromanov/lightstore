@@ -120,6 +120,16 @@ func AppendData(w rest.ResponseWriter, r *rest.Request){
 	lock.RUnlock()
 }
 
+
+//Return statistics of usage
+func Show_Statistics(w rest.ResponseWriter, r *rest.Request){
+	lock.RLock()
+	num_writes, num_reads := store.Stat()
+	w.WriteJson(map[string]int{"Total number of writes": num_writes, "Total number of reads": num_reads})
+	lock.RUnlock()
+}
+
+
 func PingPong(w rest.ResponseWriter, r *rest.Request){
 	w.WriteJson("Pong")
 }
@@ -140,6 +150,8 @@ func InitLightStore(typestore string, addr string){
 		&rest.Route{"POST", "/append", AppendData},
 		//Ping the server
 		&rest.Route{"GET", "/ping", PingPong},
+		//Return short statistics
+		&rest.Route{"GET", "/stat", Show_Statistics},
 	)
 
 	if err != nil {
