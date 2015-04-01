@@ -124,8 +124,8 @@ func AppendData(w rest.ResponseWriter, r *rest.Request){
 //Return statistics of usage
 func Show_Statistics(w rest.ResponseWriter, r *rest.Request){
 	lock.RLock()
-	num_writes, num_reads := store.Stat()
-	w.WriteJson(map[string]int{"Total number of writes": num_writes, "Total number of reads": num_reads})
+	stat := store.Stat()
+	w.WriteJson(map[string]int{"Total number of writes": stat.num_writes, "Total number of reads": stat.num_reads})
 	lock.RUnlock()
 }
 

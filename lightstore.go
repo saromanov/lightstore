@@ -36,6 +36,8 @@ type Statistics struct {
 	num_reads int
 	//Total number of writes
 	num_writes int
+	//Start time
+	start time.Time
 }
 
 func (st*Store) Get(value string)interface{} {
@@ -80,8 +82,8 @@ func (st*Store) Remove(key string){
 }
 
 //Return statistics of usage
-func (st*Store) Stat()(int,int){
-	return st.stat.num_writes, st.stat.num_reads
+func (st*Store) Stat()*Statistics{
+	return st.stat
 }
 
 func (st*Store) CloseLightStore(){
@@ -94,7 +96,8 @@ func InitStore(settings Settings)(*Store){
 	*/
 	mutex := &sync.Mutex{}
 	store := new(Store)
-	fmt.Println("Start working: ", time.Now())
+	starttime := time.Now()
+	fmt.Println("Lightstore is working: ", starttime)
 	store.items = 0;
 	/* SkipList datastructure as main store */
 	if settings.Innerdata =="skiplist"{
@@ -112,5 +115,6 @@ func InitStore(settings Settings)(*Store){
 	}
 	store.lock = mutex
 	store.stat = new(Statistics)
+	store.stat.start = starttime
 	return store
 }
