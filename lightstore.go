@@ -62,6 +62,21 @@ func (st*Store) Get(value string)interface{} {
 	return nil
 }
 
+//Get many kayes from list
+func (st*Store) GetMany(keys[] string) interface{} {
+	result := make([] interface{}, len(keys))
+	st.lock.Lock()
+	defer st.lock.Unlock()
+	if(len(keys) > 0) {
+		for i := 0; i < len(keys); i++ {
+			result = append(result, st.Get(keys[i]))
+		}
+
+		return result
+	}
+	return nil
+}
+
 func (st*Store) Set(key string, value interface{}){
 	switch st.mainstore.(type){
 	case *Dict:
@@ -79,6 +94,16 @@ func (st*Store) Remove(key string){
 	default:
 		st.mainstore.(*skiplist.SkipList).Delete(key)
 	}
+}
+
+func (st*Store) Find(key string) interface{} {
+	st.lock.Lock()
+	defer st.lock.Unlock()
+	switch st.mainstore.(type){
+
+	}
+
+	return nil
 }
 
 //Return statistics of usage
