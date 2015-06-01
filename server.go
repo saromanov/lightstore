@@ -45,6 +45,10 @@ func GetbyKey(w rest.ResponseWriter, r *rest.Request){
 	w.WriteJson(value)
 }
 
+func GetbyKeyMany(w rest.ResponseWriter, r *rest.Request) {
+	
+}
+
 //Append {Key:value} to dict
 func StoreData(w rest.ResponseWriter, r *rest.Request){
 	item := Item{}
@@ -129,6 +133,11 @@ func Show_Statistics(w rest.ResponseWriter, r *rest.Request){
 	lock.RUnlock()
 }
 
+//Find by key
+func Find(w rest.ResponseWriter, r *rest.Request) {
+
+}
+
 
 func PingPong(w rest.ResponseWriter, r *rest.Request){
 	w.WriteJson("Pong")
@@ -151,7 +160,7 @@ func InitLightStore(typestore string, addr string){
 		//Ping the server
 		&rest.Route{"GET", "/ping", PingPong},
 		//Return short statistics
-		&rest.Route{"GET", "/stat", Show_Statistics},
+		&rest.Route{"GET", "/_stat", Show_Statistics},
 	)
 
 	if err != nil {
