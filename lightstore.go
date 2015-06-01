@@ -11,7 +11,7 @@ import
 )
 
 
-//Basic implmentation of key-value store
+//Basic implmentation of key-value store(without assotiation with any db name)
 
 const 
 (
@@ -25,6 +25,7 @@ type Settings struct {
 
 type Store struct{
 	items int
+	dbs map[string]*DB
 	mainstore interface{}
 	mainstorename string
 	lock *sync.Mutex
@@ -38,14 +39,47 @@ type Statistics struct {
 	num_writes int
 	//Start time
 	start time.Time
+	//Number of active db
+	dbnum int
+}
+
+func (st*Store) CheckExistDB(value string) bool {
+	_, ok := st.dbs[value]
+	return ok
+}
+
+func (st*Store) CreateDB(dbname string) {
+	st.dbs[dbname] = CreateNewDB(dbname)
 }
 
 func (st*Store) Get(value string)interface{} {
+	return st.get(value, "")
+}
+
+func (st*Store) GetFromDB(dbname string, value string) interface{} {
+	return st.get(value, dbname)
+}
+
+//if dbname is not equal "", get data from db with name dbname
+func (st*Store) get(value string, dbname string) interface{} {
+	mainstore := st.mainstore
+	if dbname != ""{
+		//check db availability
+		dbdata, ok := st.dbs[dbname]
+		if !ok {
+			log.Fatal(fmt.Sprintf("db with name %s is not found", dbname))
+		} else if !dbdata.isactive{
+			log.Fatal(fmt.Sprintf("db with name %s is not active", dbname))
+		} else {
+			mainstore = dbdata.mainstore
+		}
+	}
+
 	st.lock.Lock()
 	defer st.lock.Unlock()
-	switch st.mainstore.(type){
+	switch mainstore.(type){
 	case *Dict:
-		result, ok := st.mainstore.(*Dict).Get(value)
+		result, ok := mainstore.(*Dict).Get(value)
 		if ok {
 			st.stat.num_reads += 1
 			return result;
@@ -53,13 +87,15 @@ func (st*Store) Get(value string)interface{} {
 	case *BMtree:
 		fmt.Println("Not implemented yet")
 	case *skiplist.SkipList:
-		result, ok := st.mainstore.(*skiplist.SkipList).Get(value)
+		result, ok := mainstore.(*skiplist.SkipList).Get(value)
 		if ok {
 			st.stat.num_reads += 1
 			return result
 		}
 	}
+
 	return nil
+
 }
 
 //Get many kayes from list
@@ -77,14 +113,50 @@ func (st*Store) GetMany(keys[] string) interface{} {
 	return nil
 }
 
-func (st*Store) Set(key string, value interface{}){
-	switch st.mainstore.(type){
+
+func (st*Store) Set(key string, value interface{}) bool{
+	return st.set("", key, value)
+}
+
+func (st*Store) SetinDB(dbname string, key string, value interface{}) bool{
+	return st.set(dbname, key, value)
+}
+
+func (st*Store) set(dbname string, key string, value interface{}) bool{
+	st.lock.Lock()
+	defer st.lock.Unlock()
+	mainstore := st.mainstore
+	if dbname != ""{
+		//check db availability
+		dbdata, ok := st.dbs[dbname]
+		if !ok {
+			log.Info(fmt.Sprintf("db with name %s is not found", dbname))
+			return false
+		} else if !dbdata.isactive{
+			log.Info(fmt.Sprintf("db with name %s is not active", dbname))
+			return false
+		} else if dbdata.limit != -1 && (dbdata.limit - dbdata.datacount) == 0 {
+			log.Info(fmt.Sprintf("db with name %s not availability to write, because contains maxumum possible number of data objrct"))
+			return false
+		} else {
+			mainstore = dbdata.mainstore
+		}
+	}
+
+	switch mainstore.(type){
 	case *Dict:
-		st.mainstore.(*Dict).Set(key, value)
+		mainstore.(*Dict).Set(key, value)
 	case *skiplist.SkipList:
-		st.mainstore.(*skiplist.SkipList).Set(key, value)
+		mainstore.(*skiplist.SkipList).Set(key, value)
+	}
+
+	if dbname != "" {
+		dbdata, _ := st.dbs[dbname]
+		dbdata.datacount += 1
 	}
 	st.stat.num_writes += 1
+	return true
+
 }
 
 func (st*Store) Remove(key string){
@@ -138,6 +210,7 @@ func InitStore(settings Settings)(*Store){
 	if settings.Innerdata == "b-tree" {
 		store.mainstore = InitBMTree()
 	}
+	store.dbs = make(map[string]*DB)
 	store.lock = mutex
 	store.stat = new(Statistics)
 	store.stat.start = starttime

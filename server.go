@@ -7,6 +7,7 @@ import
 	"github.com/op/go-logging"
 	"sync"
 	"os"
+	"fmt"
 
 )
 var lock = sync.RWMutex{}
@@ -42,7 +43,21 @@ func GetbyKey(w rest.ResponseWriter, r *rest.Request){
 		rest.Error(w, "Value code required", 400)
 		return
 	}
-	lock.RUnlock()
+	defer lock.RUnlock()
+
+	w.WriteJson(value)
+}
+
+func GetbyKeyFromDB(w rest.ResponseWriter, r *rest.Request) {
+	dbname := r.PathParam("db")
+	key := r.PathParam("key")
+	lock.RLock()
+	value := store.GetFromDB(dbname, key)
+	if value == nil {
+		rest.Error(w, "Value code required", 400)
+		return
+	}
+	defer lock.RUnlock()
 
 	w.WriteJson(value)
 }
@@ -67,9 +82,39 @@ func StoreData(w rest.ResponseWriter, r *rest.Request){
 			store.Set(item.Key, item.Value)
 		}
 	}()
-	lock.RUnlock()
+	defer lock.RUnlock()
 
 	w.WriteJson("Element was append")
+}
+
+func StoreDataToDB(w rest.ResponseWriter, r *rest.Request) {
+	dbname := r.PathParam("db")
+	item := Item{}
+	err := r.DecodeJsonPayload(&item)
+	if err != nil {
+		rest.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	lock.RLock()
+	go func(){
+		if checkData(w, item){
+			log.Info(fmt.Sprintf("Store data in db %s", dbname))
+			store.SetinDB(dbname, item.Key, item.Value)
+		}
+	}()
+	lock.RUnlock()
+
+	w.WriteJson(fmt.Sprintf("Element was append in db %s", dbname))
+
+}
+
+
+func CreateDB(w rest.ResponseWriter, r *rest.Request) {
+	log.Info("Try to create new db")
+	db := r.PathParam("db")
+	store.CreateDB(db)
+	w.WriteJson(fmt.Sprintf("db with the name %s was created", db))
 }
 
 //Get key from store and immediately remove
@@ -161,6 +206,7 @@ func LogConfigure(path string){
 	logbackend := logging.NewLogBackend(logfile, "",0)
 	logging.SetBackend(logging.NewLogBackend(os.Stdout,"",0), logbackend)
 }
+
 func InitLightStore(typestore string, addr string){
 	/*
 		Type store can be skiplist or b-tree or simple dict
@@ -171,7 +217,10 @@ func InitLightStore(typestore string, addr string){
 	api.Use(rest.DefaultDevStack...)
 	router, err := rest.MakeRouter(
 		&rest.Route{"GET", "/get/:key", GetbyKey},
+		&rest.Route{"GET", "/dbget/:db/:key", GetbyKeyFromDB},
 		&rest.Route{"POST", "/set",StoreData},
+		&rest.Route{"POST", "/create/:db", CreateDB},
+		&rest.Route{"POST", "/set/:db", StoreDataToDB},
 		&rest.Route{"DELETE", "/remove/:key", DeleteData},
 		//Get and delete
 		&rest.Route{"POST", "/gad", GetbyKeyAndRemove},
