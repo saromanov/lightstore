@@ -2,7 +2,6 @@
 
 package lightstore
 
-
 type DB struct {
 	//db name
 	dbtitle string
@@ -16,16 +15,15 @@ type DB struct {
 	datacount int
 	//Main store of db
 	mainstore interface{}
-
 }
 
 //CreateNewDB provides new DB object
-func CreateNewDB(name string)*DB {
+func CreateNewDB(name string) *DB {
 	return &DB{name, -1, false, true, 0, NewDict()}
 }
 
 //SetLimit provides set maximum number of data in this db
-func (db *DB)SetLimit(limit int) {
+func (db *DB) SetLimit(limit int) {
 	db.limit = limit
 }
 

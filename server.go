@@ -1,21 +1,20 @@
 package lightstore
 
-import
-(
-	"net/http"
+import (
+	"fmt"
 	"github.com/ant0ine/go-json-rest/rest"
 	"github.com/op/go-logging"
-	"sync"
+	"net/http"
 	"os"
-	"fmt"
-
+	"sync"
 )
+
 var lock = sync.RWMutex{}
 var store = new(Store)
 var log = logging.MustGetLogger("lightstore_log")
 
-type Item struct{
-	Key string
+type Item struct {
+	Key   string
 	Value interface{}
 }
 
@@ -33,8 +32,7 @@ func checkData(w rest.ResponseWriter, item Item) bool {
 	return true
 }
 
-
-func GetbyKey(w rest.ResponseWriter, r *rest.Request){
+func GetbyKey(w rest.ResponseWriter, r *rest.Request) {
 
 	key := r.PathParam("key")
 	lock.RLock()
@@ -63,11 +61,11 @@ func GetbyKeyFromDB(w rest.ResponseWriter, r *rest.Request) {
 }
 
 func GetbyKeyMany(w rest.ResponseWriter, r *rest.Request) {
-	
+
 }
 
 //Append {Key:value} to dict
-func StoreData(w rest.ResponseWriter, r *rest.Request){
+func StoreData(w rest.ResponseWriter, r *rest.Request) {
 	item := Item{}
 	err := r.DecodeJsonPayload(&item)
 	if err != nil {
@@ -76,8 +74,8 @@ func StoreData(w rest.ResponseWriter, r *rest.Request){
 	}
 
 	lock.RLock()
-	go func(){
-		if checkData(w, item){
+	go func() {
+		if checkData(w, item) {
 			log.Info("Store data")
 			store.Set(item.Key, item.Value)
 		}
@@ -97,8 +95,8 @@ func StoreDataToDB(w rest.ResponseWriter, r *rest.Request) {
 	}
 
 	lock.RLock()
-	go func(){
-		if checkData(w, item){
+	go func() {
+		if checkData(w, item) {
 			log.Info(fmt.Sprintf("Store data in db %s", dbname))
 			store.SetinDB(dbname, item.Key, item.Value)
 		}
@@ -109,7 +107,6 @@ func StoreDataToDB(w rest.ResponseWriter, r *rest.Request) {
 
 }
 
-
 func CreateDB(w rest.ResponseWriter, r *rest.Request) {
 	log.Info("Try to create new db")
 	db := r.PathParam("db")
@@ -118,7 +115,7 @@ func CreateDB(w rest.ResponseWriter, r *rest.Request) {
 }
 
 //Get key from store and immediately remove
-func GetbyKeyAndRemove(w rest.ResponseWriter, r *rest.Request){
+func GetbyKeyAndRemove(w rest.ResponseWriter, r *rest.Request) {
 	log.Info("Try to GetbyKeyAndRemove")
 	key := r.PathParam("key")
 	lock.RLock()
@@ -133,7 +130,7 @@ func GetbyKeyAndRemove(w rest.ResponseWriter, r *rest.Request){
 	w.WriteJson(value)
 }
 
-func DeleteData(w rest.ResponseWriter, r *rest.Request){
+func DeleteData(w rest.ResponseWriter, r *rest.Request) {
 	key := r.PathParam("key")
 	lock.RLock()
 	store.Remove(key)
@@ -142,7 +139,7 @@ func DeleteData(w rest.ResponseWriter, r *rest.Request){
 }
 
 //Append data to store by key
-func AppendData(w rest.ResponseWriter, r *rest.Request){
+func AppendData(w rest.ResponseWriter, r *rest.Request) {
 	item := Item{}
 	err := r.DecodeJsonPayload(&item)
 	if err != nil {
@@ -159,7 +156,7 @@ func AppendData(w rest.ResponseWriter, r *rest.Request){
 		w.WriteJson("Data was append and create")
 	} else {
 		items := store.Get(item.Key)
-		switch items.(type){
+		switch items.(type) {
 		case []interface{}:
 			items = append(items.([]interface{}), item.Value)
 			store.Set(item.Key, items)
@@ -175,9 +172,8 @@ func AppendData(w rest.ResponseWriter, r *rest.Request){
 	lock.RUnlock()
 }
 
-
 //Return statistics of usage
-func Show_Statistics(w rest.ResponseWriter, r *rest.Request){
+func Show_Statistics(w rest.ResponseWriter, r *rest.Request) {
 	lock.RLock()
 	log.Info("Try to getting statistics")
 	stat := store.Stat()
@@ -185,29 +181,27 @@ func Show_Statistics(w rest.ResponseWriter, r *rest.Request){
 	lock.RUnlock()
 }
 
-
 //Find by key
 func Find(w rest.ResponseWriter, r *rest.Request) {
 
 }
 
 //PingPong provides availability of server
-func PingPong(w rest.ResponseWriter, r *rest.Request){
+func PingPong(w rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson("Pong")
 }
 
-
-func LogConfigure(path string){
-	logfile, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY,0664)
+func LogConfigure(path string) {
+	logfile, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0664)
 	if err != nil {
 		panic("Log file as not created")
 	}
 	logging.SetFormatter(logging.GlogFormatter)
-	logbackend := logging.NewLogBackend(logfile, "",0)
-	logging.SetBackend(logging.NewLogBackend(os.Stdout,"",0), logbackend)
+	logbackend := logging.NewLogBackend(logfile, "", 0)
+	logging.SetBackend(logging.NewLogBackend(os.Stdout, "", 0), logbackend)
 }
 
-func InitLightStore(typestore string, addr string){
+func InitLightStore(typestore string, addr string) {
 	/*
 		Type store can be skiplist or b-tree or simple dict
 	*/
@@ -218,7 +212,7 @@ func InitLightStore(typestore string, addr string){
 	router, err := rest.MakeRouter(
 		&rest.Route{"GET", "/get/:key", GetbyKey},
 		&rest.Route{"GET", "/dbget/:db/:key", GetbyKeyFromDB},
-		&rest.Route{"POST", "/set",StoreData},
+		&rest.Route{"POST", "/set", StoreData},
 		&rest.Route{"POST", "/create/:db", CreateDB},
 		&rest.Route{"POST", "/set/:db", StoreDataToDB},
 		&rest.Route{"DELETE", "/remove/:key", DeleteData},

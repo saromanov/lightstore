@@ -1,29 +1,28 @@
 package lightstore
 
 type Dict struct {
-	Value map[string] interface{}
+	Value map[string]interface{}
 }
 
-func NewDict()(*Dict){
+func NewDict() *Dict {
 	d := new(Dict)
-	d.Value = make(map[string] interface{})
+	d.Value = make(map[string]interface{})
 	return d
 }
 
+func (d *Dict) Set(key string, value interface{}) {
 
-func (d*Dict) Set(key string, value interface{}){
-
-	d.Value[key] = value;
+	d.Value[key] = value
 }
 
-func (d*Dict) Get(key string)(interface{}, bool){
+func (d *Dict) Get(key string) (interface{}, bool) {
 	value, ok := d.Value[key]
 	return value, ok
 }
 
-func (d*Dict) Remove(key string){
+func (d *Dict) Remove(key string) {
 	_, ok := d.Value[key]
-	if ok{
+	if ok {
 		delete(d.Value, key)
 	}
 }
