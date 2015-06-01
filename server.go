@@ -4,12 +4,14 @@ import
 (
 	"net/http"
 	"github.com/ant0ine/go-json-rest/rest"
-	"log"
+	"github.com/op/go-logging"
 	"sync"
+	"os"
 
 )
 var lock = sync.RWMutex{}
 var store = new(Store)
+var log = logging.MustGetLogger("lightstore_log")
 
 type Item struct{
 	Key string
@@ -61,6 +63,7 @@ func StoreData(w rest.ResponseWriter, r *rest.Request){
 	lock.RLock()
 	go func(){
 		if checkData(w, item){
+			log.Info("Store data")
 			store.Set(item.Key, item.Value)
 		}
 	}()
@@ -71,10 +74,12 @@ func StoreData(w rest.ResponseWriter, r *rest.Request){
 
 //Get key from store and immediately remove
 func GetbyKeyAndRemove(w rest.ResponseWriter, r *rest.Request){
+	log.Info("Try to GetbyKeyAndRemove")
 	key := r.PathParam("key")
 	lock.RLock()
 	value := store.Get(key)
 	if value == nil {
+		log.Error("Value code required")
 		rest.Error(w, "Value code required", 400)
 		return
 	}
@@ -129,25 +134,39 @@ func AppendData(w rest.ResponseWriter, r *rest.Request){
 //Return statistics of usage
 func Show_Statistics(w rest.ResponseWriter, r *rest.Request){
 	lock.RLock()
+	log.Info("Try to getting statistics")
 	stat := store.Stat()
 	w.WriteJson(map[string]int{"Total number of writes": stat.num_writes, "Total number of reads": stat.num_reads})
 	lock.RUnlock()
 }
+
 
 //Find by key
 func Find(w rest.ResponseWriter, r *rest.Request) {
 
 }
 
-
+//PingPong provides availability of server
 func PingPong(w rest.ResponseWriter, r *rest.Request){
 	w.WriteJson("Pong")
 }
 
+
+func LogConfigure(path string){
+	logfile, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY,0664)
+	if err != nil {
+		panic("Log file as not created")
+	}
+	logging.SetFormatter(logging.GlogFormatter)
+	logbackend := logging.NewLogBackend(logfile, "",0)
+	logging.SetBackend(logging.NewLogBackend(os.Stdout,"",0), logbackend)
+}
 func InitLightStore(typestore string, addr string){
 	/*
 		Type store can be skiplist or b-tree or simple dict
 	*/
+	LogConfigure("lightstore.log")
+	log.Info("Start to create basic API")
 	api := rest.NewApi()
 	api.Use(rest.DefaultDevStack...)
 	router, err := rest.MakeRouter(
@@ -169,5 +188,6 @@ func InitLightStore(typestore string, addr string){
 	}
 	store = InitStore(Settings{Innerdata: typestore})
 	api.SetApp(router)
+	log.Info("Lightstore is running")
 	http.ListenAndServe(addr, api.MakeHandler())
 }
