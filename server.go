@@ -59,10 +59,11 @@ func StoreData(w rest.ResponseWriter, r *rest.Request){
 	}
 
 	lock.RLock()
-
-	if checkData(w, item){
-		store.Set(item.Key, item.Value)
-	}
+	go func(){
+		if checkData(w, item){
+			store.Set(item.Key, item.Value)
+		}
+	}()
 	lock.RUnlock()
 
 	w.WriteJson("Element was append")
