@@ -201,7 +201,7 @@ func LogConfigure(path string) {
 	logging.SetBackend(logging.NewLogBackend(os.Stdout, "", 0), logbackend)
 }
 
-func InitLightStore(typestore string, addr string) {
+func InitLightStore(typestore string, addr string, port uint) {
 	/*
 		Type store can be skiplist or b-tree or simple dict
 	*/
@@ -232,5 +232,5 @@ func InitLightStore(typestore string, addr string) {
 	store = InitStore(Settings{Innerdata: typestore})
 	api.SetApp(router)
 	log.Info("Lightstore is running")
-	http.ListenAndServe(addr, api.MakeHandler())
+	http.ListenAndServe(fmt.Sprintf("%s:%d", addr, port), api.MakeHandler())
 }
