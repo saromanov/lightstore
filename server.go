@@ -201,6 +201,8 @@ func LogConfigure(path string) {
 	logging.SetBackend(logging.NewLogBackend(os.Stdout, "", 0), logbackend)
 }
 
+
+
 func InitLightStore(typestore string, addr string, port uint) {
 	/*
 		Type store can be skiplist or b-tree or simple dict
