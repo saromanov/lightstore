@@ -1,31 +1,24 @@
 package lightstore
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/ant0ine/go-json-rest/rest"
 	"github.com/op/go-logging"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"sync"
+	"io"
 )
 
 var lock = sync.RWMutex{}
 var store = new(Store)
 var log = logging.MustGetLogger("lightstore_log")
 
-type Item struct {
-	Key   string
-	Value interface{}
-}
-
-func checkData(w rest.ResponseWriter, item Item) bool {
-	if item.Key == "" {
-		rest.Error(w, "Key code required", 400)
-		return false
-	}
-
-	if item.Value == nil {
-		rest.Error(w, "Value code required", 400)
+func checkData(value string) bool {
+	if value == "" {
+		log.Error("Value code required")
 		return false
 	}
 
@@ -66,18 +59,12 @@ func GetbyKeyMany(w rest.ResponseWriter, r *rest.Request) {
 
 //Append {Key:value} to dict
 func StoreData(w rest.ResponseWriter, r *rest.Request) {
-	item := Item{}
-	err := r.DecodeJsonPayload(&item)
-	if err != nil {
-		rest.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
+	mapdata := prepareDataToAppend(r.Body)
 	lock.RLock()
 	go func() {
-		if checkData(w, item) {
-			log.Info("Store data")
-			store.Set(item.Key, item.Value)
+		log.Info("Store data")
+		for key := range mapdata {
+			store.Set(key, mapdata[key])
 		}
 	}()
 	defer lock.RUnlock()
@@ -85,20 +72,35 @@ func StoreData(w rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson("Element was append")
 }
 
-func StoreDataToDB(w rest.ResponseWriter, r *rest.Request) {
-	dbname := r.PathParam("db")
-	item := Item{}
-	err := r.DecodeJsonPayload(&item)
-	if err != nil {
-		rest.Error(w, err.Error(), http.StatusInternalServerError)
+//This private method contain translation from json to string data
+func prepareDataToAppend(r io.ReadCloser) (result map[string]string) {
+	var res interface{}
+	body, _ := ioutil.ReadAll(r.Body)
+	errunm := json.Unmarshal([]byte(body), &res)
+	if errunm != nil {
+		log.Error(errunm.Error())
+		//rest.Error(w, errunm.Error(), http.StatusInternalServerError)
 		return
 	}
+	halfdecoded := res.(map[string]interface{})
+	for key, _ := range halfdecoded {
+		if checkData(halfdecoded[key].(string)) {
+			result[key] = halfdecoded[key].(string)
+		}
+	}
+	return result
+}
+
+func StoreDataToDB(w rest.ResponseWriter, r *rest.Request) {
+	dbname := r.PathParam("db")
+	/*decoder := json.NewDecoder(r.Body)*/
+	mapdata := prepareDataToAppend(r.Body)
 
 	lock.RLock()
 	go func() {
-		if checkData(w, item) {
-			log.Info(fmt.Sprintf("Store data in db %s", dbname))
-			store.SetinDB(dbname, item.Key, item.Value)
+		log.Info(fmt.Sprintf("Store data in db %s", dbname))
+		for key := range mapdata {
+			store.SetinDB(dbname, key, mapdata[key])
 		}
 	}()
 	lock.RUnlock()
@@ -200,8 +202,6 @@ func LogConfigure(path string) {
 	logbackend := logging.NewLogBackend(logfile, "", 0)
 	logging.SetBackend(logging.NewLogBackend(os.Stdout, "", 0), logbackend)
 }
-
-
 
 func InitLightStore(typestore string, addr string, port uint) {
 	/*
