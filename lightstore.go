@@ -182,6 +182,26 @@ func (st *Store) CloseLightStore() {
 	fmt.Println("End working: ", time.Now())
 }
 
+//This private method provides checking inner datastructure for storing
+func checkDS(name string) (result interface{}) {
+	result = skiplist.NewStringMap()
+	/* SkipList datastructure as main store */
+	if name == "skiplist" {
+		store.mainstore = skiplist.NewStringMap()
+	}
+
+	/* Simple map as main store */
+	if name == "dict" {
+		store.mainstore = NewDict()
+	}
+
+	/*B-tree structure as main store */
+	if name == "b-tree" {
+		store.mainstore = InitBMTree()
+	}
+	return result
+}
+
 func InitStore(settings Settings) *Store {
 	/*
 		Type store can be skiplist or b-tree or simple dict
@@ -191,20 +211,7 @@ func InitStore(settings Settings) *Store {
 	starttime := time.Now()
 	fmt.Println("Lightstore is working: ", starttime)
 	store.items = 0
-	/* SkipList datastructure as main store */
-	if settings.Innerdata == "skiplist" {
-		store.mainstore = skiplist.NewStringMap()
-	}
-
-	/* Simple map as main store */
-	if settings.Innerdata == "dict" {
-		store.mainstore = NewDict()
-	}
-
-	/*B-tree structure as main store */
-	if settings.Innerdata == "b-tree" {
-		store.mainstore = InitBMTree()
-	}
+	store.mainstore = checkDS(settings.Innerdata)
 	store.dbs = make(map[string]*DB)
 	store.lock = mutex
 	store.stat = new(Statistics)
