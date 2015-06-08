@@ -28,17 +28,6 @@ type Store struct {
 	stat          *Statistics
 }
 
-type Statistics struct {
-	//Total number of reads
-	num_reads int
-	//Total number of writes
-	num_writes int
-	//Start time
-	start time.Time
-	//Number of active db
-	dbnum int
-}
-
 func (st *Store) CheckExistDB(value string) bool {
 	_, ok := st.dbs[value]
 	return ok
