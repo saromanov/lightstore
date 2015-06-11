@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"github.com/ant0ine/go-json-rest/rest"
 	"github.com/op/go-logging"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"sync"
-	"io"
 )
 
 var lock = sync.RWMutex{}
@@ -75,7 +75,7 @@ func StoreData(w rest.ResponseWriter, r *rest.Request) {
 //This private method contain translation from json to string data
 func prepareDataToAppend(r io.ReadCloser) (result map[string]string) {
 	var res interface{}
-	body, _ := ioutil.ReadAll(r.Body)
+	body, _ := ioutil.ReadAll(r)
 	errunm := json.Unmarshal([]byte(body), &res)
 	if errunm != nil {
 		log.Error(errunm.Error())
@@ -83,6 +83,7 @@ func prepareDataToAppend(r io.ReadCloser) (result map[string]string) {
 		return
 	}
 	halfdecoded := res.(map[string]interface{})
+	result = make(map[string]string)
 	for key, _ := range halfdecoded {
 		if checkData(halfdecoded[key].(string)) {
 			result[key] = halfdecoded[key].(string)
@@ -95,7 +96,6 @@ func StoreDataToDB(w rest.ResponseWriter, r *rest.Request) {
 	dbname := r.PathParam("db")
 	/*decoder := json.NewDecoder(r.Body)*/
 	mapdata := prepareDataToAppend(r.Body)
-
 	lock.RLock()
 	go func() {
 		log.Info(fmt.Sprintf("Store data in db %s", dbname))
@@ -142,32 +142,38 @@ func DeleteData(w rest.ResponseWriter, r *rest.Request) {
 
 //Append data to store by key
 func AppendData(w rest.ResponseWriter, r *rest.Request) {
-	item := Item{}
+	/*item := Item{}
 	err := r.DecodeJsonPayload(&item)
 	if err != nil {
 		rest.Error(w, err.Error(), http.StatusInternalServerError)
 		return
-	}
+	}*/
+
+	mapdata := prepareDataToAppend(r.Body)
 
 	lock.RLock()
-	value := store.Get(item.Key)
-	if value == nil {
-		data := []interface{}{item.Value}
-		data = append(data, item.Value)
-		store.Set(item.Key, data)
-		w.WriteJson("Data was append and create")
-	} else {
-		items := store.Get(item.Key)
-		switch items.(type) {
-		case []interface{}:
-			items = append(items.([]interface{}), item.Value)
-			store.Set(item.Key, items)
-			w.WriteJson("Data was append to list")
-		default:
-			data := []interface{}{store.Get(item.Key)}
-			data = append(data, item.Value)
-			store.Set(item.Key, data)
-			w.WriteJson("Data was append and new list was created")
+
+	for key := range mapdata {
+		value := mapdata[key]
+		exist := store.Get(key)
+		if exist == nil {
+			data := []interface{}{value}
+			data = append(data, value)
+			store.Set(key, data)
+			w.WriteJson("Data was append and create")
+		} else {
+			items := store.Get(key)
+			switch items.(type) {
+			case []interface{}:
+				items = append(items.([]interface{}), value)
+				store.Set(key, items)
+				w.WriteJson("Data was append to list")
+			default:
+				data := []interface{}{store.Get(key)}
+				data = append(data, value)
+				store.Set(key, data)
+				w.WriteJson("Data was append and new list was created")
+			}
 		}
 	}
 
