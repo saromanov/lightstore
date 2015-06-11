@@ -5,6 +5,7 @@ import (
 	"github.com/ryszard/goskiplist/skiplist"
 	"sync"
 	"time"
+	"strings"
 	//"runtime"
 	//"errors"
 )
@@ -26,6 +27,19 @@ type Store struct {
 	mainstorename string
 	lock          *sync.Mutex
 	stat          *Statistics
+	index         *Indexing
+}
+
+//System keys starts with _ (_index, for example)
+func (st*Store) checkSystemKeys(key string) bool {
+	return strings.HasPrefix(key, "_")
+}
+
+//After understanding, that key is system, make some work with them
+func (st*Store) processSystemKey(key string) {
+	if key == "_index"{
+		st.index.CreateIndex(key)
+	}
 }
 
 func (st *Store) CheckExistDB(value string) bool {
@@ -109,6 +123,9 @@ func (st *Store) SetinDB(dbname string, key string, value interface{}) bool {
 func (st *Store) set(dbname string, key string, value interface{}) bool {
 	st.lock.Lock()
 	defer st.lock.Unlock()
+	if st.checkSystemKeys(key) {
+		return true
+	}
 	mainstore := st.mainstore
 	if dbname != "" {
 		//check db availability
@@ -205,5 +222,6 @@ func InitStore(settings Settings) *Store {
 	store.lock = mutex
 	store.stat = new(Statistics)
 	store.stat.start = starttime
+	store.index = NewIndexing()
 	return store
 }

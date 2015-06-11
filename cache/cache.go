@@ -6,12 +6,12 @@ import
 )
 
 type Cache struct {
-	lrudata *lru
+	lrudata *lru.Cache
 }
 
-func New(size cachesize)*Cache {
+func New(cachesize int)*Cache {
 	cachedata := new(Cache)
-	cachedata.lrudata := lru.New(cachesize)
+	cachedata.lrudata, _ = lru.New(cachesize)
 	return cachedata
 }
 
