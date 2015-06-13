@@ -28,10 +28,12 @@ func (idx *Indexing) CreateIndex(name string) {
 	idx.index[name] = []string{}
 }
 
+//DropIndex provides removing index from store
 func (idx* Indexing) DropIndex(value string) {
 	idx.DropIndexes([]string{value})
 }
 
+//DropIndexes provides removing indexes from store
 func (idx*Indexing) DropIndexes(values []string) {
 	for key, _ := range idx.index {
 		for _, value := range values {
@@ -40,6 +42,15 @@ func (idx*Indexing) DropIndexes(values []string) {
 			}
 		}
 	}
+}
+
+//IndexStat provides status of target index
+func (idx* Indexing) IndexStatus (index string) int{
+	item, ok := idx.index[index]
+	if !ok {
+		return 0
+	}
+	return len(item)
 }
 
 func (idx *Indexing) AddItem(name, value, location string) {
