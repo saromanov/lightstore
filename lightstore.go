@@ -38,8 +38,16 @@ func (st*Store) checkSystemKeys(key string) bool {
 //After understanding, that key is system, make some work with them
 func (st*Store) processSystemKey(key string) {
 	if key == "_index"{
-		st.index.CreateIndex(key)
+		st.CreateIndex(key)
 	}
+}
+
+func (st*Store) CreateIndex(index string) {
+	if index == "" {
+		log.Info(fmt.Sprintf("New index %s can't be created", index))
+		return
+	}
+	st.index.CreateIndex(index)
 }
 
 func (st *Store) CheckExistDB(value string) bool {

@@ -103,7 +103,7 @@ func StoreDataToDB(w rest.ResponseWriter, r *rest.Request) {
 			store.SetinDB(dbname, key, mapdata[key])
 		}
 	}()
-	lock.RUnlock()
+	defer lock.RUnlock()
 
 	w.WriteJson(fmt.Sprintf("Element was append in db %s", dbname))
 
@@ -114,6 +114,17 @@ func CreateDB(w rest.ResponseWriter, r *rest.Request) {
 	db := r.PathParam("db")
 	store.CreateDB(db)
 	w.WriteJson(fmt.Sprintf("db with the name %s was created", db))
+}
+
+//Create new index
+func CreateIndex(w rest.ResponseWriter, r *rest.Request) {
+	indextitle := r.PathParam("index")
+	lock.RLock()
+	defer lock.RUnlock()
+	go func(){
+		store.CreateIndex(indextitle)
+	}()
+	w.WriteJson("Index was created")
 }
 
 //Get key from store and immediately remove
@@ -222,6 +233,7 @@ func InitLightStore(typestore string, addr string, port uint) {
 		&rest.Route{"GET", "/dbget/:db/:key", GetbyKeyFromDB},
 		&rest.Route{"POST", "/set", StoreData},
 		&rest.Route{"POST", "/create/:db", CreateDB},
+		&rest.Route{"POST", "/createindex/:index", CreateIndex},
 		&rest.Route{"POST", "/set/:db", StoreDataToDB},
 		&rest.Route{"DELETE", "/remove/:key", DeleteData},
 		//Get and delete
