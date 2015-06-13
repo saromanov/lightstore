@@ -28,6 +28,20 @@ func (idx *Indexing) CreateIndex(name string) {
 	idx.index[name] = []string{}
 }
 
+func (idx* Indexing) DropIndex(value string) {
+	idx.DropIndexes([]string{value})
+}
+
+func (idx*Indexing) DropIndexes(values []string) {
+	for key, _ := range idx.index {
+		for _, value := range values {
+			if key == value {
+				delete(idx.index, key)
+			}
+		}
+	}
+}
+
 func (idx *Indexing) AddItem(name, value, location string) {
 	idx.index[name] = append(idx.index[name], value)
 	idx.location[value] = location
