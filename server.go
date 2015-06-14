@@ -193,11 +193,12 @@ func AppendData(w rest.ResponseWriter, r *rest.Request) {
 
 //Return statistics of usage
 func Show_Statistics(w rest.ResponseWriter, r *rest.Request) {
-	lock.RLock()
+	lock.Lock()
 	log.Info("Try to getting statistics")
 	stat := store.Stat()
-	w.WriteJson(map[string]int{"Total number of writes": stat.num_writes, "Total number of reads": stat.num_reads})
-	lock.RUnlock()
+	w.WriteJson(map[string]int{"Total number of writes": stat.num_writes, "Total number of reads": stat.num_reads,
+		"Total number of active db": stat.dbnum})
+	lock.Unlock()
 }
 
 //Find by key

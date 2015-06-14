@@ -56,7 +56,13 @@ func (st *Store) CheckExistDB(value string) bool {
 }
 
 func (st *Store) CreateDB(dbname string) {
+	st.lock.Lock()
+	_, ok := st.dbs[dbname]
 	st.dbs[dbname] = CreateNewDB(dbname)
+	if !ok {
+		st.stat.dbnum += 1
+	}
+	st.lock.Unlock()
 }
 
 func (st *Store) Get(value string) interface{} {
