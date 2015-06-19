@@ -26,6 +26,14 @@ type Statistics struct {
 	dbnum int
 }
 
+//This struct provides statistics for each item
+type ItemStatistics struct {
+	key string
+	num_reads int
+	num_writes int
+	start time.Time
+}
+
 
 func InitDBMonitoring() *DBMonitoring {
 	start := time.Now()
