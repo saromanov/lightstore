@@ -30,8 +30,14 @@ type Statistics struct {
 type ItemStatistics struct {
 	key string
 	num_reads int
-	num_writes int
 	start time.Time
+}
+
+func InitItemStatistics()*ItemStatistics {
+	start := time.Now()
+	itemstat := new(ItemStatistics)
+	itemstat.start = start
+	return itemstat
 }
 
 
