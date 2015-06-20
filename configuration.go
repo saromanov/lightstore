@@ -9,21 +9,21 @@ import (
 
 type Config struct {
 	//Address for server
-	address string
+	Address string
 	//port for server
-	port uint
+	Port uint
 	//Directory for storing log data
-	logdir string
+	Logdir string
 	//Directory for storing cache data
-	cachedir string
+	Cachedir string
 	//Diretcory for storing db data
-	dbdir string
+	Dbdir string
 	//Cluster name
-	cluster string
+	Cluster string
 	//Sync for commits
-	commitsync bool
+	Commitsync bool
 	//Size for cache
-	cachesize int
+	Cachesize int
 }
 
 
@@ -31,28 +31,26 @@ type Config struct {
 func LoadConfigData() *Config {
 	data, err := ioutil.ReadFile(getConfigPath())
 	if err != nil {
-		fmt.Println("This is")
-		setDefaultParams()
+		return setDefaultParams()
 	}
-	conf := Config{}
-	yamlerr := yaml.Unmarshal([]byte(data), &conf)
+	var conf Config
+	yamlerr := yaml.Unmarshal(data, &conf)
 	if yamlerr != nil {
 		panic(yamlerr)
 	}
-
-	return setDefaultParams()
+	return &conf
 }
 
 //In the case if config file is not exist or not full,
 // set for each param default value
 func setDefaultParams() *Config {
 	conf := new(Config)
-	conf.address = "localhost"
-	conf.port = 8080
-	conf.logdir = setDefaultLogPath()
-	conf.dbdir = setDefaultDBData()
-	conf.cluster = "cluster1"
-	conf.cachesize = 1024
+	conf.Address = "localhost"
+	conf.Port = 8080
+	conf.Logdir = setDefaultLogPath()
+	conf.Dbdir = setDefaultDBData()
+	conf.Cluster = "cluster1"
+	conf.Cachesize = 1024
 	return conf
 }
 
