@@ -38,8 +38,30 @@ func LoadConfigData() *Config {
 	if yamlerr != nil {
 		panic(yamlerr)
 	}
+
+	conf.setMissedValues()
 	return &conf
 }
+
+
+func (conf *Config) setMissedValues() {
+	if conf.Address == "" {
+		conf.Address = "localhost"
+	}
+
+	if conf.Port == 0 {
+		conf.Port = 8080
+	}
+
+	if conf.Logdir == "" {
+		conf.Logdir = setDefaultLogPath()
+	}
+
+	if conf.Dbdir == "" {
+		conf.Dbdir = setDefaultDBData()
+	}
+}
+
 
 //In the case if config file is not exist or not full,
 // set for each param default value
