@@ -63,9 +63,7 @@ func StoreData(w rest.ResponseWriter, r *rest.Request) {
 	lock.RLock()
 	go func() {
 		log.Info("Store data")
-		for key := range mapdata {
-			store.Set(key, mapdata[key])
-		}
+		store.Set(mapdata)
 	}()
 	defer lock.RUnlock()
 
@@ -188,7 +186,7 @@ func AppendData(w rest.ResponseWriter, r *rest.Request) {
 		}
 	}
 
-	lock.RUnlock()
+	defer lock.RUnlock()
 }
 
 //Return statistics of usage
