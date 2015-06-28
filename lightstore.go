@@ -138,6 +138,17 @@ func (st *Store) Set(items map[string]string) bool {
 	}
 }
 
+//Exist check key in the lightstore
+//and return true if key exist and false otherwise
+func (st *Store) Exist (key string) bool {
+	mainstore := st.mainstore
+	switch mainstore.(type) {
+	case *Dict:
+		return mainstore.(*Dict).Exist(key)
+	}
+	return false
+}
+
 func (st *Store) ScanKey(match string) *Scan{
 	return NewScan(match)
 }

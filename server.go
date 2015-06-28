@@ -164,8 +164,8 @@ func AppendData(w rest.ResponseWriter, r *rest.Request) {
 
 	for key := range mapdata {
 		value := mapdata[key]
-		exist := store.Get(key)
-		if exist == nil {
+		exist := store.Exist(key)
+		if exist{
 			data := []interface{}{value}
 			data = append(data, value)
 			//store.Set(key, data)

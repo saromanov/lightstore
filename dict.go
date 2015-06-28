@@ -31,6 +31,11 @@ func (d *Dict) Get(key string) (interface{}, bool) {
 	}
 }
 
+func (d *Dict) Exist(key string) bool {
+	_, ok := d.Value[key]
+	return ok
+}
+
 func (d *Dict) Remove(key string) {
 	_, ok := d.Value[key]
 	if ok {
