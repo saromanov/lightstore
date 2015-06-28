@@ -28,6 +28,12 @@ type PastItem struct {
 	pastitem *Item
 }
 
+//ItemOptions provides additional options for storing values
+type ItemOptions struct {
+	immutable bool
+	update bool
+}
+
 //NewItem provides creates new item before store in memory or write on disk
 func NewItem(value interface{})*Item {
 	item := new(Item)
