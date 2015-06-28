@@ -106,6 +106,28 @@ func (st *Store) get(value string, dbname string) interface{} {
 
 }
 
+func (st *Store) AppendData(kvitem KVITEM) {
+	for key, value := range kvitem {
+		exist := store.Exist(key)
+		if exist {
+			data := []interface{}{value}
+			data = append(data, value)
+			store.set("", key, data, ItemOptions{})
+		} else {
+			items := store.Get(key)
+			switch items.(type) {
+			case []interface{}:
+				items = append(items.([]interface{}), value)
+				store.set("",key, items, ItemOptions{})
+			default:
+				data := []interface{}{store.Get(key)}
+				data = append(data, value)
+				store.set("", key, data, ItemOptions{})
+			}
+		}
+	}
+}
+
 //Get many kayes from list
 func (st *Store) GetMany(keys []string) interface{} {
 	result := make([]interface{}, len(keys))
@@ -122,7 +144,7 @@ func (st *Store) GetMany(keys []string) interface{} {
 }
 
 //check and split keys on system and not
-func (st *Store) beforeSet(items KVITEM)*ReadyToSet {
+func (st *Store) beforeSet(items KVITEM) *ReadyToSet {
 	return NewReadyToSet(items)
 }
 
@@ -140,7 +162,7 @@ func (st *Store) Set(items map[string]string) bool {
 
 //Exist check key in the lightstore
 //and return true if key exist and false otherwise
-func (st *Store) Exist (key string) bool {
+func (st *Store) Exist(key string) bool {
 	mainstore := st.mainstore
 	switch mainstore.(type) {
 	case *Dict:
@@ -149,7 +171,7 @@ func (st *Store) Exist (key string) bool {
 	return false
 }
 
-func (st *Store) ScanKey(match string) *Scan{
+func (st *Store) ScanKey(match string) *Scan {
 	return NewScan(match)
 }
 

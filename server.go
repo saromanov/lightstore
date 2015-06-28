@@ -161,32 +161,9 @@ func AppendData(w rest.ResponseWriter, r *rest.Request) {
 	mapdata := prepareDataToAppend(r.Body)
 
 	lock.RLock()
-
-	for key := range mapdata {
-		value := mapdata[key]
-		exist := store.Exist(key)
-		if exist{
-			data := []interface{}{value}
-			data = append(data, value)
-			//store.Set(key, data)
-			w.WriteJson("Data was append and create")
-		} else {
-			items := store.Get(key)
-			switch items.(type) {
-			case []interface{}:
-				items = append(items.([]interface{}), value)
-				//store.Set(key, items)
-				w.WriteJson("Data was append to list")
-			default:
-				data := []interface{}{store.Get(key)}
-				data = append(data, value)
-				//store.Set(key, data)
-				w.WriteJson("Data was append and new list was created")
-			}
-		}
-	}
-
+	store.AppendData(mapdata)
 	defer lock.RUnlock()
+	w.WriteJson("Data was append to list")
 }
 
 //Return statistics of usage
