@@ -28,6 +28,7 @@ type PastItem struct {
 	pastitem *Item
 }
 
+//NewItem provides creates new item before store in memory or write on disk
 func NewItem(value interface{})*Item {
 	item := new(Item)
 	item.value = value
@@ -41,6 +42,8 @@ func NewItem(value interface{})*Item {
 	return item
 }
 
+//UpdateItem provides set new item for exist in the case, 
+//if this item is not immutable
 func (itm *Item) UpdateItem(value interface{}){
 	if !itm.immutable {
 		itm.setToPast()
@@ -48,6 +51,8 @@ func (itm *Item) UpdateItem(value interface{}){
 	}
 }
 
+
+//set to past version of the item
 func (itm *Item) setToPast(){
 	if len(itm.pastitems) < itm.numpastitems {
 		newpast := new(PastItem)
