@@ -3,9 +3,9 @@ package lightstore
 import (
 	"fmt"
 	"github.com/ryszard/goskiplist/skiplist"
+	"strings"
 	"sync"
 	"time"
-	"strings"
 	//"runtime"
 	//"errors"
 )
@@ -28,21 +28,22 @@ type Store struct {
 	lock          *sync.Mutex
 	stat          *Statistics
 	index         *Indexing
+	config        *Config
 }
 
 //System keys starts with _ (_index, for example)
-func (st*Store) checkSystemKeys(key string) bool {
+func (st *Store) checkSystemKeys(key string) bool {
 	return strings.HasPrefix(key, "_")
 }
 
 //After understanding, that key is system, make some work with them
-func (st*Store) processSystemKey(key string) {
-	if key == "_index"{
+func (st *Store) processSystemKey(key string) {
+	if key == "_index" {
 		st.CreateIndex(key)
 	}
 }
 
-func (st*Store) CreateIndex(index string) {
+func (st *Store) CreateIndex(index string) {
 	if index == "" {
 		log.Info(fmt.Sprintf("New index %s can't be created", index))
 		return
@@ -130,6 +131,10 @@ func (st *Store) Set(key string, value interface{}) bool {
 	return st.set("", key, value)
 }
 
+func (st *Store) ScanKey(match string) *Scan{
+	return NewScan(match)
+}
+
 func (st *Store) SetinDB(dbname string, key string, value interface{}) bool {
 	return st.set(dbname, key, value)
 }
@@ -157,7 +162,6 @@ func (st *Store) set(dbname string, key string, value interface{}) bool {
 			mainstore = dbdata.mainstore
 		}
 	}
-
 	switch mainstore.(type) {
 	case *Dict:
 		mainstore.(*Dict).Set(key, value)
@@ -207,17 +211,17 @@ func checkDS(name string) (result interface{}) {
 	result = skiplist.NewStringMap()
 	/* SkipList datastructure as main store */
 	if name == "skiplist" {
-		store.mainstore = skiplist.NewStringMap()
+		result = skiplist.NewStringMap()
 	}
 
 	/* Simple map as main store */
 	if name == "dict" {
-		store.mainstore = NewDict()
+		result = NewDict()
 	}
 
 	/*B-tree structure as main store */
 	if name == "b-tree" {
-		store.mainstore = InitBMTree()
+		result = InitBMTree()
 	}
 	return result
 }
@@ -229,7 +233,6 @@ func InitStore(settings Settings) *Store {
 	mutex := &sync.Mutex{}
 	store := new(Store)
 	starttime := time.Now()
-	fmt.Println("Lightstore is working: ", starttime)
 	store.items = 0
 	store.mainstore = checkDS(settings.Innerdata)
 	store.dbs = make(map[string]*DB)
@@ -237,5 +240,6 @@ func InitStore(settings Settings) *Store {
 	store.stat = new(Statistics)
 	store.stat.start = starttime
 	store.index = NewIndexing()
+	store.config = LoadConfigData()
 	return store
 }
