@@ -42,6 +42,7 @@ func NewItem(value interface{})*Item {
 	item.priority = 0
 	item.immutable = false
 	item.numpastitems = 10
+	item.stat = InitItemStatistics()
 	item.pastitems = []*PastItem{}
 	item.checksum = Checksum(value.(string))
 	item.writetime = time.Now()

@@ -2,4 +2,4 @@ package lightstore
 
 //This module provides basic types
 
-type KVITEM map[string]interface{}
+type KVITEM map[string]string

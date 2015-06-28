@@ -3,7 +3,6 @@ package lightstore
 import (
 	"fmt"
 	"github.com/ryszard/goskiplist/skiplist"
-	"strings"
 	"sync"
 	"time"
 	//"runtime"
@@ -29,11 +28,6 @@ type Store struct {
 	stat          *Statistics
 	index         *Indexing
 	config        *Config
-}
-
-//System keys starts with _ (_index, for example)
-func (st *Store) checkSystemKeys(key string) bool {
-	return strings.HasPrefix(key, "_")
 }
 
 //After understanding, that key is system, make some work with them
@@ -127,8 +121,21 @@ func (st *Store) GetMany(keys []string) interface{} {
 	return nil
 }
 
-func (st *Store) Set(key string, value interface{}) bool {
-	return st.set("", key, value)
+//check and split keys on system and not
+func (st *Store) beforeSet(items KVITEM)*ReadyToSet {
+	return NewReadyToSet(items)
+}
+
+func (st *Store) Set(items map[string]string) bool {
+	before := st.beforeSet(items)
+	if before.ready {
+		for key, value := range before.kvitems {
+			st.set("", key, value, ItemOptions{})
+		}
+		return true
+	} else {
+		return false
+	}
 }
 
 func (st *Store) ScanKey(match string) *Scan{
@@ -136,15 +143,15 @@ func (st *Store) ScanKey(match string) *Scan{
 }
 
 func (st *Store) SetinDB(dbname string, key string, value interface{}) bool {
-	return st.set(dbname, key, value)
+	return st.set(dbname, key, value, ItemOptions{})
 }
 
-func (st *Store) set(dbname string, key string, value interface{}) bool {
+func (st *Store) set(dbname string, key string, value interface{}, opt ItemOptions) bool {
 	st.lock.Lock()
 	defer st.lock.Unlock()
-	if st.checkSystemKeys(key) {
+	/*if st.checkSystemKeys(key) {
 		return true
-	}
+	}*/
 	mainstore := st.mainstore
 	if dbname != "" {
 		//check db availability
@@ -162,9 +169,10 @@ func (st *Store) set(dbname string, key string, value interface{}) bool {
 			mainstore = dbdata.mainstore
 		}
 	}
+	fmt.Println(mainstore)
 	switch mainstore.(type) {
 	case *Dict:
-		mainstore.(*Dict).Set(key, value)
+		mainstore.(*Dict).Set(key, value, opt)
 	case *skiplist.SkipList:
 		mainstore.(*skiplist.SkipList).Set(key, value)
 	}

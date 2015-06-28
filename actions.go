@@ -20,8 +20,10 @@ func NewReadyToSet(rawitems KVITEM) *ReadyToSet {
 	rts.kvitems = kvItems(rawitems, func(str string)bool {
 		return !checkSystemKeys(str)
 	})
+	rts.ready = true
 	return rts
 }
+
 
 func kvItems(rawitems KVITEM, pred func(string) bool) KVITEM {
 	result := KVITEM{}
