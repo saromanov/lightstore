@@ -14,10 +14,16 @@ func NewDict() *Dict {
 
 func (d *Dict) Set(key string, value interface{}, op ItemOptions) {
 	_, ok := d.Value[key]
+	if !ok {
+		d.Value[key] = NewItem(value)
+	}
 	if ok && op.update && !op.immutable{
 		d.Value[key].UpdateItem(value)
-	} else {
+	} 
+	if ok && !op.immutable {
 		d.Value[key] = NewItem(value)
+	} else {
+
 	}
 }
 
