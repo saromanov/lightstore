@@ -145,19 +145,40 @@ func (st *Store) GetMany(keys []string) interface{} {
 
 //check and split keys on system and not
 func (st *Store) beforeSet(items KVITEM) *ReadyToSet {
+	//Vefore set, check split system keys with prefix _ and simple keys
 	return NewReadyToSet(items)
 }
 
 func (st *Store) Set(items map[string]string) bool {
 	before := st.beforeSet(items)
 	if before.ready {
+		opt := getItemOptions(before.syskeys)
 		for key, value := range before.kvitems {
-			st.set("", key, value, ItemOptions{})
+			st.set("", key, value, opt)
 		}
 		return true
 	} else {
 		return false
 	}
+}
+
+//Before set data to the lightstore. Check if in current request
+//exists system keys with prefix _
+func getItemOptions(items map[string]string) ItemOptions {
+	itemopt := ItemOptions{}
+	for key, value := range items {
+		if key == "_index" {
+			itemopt.index = value
+		}
+		if key == "_immutable" {
+			itemopt.immutable = Bool(value)
+		}
+		if key == "_update" {
+			itemopt.update = Bool(value)
+		}
+	}
+	fmt.Println("ITM: ", itemopt)
+	return itemopt
 }
 
 //Exist check key in the lightstore
@@ -185,6 +206,7 @@ func (st *Store) set(dbname string, key string, value interface{}, opt ItemOptio
 	/*if st.checkSystemKeys(key) {
 		return true
 	}*/
+	fmt.Println(opt)
 	mainstore := st.mainstore
 	if dbname != "" {
 		//check db availability
@@ -202,7 +224,6 @@ func (st *Store) set(dbname string, key string, value interface{}, opt ItemOptio
 			mainstore = dbdata.mainstore
 		}
 	}
-	fmt.Println(mainstore)
 	switch mainstore.(type) {
 	case *Dict:
 		mainstore.(*Dict).Set(key, value, opt)
