@@ -37,7 +37,7 @@ func (cl *Client) set(jsonStr string) (int, error) {
 }
 
 func (cl *Client) sendRequest(url string, buff *bytes.Buffer)(int, error){
-	req, err := http.NewRequest("POST", url, buff)
+	req, err := cl.NewRequest("POST", url, buff)
 	req.Header.Set("X-Custom-Header", "lightstore")
 	req.Header.Set("Content-Type", "application/json")
 	if err != nil {
@@ -56,6 +56,14 @@ func (cl *Client) sendRequest(url string, buff *bytes.Buffer)(int, error){
 		body, _ := ioutil.ReadAll(resp.Body)
 		return 0, errors.New(string(body))
 	}
+}
+
+func (cl *Client) NewRequest(method string, url string, buff *bytes.Buffer)(*http.Request, error) {
+	if buff == nil {
+		return http.NewRequest("POST", url, nil)
+	}
+
+	return http.NewRequest("POST", url, buff)
 }
 
 //SetMap provides append to lightstore pairs key-value
