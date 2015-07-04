@@ -106,8 +106,7 @@ func (*Client) get(url string) string {
 }
 
 //CreatePage provides create new page on the lightstore
-func (cl *Client) CreatePage(pagename string) (error, int) {
+func (cl *Client) CreatePage(pagename string) (int, error) {
 	url := fmt.Sprintf("%s/create/%s", cl.addr, pagename)
 	cl.sendRequest(irl, nil)
 }
-
