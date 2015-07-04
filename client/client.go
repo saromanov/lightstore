@@ -59,7 +59,7 @@ func (cl *Client) sendRequest(url string, buff *bytes.Buffer)(int, error){
 }
 
 //SetMap provides append to lightstore pairs key-value
-func (cl *Client) SetMap(values KV) {
+func (cl *Client) SetMap(values KV) (int, error) {
 	result := "{"
 	c := 0
 	for key, value := range values {
@@ -70,7 +70,7 @@ func (cl *Client) SetMap(values KV) {
 		c += 1
 	}
 	result += "}"
-	cl.set(result)
+	return cl.set(result)
 }
 
 //Get valur by key
