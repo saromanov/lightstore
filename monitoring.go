@@ -24,6 +24,8 @@ type Statistics struct {
 	start time.Time
 	//Number of active db
 	dbnum int
+	//address of host
+	host string
 }
 
 //This struct provides statistics for each item
@@ -44,7 +46,7 @@ func InitItemStatistics()*ItemStatistics {
 func InitDBMonitoring() *DBMonitoring {
 	start := time.Now()
 	return &DBMonitoring {
-		&Statistics{0,0, start, 0}, 
+		&Statistics{0,0, start, 0, "localhost:8080"}, 
 		&ServerStat{start, 0},
 		&sync.RWMutex{},
 	 }
