@@ -203,10 +203,6 @@ func (st *Store) SetinDB(dbname string, key string, value interface{}) bool {
 func (st *Store) set(dbname string, key string, value interface{}, opt ItemOptions) bool {
 	st.lock.Lock()
 	defer st.lock.Unlock()
-	/*if st.checkSystemKeys(key) {
-		return true
-	}*/
-	fmt.Println(opt)
 	mainstore := st.mainstore
 	if dbname != "" {
 		//check db availability
