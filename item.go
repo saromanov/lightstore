@@ -32,6 +32,7 @@ type PastItem struct {
 type ItemOptions struct {
 	immutable bool
 	update bool
+	index string
 }
 
 //NewItem provides creates new item before store in memory or write on disk
