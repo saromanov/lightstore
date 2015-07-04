@@ -53,6 +53,7 @@ func (idx* Indexing) IndexStatus (index string) int{
 	return len(item)
 }
 
+//AddItem provides append new item to index
 func (idx *Indexing) AddItem(name, value, location string) {
 	idx.index[name] = append(idx.index[name], value)
 	idx.location[value] = location
