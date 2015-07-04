@@ -6,6 +6,14 @@ import (
 
 //Indexing in lightstore
 
+type indexing interface {
+	CreateIndex(name string)
+	DropIndex(value string)
+	DropIndexes(value []string)
+	IndexStatus (index string) int
+	AddItemToCache(name, value, location string)
+}
+
 type Indexing struct {
 	index      map[string][]string
 	location   map[string]string
