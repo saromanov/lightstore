@@ -108,5 +108,11 @@ func (*Client) get(url string) string {
 //CreatePage provides create new page on the lightstore
 func (cl *Client) CreatePage(pagename string) (int, error) {
 	url := fmt.Sprintf("%s/create/%s", cl.addr, pagename)
-	cl.sendRequest(irl, nil)
+	return cl.sendRequest(url, nil)
+}
+
+func (cl *Client) SetToPage(pagename, key, value string) (int, error) {
+	url := fmt.Sprintf("%s/set/%s", cl.addr, pagename)
+	jsonStr := fmt.Sprintf(`{"%s":"%s"}`, key, value)
+	return cl.sendRequest(url, bytes.NewBuffer([]byte(jsonStr)))
 }
