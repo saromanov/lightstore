@@ -26,14 +26,18 @@ func NewClient(addr string) *Client {
 }
 
 //Set basic key-value to lightstore
-func (cl *Client) Set(key, value string)(error, int) {
+func (cl *Client) Set(key, value string)(int, error) {
 	jsonStr := fmt.Sprintf(`{"%s":"%s"}`, key, value)
 	return cl.set(jsonStr)
 }
 
-func (cl *Client) set(jsonStr string) (error, int) {
+func (cl *Client) set(jsonStr string) (int, error) {
 	url := fmt.Sprintf("%s/set", cl.addr)
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer([]byte(jsonStr)))
+	return cl.sendRequest(url, bytes.NewBuffer([]byte(jsonStr)))
+}
+
+func (cl *Client) sendRequest(url string, buff *bytes.Buffer)(int, error){
+	req, err := http.NewRequest("POST", url, buff)
 	req.Header.Set("X-Custom-Header", "lightstore")
 	req.Header.Set("Content-Type", "application/json")
 	if err != nil {
@@ -47,10 +51,10 @@ func (cl *Client) set(jsonStr string) (error, int) {
 	defer resp.Body.Close()
 
 	if strings.HasPrefix(resp.Status, "200") {
-		return nil, 1
+		return 1, nil
 	} else {
 		body, _ := ioutil.ReadAll(resp.Body)
-		return errors.New(string(body)), 0
+		return 0, errors.New(string(body))
 	}
 }
 
