@@ -171,9 +171,14 @@ func Show_Statistics(w rest.ResponseWriter, r *rest.Request) {
 	lock.Lock()
 	log.Info("Try to getting statistics")
 	stat := store.Stat()
-	w.WriteJson(map[string]int{"Total number of writes": stat.num_writes, "Total number of reads": stat.num_reads,
-		"Total number of active db": stat.dbnum})
+	w.WriteJson(map[string]string{"Total number of writes": statfmt(stat.num_writes), 
+		"Total number of reads": statfmt(stat.num_reads),
+		"Total number of active db": statfmt(stat.dbnum), "Address": stat.host})
 	lock.Unlock()
+}
+
+func statfmt(num int) string {
+	return fmt.Sprintf("%d", num)
 }
 
 //Find by key
