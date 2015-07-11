@@ -166,6 +166,21 @@ func AppendData(w rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson("Data was append to list")
 }
 
+//Basic subscription
+func SubscribeItem(w rest.ResponseWriter, r *rest.Request) {
+	key := r.PathParam("key")
+	store.SubscribeKey(key)
+	w.WriteJson("Waiting for receive messages...")
+}
+
+func PublishItem(w rest.ResponseWriter, r *rest.Request) {
+	key := r.PathParam("key")
+	lock.RLock()
+	defer lock.RUnlock()
+	store.PublishData(key)
+	w.WriteJson("New item for publishing")
+}
+
 //Return statistics of usage
 func Show_Statistics(w rest.ResponseWriter, r *rest.Request) {
 	lock.Lock()
@@ -225,6 +240,8 @@ func InitLightStore(typestore string, addr string, port uint) {
 		&rest.Route{"GET", "/ping", PingPong},
 		//Return short statistics
 		&rest.Route{"GET", "/_stat", Show_Statistics},
+		&rest.Route{"GET", "/subscribe/:key", SubscribeItem},
+		&rest.Route{"POST", "/publish/:key", PublishItem},
 	)
 
 	if err != nil {
