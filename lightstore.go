@@ -28,6 +28,7 @@ type Store struct {
 	stat          *Statistics
 	index         *Indexing
 	config        *Config
+	pubsub        *Pubsub
 }
 
 //After understanding, that key is system, make some work with them
@@ -231,6 +232,7 @@ func (st *Store) set(dbname string, key string, value interface{}, opt ItemOptio
 		dbdata, _ := st.dbs[dbname]
 		dbdata.datacount += 1
 	}
+	st.PublishKeyValue(key, dbname)
 	st.stat.num_writes += 1
 	return true
 
@@ -262,6 +264,18 @@ func (st *Store) Stat() *Statistics {
 
 func (st *Store) CloseLightStore() {
 	fmt.Println("End working: ", time.Now())
+}
+
+func (st*Store) SubscribeKey(item string){
+	st.pubsub.Subscribe(item)
+}
+
+func (st *Store) PublishData(key string) {
+	st.pubsub.Publish(key, "newmsg")
+}
+
+func (st *Store) PublishKeyValue(key, value string){
+	st.pubsub.Publish(key, value)
 }
 
 //This private method provides checking inner datastructure for storing
@@ -299,5 +313,6 @@ func InitStore(settings Settings) *Store {
 	store.stat.start = starttime
 	store.index = NewIndexing()
 	store.config = LoadConfigData()
+	store.pubsub = PubsubInit()
 	return store
 }
