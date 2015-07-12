@@ -238,6 +238,7 @@ func (st *Store) set(dbname string, key string, value interface{}, opt ItemOptio
 
 }
 
+//Remove provides clearning curent key
 func (st *Store) Remove(key string) {
 	switch st.mainstore.(type) {
 	case Dict:
