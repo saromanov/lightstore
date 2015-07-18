@@ -43,12 +43,17 @@ func (so* SnapshotObject) Write(object SnapshotObject){
 //Read provides reading snapshot and store data to lightstore
 //if snapshotname is ""(empty), load more recently snapshot
 func (so *SnapshotObject) Read(snapshotname string) {
-	data, err := ioutil.ReadFile(path.Join(so.Dir, snapshotname))
+	_, err := ioutil.ReadFile(path.Join(so.Dir, snapshotname))
 	if err != nil {
 		panic(fmt.Sprintf("Can't find snapshot with the name %s", snapshotname))
 	}
 
 	snapshots := checkAvailableSnapshots(so.Dir)
+	if len(snapshots) == 0{
+		log.Info("Can't find available snapshots")
+	} else {
+
+	}
 }
 
 //Return snapshotnames
