@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"log"
 )
 
 type (
@@ -22,7 +23,21 @@ type Client struct {
 func NewClient(addr string) *Client {
 	cl := new(Client)
 	cl.addr = addr
+	_, err := cl.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
 	return cl
+}
+
+func (cl *Client) Ping()(bool, error){
+	resp, err := http.Get(fmt.Sprintf("%s/ping", cl.addr))
+	if err != nil{
+		return false, errors.New(fmt.Sprintf("Server by address %s is not ready", cl.addr))
+	}
+
+	resp.Body.Close()
+	return true, nil
 }
 
 //Set basic key-value to lightstore
