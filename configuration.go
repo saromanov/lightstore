@@ -24,6 +24,8 @@ type Config struct {
 	Commitsync bool
 	//Size for cache
 	Cachesize int
+
+	Every struct{Seconds int; Actions []string}
 }
 
 

@@ -299,6 +299,29 @@ func checkDS(name string) (result interface{}) {
 	return result
 }
 
+//ConstructFromConfig provides creational lightstore params from config
+func (store *Store) ConstructFromConfig(){
+	if store.config == nil {
+		return
+	}
+
+	every := store.config.Every
+	if len(every.Actions) > 0{
+		store.Every()
+	}
+}
+
+//Every provides doing some operation every n seconds/minutes
+//Data for this doing, reading from config
+//For example: Doing snapshots every 1 minute
+func (store *Store) Every(){
+	go func(){
+		for {
+			time.Sleep(time.Duration(store.config.Every.Seconds) * time.Second)
+		}
+	}()
+}
+
 func InitStore(settings Settings) *Store {
 	/*
 		Type store can be skiplist or b-tree or simple dict
@@ -314,6 +337,7 @@ func InitStore(settings Settings) *Store {
 	store.stat.start = starttime
 	store.index = NewIndexing()
 	store.config = LoadConfigData()
+	store.ConstructFromConfig()
 	store.pubsub = PubsubInit()
 	return store
 }
