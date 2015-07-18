@@ -307,16 +307,19 @@ func (store *Store) ConstructFromConfig(){
 
 	every := store.config.Every
 	if len(every.Actions) > 0{
-		store.Every()
+		store.Every(ActionsNamesToFuncs(every.Actions))
 	}
 }
 
 //Every provides doing some operation every n seconds/minutes
 //Data for this doing, reading from config
 //For example: Doing snapshots every 1 minute
-func (store *Store) Every(){
+func (store *Store) Every(funcs []func()){
 	go func(){
 		for {
+			for _, f := range funcs {
+				go f()
+			}
 			time.Sleep(time.Duration(store.config.Every.Seconds) * time.Second)
 		}
 	}()
