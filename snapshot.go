@@ -6,6 +6,7 @@ import
 	"path"
 	"fmt"
 	"strings"
+	"os"
 )
 
 //Basic snapshot for all data in ligtstore
@@ -53,6 +54,31 @@ func (so *SnapshotObject) Read(snapshotname string) {
 		log.Info("Can't find available snapshots")
 	} else {
 
+	}
+}
+
+//Read newest provides reading most newest snapshot
+func (so *SnapshotObject) ReadNewest(){
+	snapshots := checkAvailableSnapshots(so.Dir)
+	if len(snapshots) == 0{
+		log.Info("Can't find available snapshots")
+	} else {
+		stat, err := os.Stat(snapshots[0])
+		if err != nil {
+			log.Fatal(err)
+		}
+		modtime := stat.ModTime()
+
+		for _, fi := range snapshots {
+			item, err := os.Stat(fi)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			if item.ModTime().After(modtime){
+				modtime = item.ModTime()
+			}
+		}
 	}
 }
 
