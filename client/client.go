@@ -124,3 +124,8 @@ func (cl *Client) SetToPage(pagename, key, value string) (int, error) {
 	jsonStr := fmt.Sprintf(`{"%s":"%s"}`, key, value)
 	return cl.sendRequest(url, bytes.NewBuffer([]byte(jsonStr)))
 }
+
+func (cl *Client) GetFromPage(pagename, key string)string{
+	url := fmt.Sprintf("%s/dbget/%s/%s", cl.addr, pagename, key)
+	return cl.get(url)
+}
