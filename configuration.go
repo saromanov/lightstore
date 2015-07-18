@@ -7,6 +7,8 @@ import (
 	"os"
 )
 
+//This module for loading configuration from config.yaml
+
 type Config struct {
 	//Address for server
 	Address string
