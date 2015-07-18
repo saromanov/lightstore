@@ -9,6 +9,7 @@ import
 
 const (
 	SNAPSHOTS = "snapshots"
+	HISTORY_LIMIT = "history_limit"
 )
 
 //ActionsNamesToFuncs related with option
@@ -26,6 +27,10 @@ func ActionsNamesToFuncs(actions []string)[] func() {
 			}
 
 			result = append(result, f)
+		}
+
+		if lower(action) == HISTORY_LIMIT {
+			
 		}
 	}
 
