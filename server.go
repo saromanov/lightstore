@@ -192,6 +192,14 @@ func Show_Statistics(w rest.ResponseWriter, r *rest.Request) {
 	lock.Unlock()
 }
 
+func GetHistory(w rest.ResponseWriter, r *rest.Request){
+	lock.Lock()
+	log.Info("Getting list of history events")
+	w.WriteJson(store.historyevent)
+	defer lock.Unlock()
+
+}
+
 func statfmt(num int) string {
 	return fmt.Sprintf("%d", num)
 }
@@ -242,6 +250,7 @@ func InitLightStore(typestore string, addr string, port uint) {
 		&rest.Route{"GET", "/_stat", Show_Statistics},
 		&rest.Route{"GET", "/subscribe/:key", SubscribeItem},
 		&rest.Route{"POST", "/publish/:key", PublishItem},
+		&rest.Route{"GET", "/history", GetHistory},
 	)
 
 	if err != nil {

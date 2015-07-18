@@ -5,6 +5,7 @@ import (
 	"github.com/ryszard/goskiplist/skiplist"
 	"sync"
 	"time"
+	"./history"
 	//"runtime"
 	//"errors"
 )
@@ -29,6 +30,8 @@ type Store struct {
 	index         *Indexing
 	config        *Config
 	pubsub        *Pubsub
+	//Event history
+	historyevent       *history.History
 }
 
 //After understanding, that key is system, make some work with them
@@ -91,6 +94,7 @@ func (st *Store) get(value string, dbname string) interface{} {
 		result, ok := mainstore.(*Dict).Get(value)
 		if ok {
 			st.stat.num_reads += 1
+			store.historyevent.AddEvent("Get")
 			return result
 		}
 	case *BMtree:
@@ -119,6 +123,7 @@ func (st *Store) AppendData(kvitem KVITEM) {
 			switch items.(type) {
 			case []interface{}:
 				items = append(items.([]interface{}), value)
+				store.historyevent.AddEvent("Append")
 				store.set("",key, items, ItemOptions{})
 			default:
 				data := []interface{}{store.Get(key)}
@@ -138,7 +143,7 @@ func (st *Store) GetMany(keys []string) interface{} {
 		for i := 0; i < len(keys); i++ {
 			result = append(result, st.Get(keys[i]))
 		}
-
+		store.historyevent.AddEvent("GetMany")
 		return result
 	}
 	return nil
@@ -230,6 +235,7 @@ func (st *Store) set(dbname string, key string, value interface{}, opt ItemOptio
 
 	if dbname != "" {
 		dbdata, _ := st.dbs[dbname]
+		store.historyevent.AddEvent("Set")
 		dbdata.datacount += 1
 	}
 	st.PublishKeyValue(key, dbname)
@@ -309,6 +315,8 @@ func (store *Store) ConstructFromConfig(){
 	if len(every.Actions) > 0{
 		store.Every(ActionsNamesToFuncs(every.Actions))
 	}
+
+	store.historyevent = history.NewHistory(store.config.Historylimit)
 }
 
 //Every provides doing some operation every n seconds/minutes

@@ -30,6 +30,9 @@ type Config struct {
 	Blocksize int
 
 	Every struct{Seconds int; Actions []string}
+
+	//Limit list for the history of events
+	Historylimit int
 }
 
 
@@ -66,7 +69,13 @@ func (conf *Config) setMissedValues() {
 	if conf.Dbdir == "" {
 		conf.Dbdir = setDefaultDBData()
 	}
+
+	if conf.Historylimit == 0{
+		conf.Historylimit = 1000
+	}
 }
+
+
 
 
 //In the case if config file is not exist or not full,
