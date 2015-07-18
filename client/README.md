@@ -17,3 +17,9 @@ Return statistics
 
 ### CreatePage(pagename string)
 Create new page
+
+### SetToPage(pagename, key, value string)
+Write key-value data to specific pagename
+
+### GetFromPage(pagename, key string)
+Get key-value data from specific pagename
