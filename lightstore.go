@@ -6,6 +6,7 @@ import (
 	"sync"
 	"time"
 	"./history"
+	"./scan"
 	//"runtime"
 	//"errors"
 )
@@ -25,6 +26,7 @@ type Store struct {
 	dbs           map[string]*DB
 	mainstore     interface{}
 	mainstorename string
+	keys          []string
 	lock          *sync.Mutex
 	stat          *Statistics
 	index         *Indexing
@@ -198,10 +200,6 @@ func (st *Store) Exist(key string) bool {
 	return false
 }
 
-func (st *Store) ScanKey(match string) *Scan {
-	return NewScan(match)
-}
-
 func (st *Store) SetinDB(dbname string, key string, value interface{}) bool {
 	return st.set(dbname, key, value, ItemOptions{})
 }
@@ -257,10 +255,10 @@ func (st *Store) Remove(key string) {
 func (st *Store) Find(key string) interface{} {
 	st.lock.Lock()
 	defer st.lock.Unlock()
-	switch st.mainstore.(type) {
-
+	scanner := scan.NewScan(key, st.keys)
+	if scanner.Find(key) {
+		return st.get(key, "")
 	}
-
 	return nil
 }
 
@@ -316,7 +314,7 @@ func (store *Store) ConstructFromConfig(){
 		store.Every(ActionsNamesToFuncs(every.Actions))
 	}
 
-	store.historyevent = history.NewHistory(store.config.Historylimit)
+	store.historyevent = history.NewHistory(5)
 }
 
 //Every provides doing some operation every n seconds/minutes
@@ -342,6 +340,7 @@ func InitStore(settings Settings) *Store {
 	starttime := time.Now()
 	store.items = 0
 	store.mainstore = checkDS(settings.Innerdata)
+	store.keys = []string{}
 	store.dbs = make(map[string]*DB)
 	store.lock = mutex
 	store.stat = new(Statistics)
