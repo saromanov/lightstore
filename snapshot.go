@@ -21,12 +21,14 @@ type SnapshotObject struct{
 	Dir   string
 }
 
+//NewSnapsjot object provides initialization od new snapshot
 func NewSnapshotObject() *SnapshotObject {
 	so := new(SnapshotObject)
 	so.Dir = "."
 	return so
 }
 
+//Write provides storing of new snapshot
 func (so* SnapshotObject) Write(object SnapshotObject){
 	b, err := json.Marshal(object)
 	if err != nil {
