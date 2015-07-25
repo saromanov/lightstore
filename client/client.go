@@ -144,3 +144,9 @@ func (cl *Client) GetFromPage(pagename, key string)string{
 	url := fmt.Sprintf("%s/dbget/%s/%s", cl.addr, pagename, key)
 	return cl.get(url)
 }
+
+//SerializeKey provides serialization key data
+func (cl *Client) SerializeKey(key string, value string) string{
+	url := fmt.Sprintf("%s/serialize/%s/%s", cl.addr, key, value)
+	return cl.get(url)
+}

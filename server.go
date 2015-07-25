@@ -192,12 +192,23 @@ func Show_Statistics(w rest.ResponseWriter, r *rest.Request) {
 	lock.Unlock()
 }
 
-func GetHistory(w rest.ResponseWriter, r *rest.Request){
+func GetHistory(w rest.ResponseWriter, r *rest.Request) {
 	lock.Lock()
 	log.Info("Getting list of history events")
 	w.WriteJson(store.historyevent)
 	defer lock.Unlock()
 
+}
+
+//SerializeKey provides serialization key data without storing
+func SerializeKey(w rest.ResponseWriter, r *rest.Request) {
+	log.Info("Serialize new key")
+	key := r.PathParam("key")
+	value := r.PathParam("value")
+	w.WriteJson(JsonSerialization(&KeySerialize{
+		Key: key,
+		Value: value,
+		}))
 }
 
 func statfmt(num int) string {
@@ -251,6 +262,7 @@ func InitLightStore(typestore string, addr string, port uint) {
 		&rest.Route{"GET", "/subscribe/:key", SubscribeItem},
 		&rest.Route{"POST", "/publish/:key", PublishItem},
 		&rest.Route{"GET", "/history", GetHistory},
+		&rest.Route{"GET", "/serialize/:key/:value", SerializeKey},
 	)
 
 	if err != nil {
