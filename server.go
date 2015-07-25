@@ -193,10 +193,10 @@ func Show_Statistics(w rest.ResponseWriter, r *rest.Request) {
 }
 
 func GetHistory(w rest.ResponseWriter, r *rest.Request) {
-	lock.Lock()
+	//lock.Lock()
 	log.Info("Getting list of history events")
-	w.WriteJson(store.historyevent)
-	defer lock.Unlock()
+	w.WriteJson(store.historyevent.GetAll())
+	//defer lock.Unlock()
 
 }
 
@@ -216,8 +216,10 @@ func statfmt(num int) string {
 }
 
 //Find by key
-func Find(w rest.ResponseWriter, r *rest.Request) {
-
+func FindKey(w rest.ResponseWriter, r *rest.Request) {
+	log.Info("Try to find new key")
+	key := r.PathParam("key")
+	w.WriteJson(store.Find(key))
 }
 
 //PingPong provides availability of server
@@ -263,6 +265,7 @@ func InitLightStore(typestore string, addr string, port uint) {
 		&rest.Route{"POST", "/publish/:key", PublishItem},
 		&rest.Route{"GET", "/history", GetHistory},
 		&rest.Route{"GET", "/serialize/:key/:value", SerializeKey},
+		&rest.Route{"GET", "/find/:key", FindKey},
 	)
 
 	if err != nil {
