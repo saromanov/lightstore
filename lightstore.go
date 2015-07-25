@@ -224,20 +224,24 @@ func (st *Store) set(dbname string, key string, value interface{}, opt ItemOptio
 			mainstore = dbdata.mainstore
 		}
 	}
-	switch mainstore.(type) {
-	case *Dict:
-		mainstore.(*Dict).Set(key, value, opt)
-	case *skiplist.SkipList:
-		mainstore.(*skiplist.SkipList).Set(key, value)
-	}
 
-	if dbname != "" {
-		dbdata, _ := st.dbs[dbname]
-		store.historyevent.AddEvent("deafult", "Set")
-		dbdata.datacount += 1
-	}
-	st.PublishKeyValue(key, dbname)
-	st.stat.num_writes += 1
+	go func() {
+		switch mainstore.(type) {
+		case *Dict:
+			mainstore.(*Dict).Set(key, value, opt)
+		case *skiplist.SkipList:
+			mainstore.(*skiplist.SkipList).Set(key, value)
+		}
+
+		if dbname != "" {
+			dbdata, _ := st.dbs[dbname]
+			st.historyevent.AddEvent("deafult", "Set")
+			dbdata.datacount += 1
+		}
+		st.PublishKeyValue(key, dbname)
+		st.stat.num_writes += 1
+	}()
+
 	return true
 
 }
