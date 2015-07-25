@@ -150,3 +150,13 @@ func (cl *Client) SerializeKey(key string, value string) string{
 	url := fmt.Sprintf("%s/serialize/%s/%s", cl.addr, key, value)
 	return cl.get(url)
 }
+
+func (cl *Client) GetHistory() string {
+	url := fmt.Sprintf("%s/history", cl.addr)
+	return cl.get(url)
+}
+
+func (cl *Client) Find(key string) string {
+	url := fmt.Sprintf("%s/find/%s", cl.addr, key)
+	return cl.get(url)
+}
