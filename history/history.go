@@ -10,16 +10,17 @@ import
 type History struct {
 	items []*Event
 	limit int
+	count int
 	lock sync.RWMutex
 }
 
 type Event struct{
 	//Title of event
-	title string
+	Title string
 	//Address from event
-	addr  string
+	Addr  string
 	//Time where event was happen
-	timesdata time.Time
+	Timesdata time.Time
 }
 
 func NewHistory(limit int)* History{
@@ -34,15 +35,16 @@ func NewHistory(limit int)* History{
 func (hist*History) AddEvent(addr, title string){
 	hist.lock.RLock()
 	defer hist.lock.RUnlock()
-	if len(hist.items) == hist.limit {
+	if hist.count == hist.limit {
 		hist.removeOutdated(1)
+		//hist.count--
 	}
-
-	hist.items = append(hist.items, &Event{
-		title: title,
-		addr: addr, 
-		timesdata: time.Now(),
-		})
+	hist.items[hist.count] = &Event{
+		Title: title,
+		Addr: addr, 
+		Timesdata: time.Now(),
+		}
+	hist.count++
 }
 
 //Get event by id
@@ -55,7 +57,7 @@ func (hist*History) Get(idx int)*Event {
 }
 
 func (hist *History) GetAll()[]*Event {
-	return hist.items
+	return hist.items[0:hist.count]
 }
 
 //Remove outdated records from items.
