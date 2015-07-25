@@ -37,8 +37,12 @@ func (hist*History) AddEvent(addr, title string){
 	defer hist.lock.RUnlock()
 	if hist.count == hist.limit {
 		hist.removeOutdated(1)
-		//hist.count--
+		newlog := make([]*Event, hist.limit)
+		copy(newlog, hist.items)
+		hist.items = newlog
+		hist.count = hist.limit-1
 	}
+
 	hist.items[hist.count] = &Event{
 		Title: title,
 		Addr: addr, 
@@ -49,6 +53,8 @@ func (hist*History) AddEvent(addr, title string){
 
 //Get event by id
 func (hist*History) Get(idx int)*Event {
+	hist.lock.RLock()
+	defer hist.lock.RUnlock()
 	if idx > hist.limit {
 		return &Event{}
 	}
@@ -57,6 +63,8 @@ func (hist*History) Get(idx int)*Event {
 }
 
 func (hist *History) GetAll()[]*Event {
+	hist.lock.RLock()
+	defer hist.lock.RUnlock()
 	return hist.items[0:hist.count]
 }
 

@@ -1,0 +1,375 @@
+I0612 02:06:14.23932 11856 server.go:217] Start to create basic API
+I0612 02:06:14.239893 11856 server.go:242] Lightstore is running
+I0612 02:06:40.730355 11856 server.go:113] Try to create new db
+I0612 02:07:16.546022 11856 server.go:113] Try to create new db
+I0612 02:08:58.298605 11989 server.go:218] Start to create basic API
+I0612 02:08:58.299227 11989 server.go:243] Lightstore is running
+I0612 02:09:02.526747 11989 server.go:114] Try to create new db
+I0612 02:09:32.492768 12099 server.go:218] Start to create basic API
+I0612 02:09:32.49406 12099 server.go:243] Lightstore is running
+I0612 02:09:36.798031 12099 server.go:114] Try to create new db
+I0612 02:10:26.847551 12201 server.go:217] Start to create basic API
+I0612 02:10:26.849316 12201 server.go:242] Lightstore is running
+I0612 02:10:28.573247 12201 server.go:113] Try to create new db
+I0612 02:13:44.030326 12347 server.go:218] Start to create basic API
+I0612 02:13:44.03236 12347 server.go:243] Lightstore is running
+I0612 02:13:50.036149 12347 server.go:114] Try to create new db
+I0612 02:13:52.446733 12347 server.go:102] Store data in db db1
+I0612 03:23:09.656036 14238 server.go:217] Start to create basic API
+I0612 03:23:09.667853 14238 server.go:242] Lightstore is running
+I0613 22:41:48.4936 22763 server.go:217] Start to create basic API
+I0613 22:41:48.495528 22763 server.go:242] Lightstore is running
+I0613 22:51:32.606353 23119 server.go:228] Start to create basic API
+I0613 22:51:32.607055 23119 server.go:254] Lightstore is running
+I0614 19:38:33.684989 19100 server.go:229] Start to create basic API
+I0614 19:38:33.686447 19100 server.go:255] Lightstore is running
+I0614 19:39:15.225754 19100 server.go:197] Try to getting statistics
+I0614 19:39:22.31117 19100 server.go:113] Try to create new db
+I0614 19:39:23.723826 19100 server.go:197] Try to getting statistics
+I0614 19:39:25.90794 19100 server.go:197] Try to getting statistics
+I0614 19:39:28.576552 19100 server.go:113] Try to create new db
+I0614 19:39:30.113834 19100 server.go:197] Try to getting statistics
+I0614 19:41:45.226979 19250 server.go:229] Start to create basic API
+I0614 19:41:45.247128 19250 server.go:255] Lightstore is running
+I0614 19:41:49.26091 19250 server.go:113] Try to create new db
+I0614 19:41:50.262365 19250 server.go:113] Try to create new db
+I0614 19:41:54.288263 19250 server.go:197] Try to getting statistics
+I0614 19:41:55.225191 19250 server.go:197] Try to getting statistics
+I0614 19:48:54.012569 19529 server.go:229] Start to create basic API
+I0614 19:48:54.028432 19529 server.go:255] Lightstore is running
+I0614 19:53:52.059825 19655 server.go:229] Start to create basic API
+I0614 19:53:52.060976 19655 server.go:255] Lightstore is running
+I0614 21:01:36.592603 19655 server.go:65] Store data
+I0614 21:11:05.013633 19655 server.go:65] Store data
+I0614 21:13:15.792947 19655 server.go:65] Store data
+I0614 21:13:45.403163 19655 server.go:65] Store data
+I0614 21:14:26.843642 19655 server.go:65] Store data
+I0614 21:14:36.551799 19655 server.go:65] Store data
+I0614 21:15:06.119793 19655 server.go:65] Store data
+I0614 21:16:35.397417 19655 server.go:65] Store data
+I0614 21:18:00.473717 19655 server.go:65] Store data
+I0614 21:18:20.223227 19655 server.go:65] Store data
+I0614 21:18:41.62581 19655 server.go:65] Store data
+I0614 21:19:13.634936 19655 server.go:65] Store data
+I0614 21:19:27.81258 19655 server.go:65] Store data
+I0614 21:19:41.469954 19655 server.go:65] Store data
+I0614 21:31:46.098411 19655 server.go:113] Try to create new db
+I0614 21:41:39.877644 23081 server.go:229] Start to create basic API
+I0614 21:41:39.922755 23081 server.go:255] Lightstore is running
+I0614 21:42:35.451769 23195 server.go:229] Start to create basic API
+I0614 21:42:35.474311 23195 server.go:255] Lightstore is running
+E0614 21:42:38.25969 23195 server.go:81] invalid character 'd' looking for beginning of value
+I0614 21:42:38.260376 23195 server.go:65] Store data
+I0614 21:43:52.010357 23287 server.go:229] Start to create basic API
+I0614 21:43:52.012636 23287 server.go:255] Lightstore is running
+E0614 21:43:58.988587 23287 server.go:81] invalid character 'd' looking for beginning of value
+I0614 21:43:58.989441 23287 server.go:65] Store data
+E0614 21:45:34.678974 23287 server.go:81] invalid character 'd' looking for beginning of value
+I0614 21:45:34.67949 23287 server.go:65] Store data
+I0614 21:46:01.702206 23287 server.go:65] Store data
+I0614 21:46:37.457608 23287 server.go:65] Store data
+I0614 21:50:16.539988 23287 server.go:65] Store data
+I0614 21:51:24.004624 23287 server.go:65] Store data
+I0614 21:51:35.620763 23287 server.go:65] Store data
+E0614 21:52:14.061296 23287 server.go:81] invalid character ',' after top-level value
+I0614 21:52:14.061877 23287 server.go:65] Store data
+E0614 21:52:19.952581 23287 server.go:81] invalid character ',' after top-level value
+I0614 21:52:19.953178 23287 server.go:65] Store data
+I0614 21:52:31.127635 23287 server.go:65] Store data
+I0614 21:55:05.377235 23287 server.go:65] Store data
+I0614 21:55:34.729776 23287 server.go:65] Store data
+I0614 21:56:22.605003 23287 server.go:65] Store data
+I0614 21:58:27.16874 23287 server.go:65] Store data
+I0614 22:00:06.640719 23287 server.go:65] Store data
+I0614 22:00:27.844875 23287 server.go:65] Store data
+I0620 15:00:24.94532 6816 server.go:229] Start to create basic API
+I0620 15:00:25.011972 6816 server.go:255] Lightstore is running
+I0620 15:00:52.315432 6848 server.go:229] Start to create basic API
+I0620 15:00:52.316913 6848 server.go:255] Lightstore is running
+I0620 15:01:43.152314 6888 server.go:229] Start to create basic API
+I0620 15:01:43.153756 6888 server.go:255] Lightstore is running
+I0620 15:19:12.972343 7331 server.go:229] Start to create basic API
+I0620 15:33:52.567061 7614 server.go:229] Start to create basic API
+I0620 15:35:04.37955 7658 server.go:229] Start to create basic API
+I0620 15:35:04.444503 7658 server.go:255] Lightstore is running
+I0620 15:35:35.991549 7718 server.go:229] Start to create basic API
+I0620 15:35:35.993313 7718 server.go:255] Lightstore is running
+I0620 15:38:43.37392 7889 server.go:229] Start to create basic API
+I0620 15:38:43.401482 7889 server.go:255] Lightstore is running
+I0620 15:39:44.001663 7927 server.go:229] Start to create basic API
+I0620 15:39:44.003793 7927 server.go:255] Lightstore is running
+I0620 15:39:59.518097 7956 server.go:229] Start to create basic API
+I0620 15:39:59.519717 7956 server.go:255] Lightstore is running
+I0620 15:40:29.497407 7990 server.go:229] Start to create basic API
+I0620 15:40:29.500847 7990 server.go:255] Lightstore is running
+I0620 15:41:12.907296 8025 server.go:229] Start to create basic API
+I0620 15:41:12.964755 8025 server.go:255] Lightstore is running
+I0620 15:44:38.845761 8107 server.go:229] Start to create basic API
+I0620 15:44:38.903082 8107 server.go:255] Lightstore is running
+I0620 15:45:09.556743 8160 server.go:229] Start to create basic API
+I0620 15:45:09.559676 8160 server.go:255] Lightstore is running
+I0620 15:45:19.862765 8187 server.go:229] Start to create basic API
+I0620 15:45:19.864291 8187 server.go:255] Lightstore is running
+I0620 15:45:50.237844 8237 server.go:229] Start to create basic API
+I0620 15:45:50.240903 8237 server.go:255] Lightstore is running
+I0620 15:46:18.356076 8269 server.go:229] Start to create basic API
+I0620 15:46:18.358479 8269 server.go:255] Lightstore is running
+I0620 15:46:51.172096 8321 server.go:229] Start to create basic API
+I0620 15:46:51.174948 8321 server.go:255] Lightstore is running
+I0620 15:48:34.764072 8368 server.go:229] Start to create basic API
+I0620 15:48:34.766923 8368 server.go:255] Lightstore is running
+I0620 16:11:08.19531 8774 server.go:229] Start to create basic API
+I0620 16:11:08.252512 8774 server.go:255] Lightstore is running
+I0628 19:43:16.161243 11036 server.go:229] Start to create basic API
+I0628 19:43:16.317425 11036 server.go:255] Lightstore is running
+I0628 19:43:49.331188 11036 server.go:65] Store data
+I0628 19:52:30.051968 11352 server.go:229] Start to create basic API
+I0628 19:52:30.109137 11352 server.go:255] Lightstore is running
+I0628 19:53:19.359004 11417 server.go:229] Start to create basic API
+I0628 19:53:19.360639 11417 server.go:255] Lightstore is running
+I0628 19:53:22.182085 11417 server.go:65] Store data
+I0628 19:54:48.699197 11479 server.go:229] Start to create basic API
+I0628 19:54:48.70071 11479 server.go:255] Lightstore is running
+I0628 19:54:54.97493 11479 server.go:65] Store data
+I0628 19:55:19.768281 11520 server.go:229] Start to create basic API
+I0628 19:55:19.771772 11520 server.go:255] Lightstore is running
+I0628 19:55:21.783072 11520 server.go:65] Store data
+I0628 19:56:31.171277 11584 server.go:229] Start to create basic API
+I0628 19:56:31.172705 11584 server.go:256] Lightstore is running
+I0628 19:58:15.912056 11635 server.go:229] Start to create basic API
+I0628 19:58:15.913794 11635 server.go:255] Lightstore is running
+I0628 19:58:19.371944 11635 server.go:65] Store data
+I0628 19:59:08.490425 11635 server.go:65] Store data
+I0628 20:00:11.012752 11752 server.go:229] Start to create basic API
+I0628 20:00:11.049133 11752 server.go:255] Lightstore is running
+I0628 20:00:16.170413 11752 server.go:65] Store data
+I0628 20:05:01.546689 11752 server.go:65] Store data
+I0628 20:05:11.799068 11911 server.go:229] Start to create basic API
+I0628 20:05:11.814969 11911 server.go:255] Lightstore is running
+I0628 20:06:00.478764 11972 server.go:229] Start to create basic API
+I0628 20:06:00.544339 11972 server.go:255] Lightstore is running
+I0628 20:06:02.987731 11972 server.go:65] Store data
+I0628 20:06:04.316963 11972 server.go:65] Store data
+I0628 20:07:10.176994 12032 server.go:229] Start to create basic API
+I0628 20:07:10.178618 12032 server.go:255] Lightstore is running
+I0628 20:07:11.860326 12032 server.go:65] Store data
+I0628 20:08:15.852542 12083 server.go:229] Start to create basic API
+I0628 20:08:15.85422 12083 server.go:255] Lightstore is running
+I0628 20:08:18.557661 12083 server.go:65] Store data
+I0628 22:33:18.11341 16094 server.go:227] Start to create basic API
+I0628 22:33:18.237963 16094 server.go:253] Lightstore is running
+I0628 22:33:24.604693 16094 server.go:65] Store data
+I0628 22:34:17.311392 16094 server.go:65] Store data
+I0628 22:35:16.138765 16198 server.go:227] Start to create basic API
+I0628 22:35:16.287653 16198 server.go:253] Lightstore is running
+I0628 22:35:23.771273 16198 server.go:65] Store data
+I0628 22:36:25.101626 16268 server.go:227] Start to create basic API
+I0628 22:36:25.125361 16268 server.go:253] Lightstore is running
+I0628 22:36:28.285014 16268 server.go:65] Store data
+I0628 22:37:12.323275 16315 server.go:227] Start to create basic API
+I0628 22:37:12.347193 16315 server.go:253] Lightstore is running
+I0628 22:37:14.465839 16315 server.go:65] Store data
+I0628 22:37:55.513471 16360 server.go:227] Start to create basic API
+I0628 22:37:55.712306 16360 server.go:253] Lightstore is running
+I0628 22:38:01.379576 16360 server.go:65] Store data
+I0628 22:38:48.320418 16407 server.go:227] Start to create basic API
+I0628 22:38:48.3402 16407 server.go:253] Lightstore is running
+I0628 22:38:50.025973 16407 server.go:65] Store data
+I0628 22:41:41.381465 16661 server.go:227] Start to create basic API
+I0628 22:41:41.42572 16661 server.go:253] Lightstore is running
+I0628 22:48:06.390613 16851 server.go:227] Start to create basic API
+I0628 22:48:06.455784 16851 server.go:253] Lightstore is running
+I0628 23:24:11.898595 17786 server.go:228] Start to create basic API
+I0628 23:24:12.447536 17786 server.go:254] Lightstore is running
+I0628 23:24:22.166285 17812 server.go:228] Start to create basic API
+I0628 23:24:22.485963 17812 server.go:254] Lightstore is running
+I0704 21:38:58.992905 18789 server.go:209] Start to create basic API
+I0704 21:38:59.006822 18789 server.go:235] Lightstore is running
+I0704 21:39:25.056519 18789 server.go:99] Store data in db db1
+I0704 21:39:25.05681 18789 lightstore.go:193] db with name db1 is not found
+I0704 21:39:25.05698 18789 lightstore.go:193] db with name db1 is not found
+I0704 21:39:25.057143 18789 lightstore.go:193] db with name db1 is not found
+I0704 21:41:41.656509 18988 server.go:209] Start to create basic API
+I0704 21:41:41.755045 18988 server.go:235] Lightstore is running
+I0704 21:41:50.062903 18988 server.go:99] Store data in db db1
+I0704 21:41:50.063265 18988 lightstore.go:194] db with name db1 is not found
+I0704 21:41:50.063512 18988 lightstore.go:194] db with name db1 is not found
+I0704 21:41:50.063697 18988 lightstore.go:194] db with name db1 is not found
+I0704 21:50:42.64126 19515 server.go:209] Start to create basic API
+I0704 21:50:42.652935 19515 server.go:235] Lightstore is running
+I0704 21:50:46.456158 19515 server.go:99] Store data in db db1
+I0704 21:50:46.456463 19515 lightstore.go:206] db with name db1 is not found
+I0704 21:50:46.45664 19515 lightstore.go:206] db with name db1 is not found
+I0704 21:50:46.456812 19515 lightstore.go:206] db with name db1 is not found
+I0704 21:51:16.680398 19515 server.go:99] Store data in db db1
+I0704 21:51:16.680685 19515 lightstore.go:206] db with name db1 is not found
+I0704 21:51:16.680862 19515 lightstore.go:206] db with name db1 is not found
+I0704 21:51:16.681036 19515 lightstore.go:206] db with name db1 is not found
+I0704 21:51:44.672726 19515 server.go:65] Store data
+I0704 21:59:44.931127 20019 server.go:209] Start to create basic API
+I0704 21:59:44.942163 20019 server.go:235] Lightstore is running
+I0704 21:59:53.457863 20019 server.go:65] Store data
+I0704 22:00:00.759115 20019 server.go:65] Store data
+I0704 22:00:32.960906 20081 server.go:209] Start to create basic API
+I0704 22:00:32.962423 20081 server.go:235] Lightstore is running
+I0704 22:00:35.158447 20081 server.go:65] Store data
+I0704 22:01:42.118081 20184 server.go:209] Start to create basic API
+I0704 22:01:42.119859 20184 server.go:235] Lightstore is running
+I0704 22:01:43.740686 20184 server.go:65] Store data
+I0704 22:06:28.779707 20501 server.go:209] Start to create basic API
+I0704 22:06:28.781596 20501 server.go:235] Lightstore is running
+I0704 22:06:34.74796 20501 server.go:65] Store data
+I0704 22:06:37.848417 20501 server.go:65] Store data
+I0704 22:09:57.379571 20688 server.go:209] Start to create basic API
+I0704 22:09:57.381027 20688 server.go:235] Lightstore is running
+I0704 22:09:59.671363 20688 server.go:65] Store data
+I0704 22:10:02.81368 20688 server.go:65] Store data
+I0704 22:10:11.557306 20688 server.go:65] Store data
+I0704 22:11:31.807774 20795 server.go:209] Start to create basic API
+I0704 22:11:31.809701 20795 server.go:235] Lightstore is running
+I0704 22:11:35.019007 20795 server.go:65] Store data
+I0704 22:11:37.612871 20795 server.go:65] Store data
+I0704 22:12:13.941824 20795 server.go:65] Store data
+I0704 22:12:21.330773 20795 server.go:65] Store data
+I0704 22:33:29.810741 21867 server.go:209] Start to create basic API
+I0704 22:33:29.877078 21867 server.go:235] Lightstore is running
+I0704 22:35:20.039428 21965 server.go:209] Start to create basic API
+I0704 22:35:20.041269 21965 server.go:235] Lightstore is running
+I0704 23:31:54.706413 24752 server.go:209] Start to create basic API
+I0704 23:31:55.164922 24752 server.go:235] Lightstore is running
+I0711 22:26:37.834647 17740 server.go:224] Start to create basic API
+I0711 22:26:37.955998 17740 server.go:252] Lightstore is running
+I0718 19:29:49.058588 4063 server.go:224] Start to create basic API
+I0718 19:29:49.164779 4063 server.go:252] Lightstore is running
+I0718 19:52:13.268119 6074 server.go:224] Start to create basic API
+I0718 19:52:13.78496 6074 server.go:252] Lightstore is running
+I0718 19:52:47.980383 6074 server.go:65] Store data
+I0718 19:52:47.982987 6074 server.go:111] Try to create new db
+I0718 19:52:47.985183 6074 server.go:99] Store data in db data2
+I0718 19:53:44.156043 6074 server.go:65] Store data
+I0718 19:53:44.169769 6074 server.go:111] Try to create new db
+I0718 19:53:44.184843 6074 server.go:99] Store data in db data2
+I0718 20:02:17.158691 7001 server.go:224] Start to create basic API
+I0718 20:02:17.605226 7001 server.go:252] Lightstore is running
+I0718 20:02:23.60383 7001 server.go:65] Store data
+I0718 20:02:23.627507 7001 server.go:111] Try to create new db
+I0718 20:02:23.630612 7001 server.go:99] Store data in db data2
+I0718 20:02:56.036071 7001 server.go:65] Store data
+I0718 20:02:56.038261 7001 server.go:111] Try to create new db
+I0718 20:02:56.040054 7001 server.go:99] Store data in db data2
+I0718 20:03:03.101174 7001 server.go:65] Store data
+I0718 20:03:03.104413 7001 server.go:111] Try to create new db
+I0718 20:03:03.105895 7001 server.go:99] Store data in db data2
+I0718 20:55:34.045491 11651 server.go:224] Start to create basic API
+I0718 20:55:34.333423 11651 server.go:252] Lightstore is running
+I0718 20:58:24.689285 11651 server.go:65] Store data
+I0718 20:58:24.691444 11651 server.go:111] Try to create new db
+I0718 20:58:24.692892 11651 server.go:99] Store data in db data2
+I0718 20:59:01.973971 12117 server.go:224] Start to create basic API
+I0718 20:59:01.985313 12117 server.go:252] Lightstore is running
+I0718 20:59:05.330191 12117 server.go:65] Store data
+I0718 20:59:05.332388 12117 server.go:111] Try to create new db
+I0718 20:59:05.333655 12117 server.go:99] Store data in db data2
+I0718 21:00:09.849574 12295 server.go:224] Start to create basic API
+I0718 21:00:09.851762 12295 server.go:252] Lightstore is running
+I0718 21:00:12.889357 12295 server.go:65] Store data
+I0718 21:00:12.892237 12295 server.go:111] Try to create new db
+I0718 21:00:12.893688 12295 server.go:99] Store data in db data2
+I0718 21:00:43.892185 12383 server.go:224] Start to create basic API
+I0718 21:00:43.893781 12383 server.go:252] Lightstore is running
+I0718 21:00:47.471043 12383 server.go:65] Store data
+I0718 21:00:47.473908 12383 server.go:111] Try to create new db
+I0718 21:00:47.47547 12383 server.go:99] Store data in db data2
+I0718 21:01:56.411272 12578 server.go:224] Start to create basic API
+I0718 21:01:56.413057 12578 server.go:252] Lightstore is running
+I0718 21:03:47.969149 12736 server.go:224] Start to create basic API
+I0718 21:04:42.871218 12824 server.go:224] Start to create basic API
+I0718 21:05:05.661976 12879 server.go:224] Start to create basic API
+I0718 21:07:23.902206 13072 server.go:224] Start to create basic API
+I0718 21:07:58.486474 13136 server.go:224] Start to create basic API
+I0718 21:08:17.839197 13182 server.go:224] Start to create basic API
+I0718 21:08:17.842196 13182 server.go:252] Lightstore is running
+I0718 21:09:11.49515 13273 server.go:224] Start to create basic API
+I0718 21:09:11.513503 13273 server.go:252] Lightstore is running
+I0718 21:14:37.670216 13736 server.go:224] Start to create basic API
+I0718 21:14:37.744207 13736 server.go:252] Lightstore is running
+I0718 21:15:05.526564 13797 server.go:224] Start to create basic API
+I0718 21:15:05.528523 13797 server.go:252] Lightstore is running
+I0718 21:19:36.27299 14153 server.go:224] Start to create basic API
+I0718 21:19:36.315333 14153 server.go:252] Lightstore is running
+I0718 21:20:20.996933 14232 server.go:224] Start to create basic API
+I0718 21:20:20.998866 14232 server.go:252] Lightstore is running
+I0718 21:20:33.226305 14269 server.go:224] Start to create basic API
+I0718 21:20:33.227972 14269 server.go:252] Lightstore is running
+I0718 21:25:13.945071 14682 server.go:224] Start to create basic API
+I0718 21:25:14.049639 14682 server.go:252] Lightstore is running
+I0718 21:25:33.453673 14729 server.go:224] Start to create basic API
+I0718 21:25:33.478836 14729 server.go:252] Lightstore is running
+I0718 21:25:55.640179 14781 server.go:224] Start to create basic API
+I0718 21:25:55.641742 14781 server.go:252] Lightstore is running
+I0718 21:26:33.964234 14853 server.go:224] Start to create basic API
+I0718 21:26:33.966943 14853 server.go:252] Lightstore is running
+I0718 21:26:46.654441 14853 server.go:65] Store data
+I0718 21:26:46.656395 14853 server.go:111] Try to create new db
+I0718 21:26:46.657778 14853 server.go:99] Store data in db data2
+I0718 21:32:08.870969 15383 server.go:224] Start to create basic API
+I0718 21:32:08.948019 15383 server.go:252] Lightstore is running
+I0718 21:32:52.694354 15460 server.go:224] Start to create basic API
+I0718 21:32:52.788214 15460 server.go:252] Lightstore is running
+I0718 21:33:42.06522 15545 server.go:224] Start to create basic API
+I0718 21:33:42.134127 15545 server.go:252] Lightstore is running
+I0718 21:37:26.512662 15922 server.go:224] Start to create basic API
+I0718 21:37:26.914704 15922 server.go:252] Lightstore is running
+I0718 21:47:54.099521 16798 server.go:224] Start to create basic API
+I0718 21:47:54.226506 16798 server.go:252] Lightstore is running
+I0718 22:51:08.601465 21948 server.go:224] Start to create basic API
+I0718 22:51:08.790975 21948 server.go:252] Lightstore is running
+I0718 23:19:45.281181 24307 server.go:224] Start to create basic API
+I0718 23:19:45.370734 24307 server.go:252] Lightstore is running
+I0718 23:37:24.576835 25676 server.go:224] Start to create basic API
+I0718 23:37:24.611613 25676 server.go:252] Lightstore is running
+I0718 23:37:40.345201 25722 server.go:224] Start to create basic API
+I0718 23:37:40.359941 25722 server.go:252] Lightstore is running
+I0718 23:40:11.889826 25930 server.go:224] Start to create basic API
+I0718 23:40:11.905324 25930 server.go:252] Lightstore is running
+I0718 23:57:42.827785 27547 server.go:231] Start to create basic API
+I0718 23:57:42.979917 27547 server.go:260] Lightstore is running
+I0718 23:58:48.030333 27653 server.go:232] Start to create basic API
+I0718 23:58:48.044328 27653 server.go:261] Lightstore is running
+I0718 23:58:57.090782 27653 server.go:65] Store data
+I0718 23:58:57.198179 27653 server.go:111] Try to create new db
+I0718 23:58:57.200237 27653 server.go:99] Store data in db data2
+I0719 00:00:05.714477 27832 server.go:232] Start to create basic API
+I0719 00:00:05.820029 27832 server.go:261] Lightstore is running
+I0719 00:00:24.842561 27832 server.go:65] Store data
+I0719 00:00:24.945001 27832 server.go:111] Try to create new db
+I0719 00:00:24.947028 27832 server.go:99] Store data in db data2
+I0719 00:02:10.953524 28068 server.go:232] Start to create basic API
+I0719 00:02:10.992514 28068 server.go:261] Lightstore is running
+I0719 00:02:15.694285 28068 server.go:65] Store data
+I0719 00:02:15.697803 28068 server.go:111] Try to create new db
+I0719 00:02:15.699234 28068 server.go:99] Store data in db data2
+I0719 00:02:59.089918 28176 server.go:232] Start to create basic API
+I0719 00:02:59.091788 28176 server.go:261] Lightstore is running
+I0719 00:03:01.671184 28176 server.go:65] Store data
+I0719 00:03:01.716593 28176 server.go:111] Try to create new db
+I0719 00:03:01.718148 28176 server.go:99] Store data in db data2
+I0719 00:03:05.488468 28176 server.go:65] Store data
+I0719 00:03:05.491063 28176 server.go:111] Try to create new db
+I0719 00:03:05.492617 28176 server.go:99] Store data in db data2
+I0719 00:03:11.015334 28253 server.go:232] Start to create basic API
+I0719 00:03:11.017077 28253 server.go:261] Lightstore is running
+I0719 00:03:13.38855 28253 server.go:65] Store data
+I0719 00:03:13.413392 28253 server.go:111] Try to create new db
+I0719 00:03:13.415788 28253 server.go:99] Store data in db data2
+I0719 00:03:45.898174 28349 server.go:232] Start to create basic API
+I0719 00:03:45.899945 28349 server.go:261] Lightstore is running
+I0719 00:03:48.592611 28349 server.go:65] Store data
+I0719 00:03:48.596634 28349 server.go:111] Try to create new db
+I0719 00:03:48.59854 28349 server.go:99] Store data in db data2
+I0719 00:04:18.994441 28442 server.go:232] Start to create basic API
+I0719 00:04:18.996031 28442 server.go:261] Lightstore is running
+I0719 00:04:22.08334 28442 server.go:197] Getting list of history events
+I0719 00:04:26.855414 28442 server.go:65] Store data
+I0719 00:04:26.857752 28442 server.go:111] Try to create new db
+I0719 00:04:26.859639 28442 server.go:99] Store data in db data2
