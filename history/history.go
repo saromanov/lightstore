@@ -14,7 +14,11 @@ type History struct {
 }
 
 type Event struct{
+	//Title of event
 	title string
+	//Address from event
+	addr  string
+	//Time where event was happen
 	timesdata time.Time
 }
 
@@ -27,7 +31,7 @@ func NewHistory(limit int)* History{
 }
 
 //AddEvent provides storing new event to list
-func (hist*History) AddEvent(title string){
+func (hist*History) AddEvent(addr, title string){
 	hist.lock.RLock()
 	defer hist.lock.RUnlock()
 	if len(hist.items) == hist.limit {
@@ -35,7 +39,8 @@ func (hist*History) AddEvent(title string){
 	}
 
 	hist.items = append(hist.items, &Event{
-		title:title, 
+		title: title,
+		addr: addr, 
 		timesdata: time.Now(),
 		})
 }
