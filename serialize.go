@@ -3,15 +3,19 @@ package lightstore
 import
 (
 	"encoding/json"
-	"log"
 )
 //This module provides serialization
+
+type KeySerialize struct {
+	Key string
+	Value string
+}
 
 //JsonSerialization...
 func JsonSerialization(data interface{}) string{
 	result, err := json.Marshal(data)
 	if err != nil {
-		log.Printf(err)
+		panic(err)
 	}
 
 	return string(result)
