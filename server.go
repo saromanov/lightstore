@@ -183,13 +183,13 @@ func PublishItem(w rest.ResponseWriter, r *rest.Request) {
 
 //Return statistics of usage
 func Show_Statistics(w rest.ResponseWriter, r *rest.Request) {
-	lock.Lock()
+	//lock.Lock()
 	log.Info("Try to getting statistics")
 	stat := store.Stat()
 	w.WriteJson(map[string]string{"Total number of writes": statfmt(stat.num_writes), 
 		"Total number of reads": statfmt(stat.num_reads),
 		"Total number of active db": statfmt(stat.dbnum), "Address": stat.host})
-	lock.Unlock()
+	//lock.Unlock()
 }
 
 func GetHistory(w rest.ResponseWriter, r *rest.Request) {
