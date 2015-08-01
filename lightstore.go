@@ -278,7 +278,8 @@ func (st *Store) CloseLightStore() {
 }
 
 func (st*Store) SubscribeKey(item string){
-	st.pubsub.Subscribe(&SubscribeData{Title: item})
+	rpc.InitClient(nil).Get("Pubsub.Subscribe", &SubscribeData{Title: item}, nil)
+	//st.pubsub.Subscribe(&SubscribeData{Title: item})
 }
 
 func (st *Store) PublishInfo(key string) {
@@ -287,6 +288,12 @@ func (st *Store) PublishInfo(key string) {
 
 func (st *Store) PublishKeyValue(key, value string){
 	st.pubsub.Publish(&PublishData{Title: key, Msg:value})
+}
+
+func (st *Store) makeSnapshot(){
+	//This is only for testing
+	snap := NewSnapshotObject()
+	snap.Write(&SnapshotObject{Crc32: "123", Data: "foobar", Dir: "/"})
 }
 
 //This private method provides checking inner datastructure for storing

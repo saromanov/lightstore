@@ -222,6 +222,12 @@ func FindKey(w rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(store.Find(key))
 }
 
+//MakeSnapShot provides saving of the new snapshot
+func MakeSnapShot(w rest.ResponseWriter, r *rest.Request) {
+	store.makeSnapshot()
+	w.WriteJson("New snapshot was created")
+}
+
 //PingPong provides availability of server
 func PingPong(w rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson("Pong")
@@ -266,6 +272,7 @@ func InitLightStore(typestore string, addr string, port uint) {
 		&rest.Route{"GET", "/history", GetHistory},
 		&rest.Route{"GET", "/serialize/:key/:value", SerializeKey},
 		&rest.Route{"GET", "/find/:key", FindKey},
+		&rest.Route{"GET", "/snapshot", MakeSnapShot},
 	)
 
 	if err != nil {

@@ -29,7 +29,7 @@ func NewSnapshotObject() *SnapshotObject {
 }
 
 //Write provides storing of new snapshot
-func (so* SnapshotObject) Write(object SnapshotObject){
+func (so* SnapshotObject) Write(object* SnapshotObject){
 	b, err := json.Marshal(object)
 	if err != nil {
 		panic(err)
