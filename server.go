@@ -177,7 +177,7 @@ func PublishItem(w rest.ResponseWriter, r *rest.Request) {
 	key := r.PathParam("key")
 	lock.RLock()
 	defer lock.RUnlock()
-	store.PublishData(key)
+	store.PublishInfo(key)
 	w.WriteJson("New item for publishing")
 }
 

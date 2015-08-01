@@ -7,6 +7,7 @@ import (
 	"time"
 	"./history"
 	"./scan"
+	"./rpc"
 	//"runtime"
 	//"errors"
 )
@@ -34,6 +35,7 @@ type Store struct {
 	pubsub        *Pubsub
 	//Event history
 	historyevent       *history.History
+	rpcdata       *rpc.RPCData
 }
 
 //After understanding, that key is system, make some work with them
@@ -276,15 +278,15 @@ func (st *Store) CloseLightStore() {
 }
 
 func (st*Store) SubscribeKey(item string){
-	st.pubsub.Subscribe(item)
+	st.pubsub.Subscribe(&SubscribeData{Title: item})
 }
 
-func (st *Store) PublishData(key string) {
-	st.pubsub.Publish(key, "newmsg")
+func (st *Store) PublishInfo(key string) {
+	st.pubsub.Publish(&PublishData{Title: key, Msg:"newmsg"})
 }
 
 func (st *Store) PublishKeyValue(key, value string){
-	st.pubsub.Publish(key, value)
+	st.pubsub.Publish(&PublishData{Title: key, Msg:value})
 }
 
 //This private method provides checking inner datastructure for storing
@@ -353,5 +355,8 @@ func InitStore(settings Settings) *Store {
 	store.config = LoadConfigData()
 	store.ConstructFromConfig()
 	store.pubsub = PubsubInit()
+	rpc.RegisterRPCFunction(store.pubsub)
+	store.rpcdata = rpc.Init("")
+	store.rpcdata.Run()
 	return store
 }

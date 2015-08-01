@@ -14,6 +14,15 @@ type Pubsub struct {
 	queue []PubsubObject
 }
 
+type SubscribeData struct{
+	Title string
+}
+
+type PublishData struct{
+	Title string
+	Msg string
+}
+
 type PubsubObject struct {
 	//Catch only once event
 	once bool
@@ -31,15 +40,15 @@ func PubsubInit()*Pubsub{
 
 //Subscribe provides subscibtion to the specific key
 //for example on the db title
-func (ps *Pubsub) Subscribe(title string){
-	ps.inner[title] = PubsubObject{}
+func (ps *Pubsub) Subscribe(si* SubscribeData){
+	ps.inner[si.Title] = PubsubObject{}
 	var wg sync.WaitGroup
     wg.Add(1)
 	go func(){
 		for {
 			item, err := ps.receive()
 			if err == nil {
-				fmt.Println(fmt.Sprintf("Receive from %s %s", title, item.msg))
+				fmt.Println(fmt.Sprintf("Receive from %s %s", si.Title, item.msg))
 				if item.once {
 					break
 					wg.Done()
@@ -53,8 +62,8 @@ func (ps *Pubsub) Subscribe(title string){
 }
 
 //Publish new message
-func (ps *Pubsub) Publish(title, msg string) {
-	ps.publish(title, msg)
+func (ps *Pubsub) Publish(po *PublishData) {
+	ps.publish(po.Title, po.Msg)
 }
 
 func (ps *Pubsub) receive()(PubsubObject, error){
