@@ -16,17 +16,15 @@ type ClientOptions struct {
 	Timeout time.Duration
 }
 
-func (client *RPCClient) Init(opt *ClientOptions) *RPCClient {
-	addr := opt.Address
-	if addr == "" {
-		addr = ADDR
-	}
+func InitClient(opt *ClientOptions) *RPCClient {
+	addr := ADDR
+	timeout := time.Duration(100) * time.Millisecond
 
-	timeout := opt.Timeout
-	if timeout == 0 {
-		timeout = 2
+	if opt != nil {
+		addr = opt.Address
+		timeout = opt.Timeout
 	}
-
+	
 	connection, err := net.DialTimeout("tcp", addr, timeout)
 	if err != nil {
 		log.Fatal(err)
@@ -35,6 +33,6 @@ func (client *RPCClient) Init(opt *ClientOptions) *RPCClient {
 	return &RPCClient{connection: rpc.NewClient(connection)}
 }
 
-func (client *RPCClient) Get(procname string) {
-	//client.connection.Call()
+func (client *RPCClient) Get(title string, input,output interface{}) {
+	client.connection.Call(title, input, output)
 }
