@@ -33,8 +33,8 @@ func NewHistory(limit int)* History{
 
 //AddEvent provides storing new event to list
 func (hist*History) AddEvent(addr, title string){
-	hist.lock.RLock()
-	defer hist.lock.RUnlock()
+	hist.lock.Lock()
+	defer hist.lock.Unlock()
 	if hist.count == hist.limit {
 		hist.removeOutdated(1)
 		newlog := make([]*Event, hist.limit)
