@@ -38,9 +38,10 @@ func PubsubInit()*Pubsub{
 	return ps
 }
 
+
 //Subscribe provides subscibtion to the specific key
 //for example on the db title
-func (ps *Pubsub) Subscribe(si* SubscribeData){
+func (ps *Pubsub) Subscribe(si* SubscribeData, value* interface{}) error{
 	ps.inner[si.Title] = PubsubObject{}
 	var wg sync.WaitGroup
     wg.Add(1)
@@ -58,7 +59,8 @@ func (ps *Pubsub) Subscribe(si* SubscribeData){
 			time.Sleep(100 * time.Millisecond)
 		}
 	}()
-	wg.Wait()
+	//wg.Wait()
+	return nil
 }
 
 //Publish new message
