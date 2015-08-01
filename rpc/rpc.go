@@ -28,10 +28,6 @@ func Init(address string) *RPCData {
 	return rpcdata
 }
 
-func (rpcdata *RPCData) Register(obj interface{}) {
-	rpc.Register(obj)
-}
-
 func (rpcdata *RPCData) Run() {
 	go func() {
 		l, e := net.Listen("tcp", rpcdata.address)
