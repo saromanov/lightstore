@@ -11,6 +11,7 @@ import
 type Scan struct {
 	match string
 	keys []string
+	subspaces []*Subspace
 }
 
 func NewScan(match string, keys []string)*Scan {
@@ -24,6 +25,8 @@ func (sc *Scan) Process(){
 	sort.Strings(sc.keys)
 }
 
+
+//Finf provides simple finding of the key
 func (sc *Scan) Find(key string) bool {
 	for _, item := range sc.keys{
 		if item == key {
