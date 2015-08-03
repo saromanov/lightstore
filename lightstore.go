@@ -28,7 +28,7 @@ type Store struct {
 	mainstore     interface{}
 	mainstorename string
 	keys          []string
-	lock          *sync.Mutex
+	lock          *sync.RWMutex
 	stat          *Statistics
 	index         *Indexing
 	config        *Config
@@ -91,8 +91,8 @@ func (st *Store) get(value string, dbname string) interface{} {
 		}
 	}
 
-	st.lock.Lock()
-	defer st.lock.Unlock()
+	st.lock.RLock()
+	defer st.lock.RUnlock()
 	switch mainstore.(type) {
 	case *Dict:
 		result, ok := mainstore.(*Dict).Get(value)
@@ -348,7 +348,7 @@ func InitStore(settings Settings) *Store {
 	/*
 		Type store can be skiplist or b-tree or simple dict
 	*/
-	mutex := &sync.Mutex{}
+	mutex := &sync.RWMutex{}
 	store := new(Store)
 	starttime := time.Now()
 	store.items = 0
