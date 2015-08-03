@@ -233,6 +233,12 @@ func PingPong(w rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson("Pong")
 }
 
+
+//RepairGet provides getting data from the trash
+func RepairGet(w rest.ResponseWriter, r *rest.Request) {
+	w.WriteJson(store.RepairData(r.PathParam("key")))
+}
+
 func LogConfigure(path string) {
 	logfile, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0664)
 	if err != nil {
@@ -273,6 +279,7 @@ func InitLightStore(typestore string, addr string, port uint) {
 		&rest.Route{"GET", "/serialize/:key/:value", SerializeKey},
 		&rest.Route{"GET", "/find/:key", FindKey},
 		&rest.Route{"GET", "/snapshot", MakeSnapShot},
+		&rest.Route{"GET", "/repair/:key", RepairGet},
 	)
 
 	if err != nil {
