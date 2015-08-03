@@ -270,6 +270,14 @@ func (st *Store) Find(key string) interface{} {
 	return nil
 }
 
+func (st *Store) RepairData(key string) *RepairItem {
+	item, err := st.mainstore.(*Dict).GetFromRepair(key)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return item
+}
+
 //Return statistics of usage
 func (st *Store) Stat() *Statistics {
 	return st.stat
