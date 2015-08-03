@@ -128,6 +128,28 @@ func (*Client) get(url string) string {
 	}
 }
 
+func (*Client) remove(url string) string {
+	req, err := http.NewRequest("DELETE", url, nil)
+	req.Header.Set("X-Custom-Header", "lightstore")
+	req.Header.Set("Content-Type", "application/json")
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	defer resp.Body.Close()
+	if err != nil {
+		panic(err)
+	}
+	if strings.HasPrefix(resp.Status, "200") {
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			panic(err)
+		}
+		result := string(body)
+		return result[1 : len(result)-1]
+	} else {
+		return ""
+	}
+}
+
 //CreatePage provides create new page on the lightstore
 func (cl *Client) CreatePage(pagename string) (int, error) {
 	url := fmt.Sprintf("%s/create/%s", cl.addr, pagename)
@@ -166,7 +188,12 @@ func (cl *Client) Subscribe(key string){
 	cl.get(url)
 }
 
-func (cl *Client) Repair(key string)interface{} {
+func (cl *Client) Remove(key string) {
 	url := fmt.Sprintf("%s/remove/%s", cl.addr, key)
-	return cl.get(key)
+	cl.remove(url)
+}
+
+func (cl *Client) Repair(key string)interface{} {
+	url := fmt.Sprintf("%s/repair/%s", cl.addr, key)
+	return cl.get(url)
 }
