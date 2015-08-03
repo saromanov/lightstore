@@ -3,6 +3,7 @@ import
 (
 	"time"
 	"errors"
+	"fmt"
 )
 
 
@@ -14,7 +15,7 @@ type Repair struct {
 
 type RepairItem struct {
 	key string
-	value string
+	value interface{}
 	checksum string
 	date time.Time
 }
@@ -25,17 +26,18 @@ func NewRepair()*Repair {
 	return rep
 }
 
-func (rep*Repair) AddToRepair(key, value string){
+func (rep*Repair) AddToRepair(key string, value interface{}){
 	newitem := &RepairItem{
 		key:key, 
 		value:value, 
-		checksum: Checksum(key + value), 
+		checksum: Checksum(key), 
 		date:time.Now()}
 	rep.data = append(rep.data, newitem)
 }
 
 func (rep *Repair) GetFromRepair(key, value string)(*RepairItem, error) {
 	for _, item := range rep.data {
+		fmt.Println(item.key)
 		if item.key == key || item.value == value {
 			return item, nil
 		}
