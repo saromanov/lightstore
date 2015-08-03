@@ -3,12 +3,14 @@ package lightstore
 type Dict struct {
 	Value map[string]*Item
 	stat ItemStatistics
+	repair  *Repair
 }
 
 
 func NewDict() *Dict {
 	d := new(Dict)
 	d.Value = make(map[string]*Item)
+	d.repair = NewRepair()
 	return d
 }
 
@@ -35,6 +37,10 @@ func (d *Dict) Get(key string) (interface{}, bool) {
 		d.Value[key].stat.num_reads += 1
 		return d.Value[key].value, ok
 	}
+}
+
+func (d *Dict) GetFromRepair(key string)(*RepairItem, error) {
+	return d.repair.GetFromRepair(key, "")
 }
 
 func (d *Dict) Exist(key string) bool {
