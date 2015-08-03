@@ -255,7 +255,7 @@ func (st *Store) Remove(key string) {
 	switch st.mainstore.(type) {
 	case Dict:
 		st.mainstore.(*Dict).Remove(key)
-	default:
+	case *skiplist.SkipList:
 		st.mainstore.(*skiplist.SkipList).Delete(key)
 	}
 }
@@ -271,6 +271,7 @@ func (st *Store) Find(key string) interface{} {
 }
 
 func (st *Store) RepairData(key string) *RepairItem {
+	fmt.Println(fmt.Sprintf("Try to repair key %s", key))
 	item, err := st.mainstore.(*Dict).GetFromRepair(key)
 	if err != nil {
 		log.Fatal(err)
