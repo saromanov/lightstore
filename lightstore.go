@@ -228,6 +228,7 @@ func (st *Store) set(dbname string, key string, value interface{}, opt ItemOptio
 	}
 
 	go func() {
+		starttime := time.Now()
 		switch mainstore.(type) {
 		case *Dict:
 			mainstore.(*Dict).Set(key, value, opt)
@@ -242,6 +243,7 @@ func (st *Store) set(dbname string, key string, value interface{}, opt ItemOptio
 		}
 		st.PublishKeyValue(key, dbname)
 		st.stat.num_writes += 1
+		fmt.Println(fmt.Sprintf("Stored in : %s", time.Since(starttime)))
 	}()
 
 	return true
