@@ -49,8 +49,9 @@ func (d *Dict) Exist(key string) bool {
 }
 
 func (d *Dict) Remove(key string) {
-	_, ok := d.Value[key]
+	item, ok := d.Value[key]
 	if ok {
+		d.repair.AddToRepair(key, item.value)
 		delete(d.Value, key)
 	}
 }
