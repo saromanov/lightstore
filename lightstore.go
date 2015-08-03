@@ -253,7 +253,7 @@ func (st *Store) set(dbname string, key string, value interface{}, opt ItemOptio
 //Remove provides clearning curent key
 func (st *Store) Remove(key string) {
 	switch st.mainstore.(type) {
-	case Dict:
+	case *Dict:
 		st.mainstore.(*Dict).Remove(key)
 	case *skiplist.SkipList:
 		st.mainstore.(*skiplist.SkipList).Delete(key)
@@ -309,7 +309,7 @@ func (st *Store) makeSnapshot(){
 
 //This private method provides checking inner datastructure for storing
 func checkDS(name string) (result interface{}) {
-	result = skiplist.NewStringMap()
+	result = NewDict()
 	/* SkipList datastructure as main store */
 	if name == "skiplist" {
 		result = skiplist.NewStringMap()
