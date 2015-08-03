@@ -165,3 +165,8 @@ func (cl *Client) Subscribe(key string){
 	url := fmt.Sprintf("%s/subscribe/%s", cl.addr, key)
 	cl.get(url)
 }
+
+func (cl *Client) Repair(key string)interface{} {
+	url := fmt.Sprintf("%s/remove/%s", cl.addr, key)
+	return cl.get(key)
+}
