@@ -160,3 +160,8 @@ func (cl *Client) Find(key string) string {
 	url := fmt.Sprintf("%s/find/%s", cl.addr, key)
 	return cl.get(url)
 }
+
+func (cl *Client) Subscribe(key string){
+	url := fmt.Sprintf("%s/subscribe/%s", cl.addr, key)
+	cl.get(url)
+}
