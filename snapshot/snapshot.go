@@ -1,4 +1,4 @@
-package lightstore
+package snapshot
 import
 (
 	"encoding/json"
