@@ -285,7 +285,10 @@ func InitLightStore(typestore string, addr string, port uint) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	store = InitStore(Settings{Innerdata: typestore})
+
+	NewServer(addr, typestore).RunServer()
+	fmt.Println(fmt.Sprintf("Start to listen TCP at %s", addr))
+	//store = InitStore(Settings{Innerdata: typestore})
 	api.SetApp(router)
 	log.Info("Lightstore is running")
 	http.ListenAndServe(fmt.Sprintf("%s:%d", addr, port), api.MakeHandler())
