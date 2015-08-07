@@ -29,7 +29,6 @@ func NewServer(addr, typestore string) *Server {
 }
 
 func (serv*Server) RunServer() {
-	defer serv.listener.Close()
 	go func() {
 		for {
 			conn, err := serv.listener.Accept()
