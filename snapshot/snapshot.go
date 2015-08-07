@@ -7,7 +7,11 @@ import
 	"fmt"
 	"strings"
 	"os"
+	"github.com/op/go-logging"
 )
+
+var log = logging.MustGetLogger("lightstore_log")
+
 
 //Basic snapshot for all data in ligtstore
 
