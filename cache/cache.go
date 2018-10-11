@@ -17,3 +17,7 @@ func New(cachesize int) *Cache {
 func (cachedata *Cache) AddToCache(item string, timedata int) {
 	cachedata.lrudata.Add(item, timedata)
 }
+
+func (cachedata *Cache) Get(item string) (interface{}, error) {
+	return cachedata.lrucache.Get(item)
+}
