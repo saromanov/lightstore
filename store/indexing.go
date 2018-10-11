@@ -1,6 +1,6 @@
 package store
 
-import "github.com/ryszard/goskiplist/skiplist/cache"
+import "github.com/saromanov/lightstore/cache"
 
 //Indexing in lightstore
 
