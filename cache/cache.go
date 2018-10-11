@@ -20,7 +20,7 @@ func New(cachesize int) *Cache {
 	return cachedata
 }
 
-func (cachedata *Cache) AddToCache(item string, timedata int) {
+func (cachedata *Cache) Put(item string, timedata int) {
 	cachedata.lrudata.Add(item, timedata)
 }
 
