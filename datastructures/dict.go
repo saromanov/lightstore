@@ -1,16 +1,12 @@
 package datastructures
 
-import
-(
-	"../statistics"
-)
+import "github.com/saromanov/lightstore/statistics"
 
 type Dict struct {
-	Value map[string]*Item
-	stat statistics.ItemStatistics
-	repair  *Repair
+	Value  map[string]*Item
+	stat   statistics.ItemStatistics
+	repair *Repair
 }
-
 
 func NewDict() *Dict {
 	d := new(Dict)
@@ -24,9 +20,9 @@ func (d *Dict) Set(key string, value interface{}, op ItemOptions) {
 	if !ok {
 		d.Value[key] = NewItem(value)
 	}
-	if ok && op.update && !op.immutable{
+	if ok && op.update && !op.immutable {
 		d.Value[key].UpdateItem(value)
-	} 
+	}
 	if ok && !op.immutable {
 		d.Value[key] = NewItem(value)
 	} else {
@@ -44,7 +40,7 @@ func (d *Dict) Get(key string) (interface{}, bool) {
 	}
 }
 
-func (d *Dict) GetFromRepair(key string)(*RepairItem, error) {
+func (d *Dict) GetFromRepair(key string) (*RepairItem, error) {
 	return d.repair.GetFromRepair(key, "")
 }
 

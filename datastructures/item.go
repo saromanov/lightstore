@@ -1,23 +1,23 @@
 package datastructures
-import
-(
+
+import (
 	"time"
-	"../statistics"
+
+	"github.com/saromanov/lightstore/statistics"
 )
 
-
 type Item struct {
-	id int64
-	checksum string
-	value interface{}
-	stat *statistics.ItemStatistics
-	weights int
-	priority int
+	id        int64
+	checksum  string
+	value     interface{}
+	stat      *statistics.ItemStatistics
+	weights   int
+	priority  int
 	immutable bool
 	writetime time.Time
 	//Maximum Number of past values
 	numpastitems int
-	pastitems []*PastItem
+	pastitems    []*PastItem
 }
 
 type PastItem struct {
@@ -32,12 +32,12 @@ type PastItem struct {
 //ItemOptions provides additional options for storing values
 type ItemOptions struct {
 	immutable bool
-	update bool
-	index string
+	update    bool
+	index     string
 }
 
 //NewItem provides creates new item before store in memory or write on disk
-func NewItem(value interface{})*Item {
+func NewItem(value interface{}) *Item {
 	item := new(Item)
 	item.value = value
 	item.weights = 0
@@ -51,21 +51,20 @@ func NewItem(value interface{})*Item {
 	return item
 }
 
-//UpdateItem provides set new item for exist in the case, 
+//UpdateItem provides set new item for exist in the case,
 //if this item is not immutable
-func (itm *Item) UpdateItem(value interface{}){
+func (itm *Item) UpdateItem(value interface{}) {
 	if !itm.immutable {
 		itm.setToPast()
 		itm.value = value
 	}
 }
 
-
 //set to past version of the item
-func (itm *Item) setToPast(){
+func (itm *Item) setToPast() {
 	if len(itm.pastitems) < itm.numpastitems {
 		newpast := new(PastItem)
-		newpast.vernum = len(itm.pastitems)+1
+		newpast.vernum = len(itm.pastitems) + 1
 		newpast.updatetime = time.Now()
 		newpast.pastitem = itm
 		itm.pastitems = append(itm.pastitems, newpast)
