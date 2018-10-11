@@ -10,8 +10,6 @@ import (
 	"../rpc"
 	"../statistics"
 	"../datastructures"
-	//"runtime"
-	//"errors"
 )
 
 //Basic implmentation of key-value store(without assotiation with any db name)
