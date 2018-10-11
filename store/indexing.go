@@ -1,8 +1,6 @@
 package store
 
-import (
-	"../cache"
-)
+import "github.com/ryszard/goskiplist/skiplist/cache"
 
 //Indexing in lightstore
 
@@ -10,7 +8,7 @@ type indexing interface {
 	CreateIndex(name string)
 	DropIndex(value string)
 	DropIndexes(value []string)
-	IndexStatus (index string) int
+	IndexStatus(index string) int
 	AddItemToCache(name, value, location string)
 }
 
@@ -37,12 +35,12 @@ func (idx *Indexing) CreateIndex(name string) {
 }
 
 //DropIndex provides removing index from store
-func (idx* Indexing) DropIndex(value string) {
+func (idx *Indexing) DropIndex(value string) {
 	idx.DropIndexes([]string{value})
 }
 
 //DropIndexes provides removing indexes from store
-func (idx*Indexing) DropIndexes(values []string) {
+func (idx *Indexing) DropIndexes(values []string) {
 	for key, _ := range idx.index {
 		for _, value := range values {
 			if key == value {
@@ -53,7 +51,7 @@ func (idx*Indexing) DropIndexes(values []string) {
 }
 
 //IndexStat provides status of target index
-func (idx* Indexing) IndexStatus (index string) int{
+func (idx *Indexing) IndexStatus(index string) int {
 	item, ok := idx.index[index]
 	if !ok {
 		return 0

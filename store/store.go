@@ -5,11 +5,11 @@ import (
 	"github.com/ryszard/goskiplist/skiplist"
 	"sync"
 	"time"
-	"../history"
-	"../scan"
-	"../rpc"
-	"../statistics"
-	"../datastructures"
+	"github.com/saromanov/lightstore/history"
+	"github.com/saromanov/lightstore/scan"
+	"github.com/saromanov/lightstore/rpc"
+	"github.com/saromanov/lightstore/statistics"
+	"github.com/saromanov/lightstore/datastructures"
 )
 
 //Basic implmentation of key-value store(without assotiation with any db name)
