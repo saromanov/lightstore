@@ -359,7 +359,7 @@ func InitStore(settings Settings) *Store {
 	*/
 	mutex := &sync.RWMutex{}
 	store := new(Store)
-	starttime := time.Now()
+	starttime := time.Now().UTC()
 	store.items = 0
 	store.mainstore = checkDS(settings.Innerdata)
 	store.keys = []string{}
