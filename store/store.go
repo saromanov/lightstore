@@ -14,9 +14,7 @@ import (
 
 //Basic implmentation of key-value store(without assotiation with any db name)
 
-const (
-	param = 0
-)
+const param = 0
 
 type Settings struct {
 	Innerdata string
