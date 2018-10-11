@@ -1,17 +1,18 @@
+// snapshot provides creating of shanpshots
 package snapshot
-import
-(
+
+import (
 	"encoding/json"
-	"io/ioutil"
-	"path"
 	"fmt"
-	"strings"
+	"io/ioutil"
 	"os"
+	"path"
+	"strings"
+
 	"github.com/op/go-logging"
 )
 
 var log = logging.MustGetLogger("lightstore_log")
-
 
 //Basic snapshot for all data in ligtstore
 
@@ -19,7 +20,7 @@ type snapshot interface {
 	Write(object SnapshotObject)
 }
 
-type SnapshotObject struct{
+type SnapshotObject struct {
 	Crc32 string
 	Data  string
 	Dir   string
@@ -33,7 +34,7 @@ func NewSnapshotObject() *SnapshotObject {
 }
 
 //Write provides storing of new snapshot
-func (so* SnapshotObject) Write(object* SnapshotObject){
+func (so *SnapshotObject) Write(object *SnapshotObject) {
 	b, err := json.Marshal(object)
 	if err != nil {
 		panic(err)
@@ -46,7 +47,6 @@ func (so* SnapshotObject) Write(object* SnapshotObject){
 
 }
 
-
 //Read provides reading snapshot and store data to lightstore
 //if snapshotname is ""(empty), load more recently snapshot
 func (so *SnapshotObject) Read(snapshotname string) {
@@ -56,7 +56,7 @@ func (so *SnapshotObject) Read(snapshotname string) {
 	}
 
 	snapshots := checkAvailableSnapshots(so.Dir)
-	if len(snapshots) == 0{
+	if len(snapshots) == 0 {
 		log.Info("Can't find available snapshots")
 	} else {
 
@@ -64,9 +64,9 @@ func (so *SnapshotObject) Read(snapshotname string) {
 }
 
 //Read newest provides reading most newest snapshot
-func (so *SnapshotObject) ReadNewest(){
+func (so *SnapshotObject) ReadNewest() {
 	snapshots := checkAvailableSnapshots(so.Dir)
-	if len(snapshots) == 0{
+	if len(snapshots) == 0 {
 		log.Info("Can't find available snapshots")
 	} else {
 		stat, err := os.Stat(snapshots[0])
@@ -81,7 +81,7 @@ func (so *SnapshotObject) ReadNewest(){
 				log.Fatal(err)
 			}
 
-			if item.ModTime().After(modtime){
+			if item.ModTime().After(modtime) {
 				modtime = item.ModTime()
 			}
 		}
@@ -89,7 +89,7 @@ func (so *SnapshotObject) ReadNewest(){
 }
 
 //Return snapshotnames
-func checkAvailableSnapshots(dir string)[]string{
+func checkAvailableSnapshots(dir string) []string {
 	files, err := ioutil.ReadDir(dir)
 	result := []string{}
 	if err != nil {
