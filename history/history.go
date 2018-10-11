@@ -46,7 +46,7 @@ func (hist*History) AddEvent(addr, title string){
 	hist.items[hist.count] = &Event{
 		Title: title,
 		Addr: addr, 
-		Timesdata: time.Now(),
+		Timesdata: time.Now().UTC(),
 		}
 	hist.count++
 }
