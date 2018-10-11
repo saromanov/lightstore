@@ -26,10 +26,13 @@ type SnapshotObject struct {
 	Dir   string
 }
 
-//NewSnapsjot object provides initialization od new snapshot
-func NewSnapshotObject() *SnapshotObject {
+//NewSnapshotObject object provides initialization od new snapshot
+func NewSnapshotObject(path string) *SnapshotObject {
 	so := new(SnapshotObject)
 	so.Dir = "."
+	if path != "" {
+		so.Dir = path
+	}
 	return so
 }
 
