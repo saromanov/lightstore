@@ -2,9 +2,10 @@ package store
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
+
+	"gopkg.in/yaml.v2"
 )
 
 //This module for loading configuration from config.yaml
@@ -29,12 +30,14 @@ type Config struct {
 	//Sise for blocks
 	Blocksize int
 
-	Every struct{Seconds int; Actions []string}
+	Every struct {
+		Seconds int
+		Actions []string
+	}
 
 	//Limit list for the history of events
 	Historylimit int
 }
-
 
 //LoadConfigData provides load configuration or set default params
 func LoadConfigData() *Config {
@@ -51,7 +54,6 @@ func LoadConfigData() *Config {
 	conf.setMissedValues()
 	return &conf
 }
-
 
 func (conf *Config) setMissedValues() {
 	if conf.Address == "" {
@@ -70,13 +72,10 @@ func (conf *Config) setMissedValues() {
 		conf.Dbdir = setDefaultDBData()
 	}
 
-	if conf.Historylimit == 0{
+	if conf.Historylimit == 0 {
 		conf.Historylimit = 1000
 	}
 }
-
-
-
 
 //In the case if config file is not exist or not full,
 // set for each param default value
@@ -97,7 +96,7 @@ func getConfigPath() string {
 }
 
 //Set log path (/var/log/litghstore)
-func setDefaultLogPath() string{
+func setDefaultLogPath() string {
 	path := fmt.Sprintf("%s/lightstore", os.Getenv("HOME"))
 	filepath := fmt.Sprintf("%s/lightstore.log", path)
 	_, err := os.Stat(path)
@@ -121,7 +120,7 @@ func setDefaultLogPath() string{
 	return filepath
 }
 
-func setDefaultDBData() string{
+func setDefaultDBData() string {
 	home := os.Getenv("HOME")
 	path := fmt.Sprintf("%s/lightstore", home)
 	filepath := fmt.Sprintf("%s/lightstore.data", path)
@@ -134,13 +133,13 @@ func setDefaultDBData() string{
 		if errfile != nil {
 			panic(errfile)
 		}
+		return filepath
 
-	} else {
-		_, errfile := os.Stat(filepath)
-		if errfile != nil {
-			f, _ := os.Create(fmt.Sprintf("%s/lightstore.data", path))
-			defer f.Close()
-		}
+	}
+	_, errfile := os.Stat(filepath)
+	if errfile != nil {
+		f, _ := os.Create(fmt.Sprintf("%s/lightstore.data", path))
+		defer f.Close()
 	}
 
 	return filepath
