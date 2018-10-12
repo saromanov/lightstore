@@ -1,27 +1,27 @@
 package utils
 
-import
-(
+import (
 	"strings"
-	"../snapshot"
+
+	"github.com/saromanov/lightstore/snapshot"
 )
 
 //This module for construction data from config
 
 const (
-	SNAPSHOTS = "snapshots"
+	SNAPSHOTS     = "snapshots"
 	HISTORY_LIMIT = "history_limit"
 )
 
 //ActionsNamesToFuncs related with option
 // 'Every' from configuration
 //This module gets names of actions and return functions
-func ActionsNamesToFuncs(actions []string)[] func() {
+func ActionsNamesToFuncs(actions []string) []func() {
 	result := []func(){}
-	for _, action := range actions{
-		if lower(action) == SNAPSHOTS{
-			f := func(){
-				snap:= snapshot.NewSnapshotObject()
+	for _, action := range actions {
+		if lower(action) == SNAPSHOTS {
+			f := func() {
+				snap := snapshot.NewSnapshotObject("")
 				if snap != nil {
 
 				}
@@ -31,13 +31,13 @@ func ActionsNamesToFuncs(actions []string)[] func() {
 		}
 
 		if lower(action) == HISTORY_LIMIT {
-			
+
 		}
 	}
 
 	return result
 }
 
-func lower(str string) string{
+func lower(str string) string {
 	return strings.ToLower(str)
 }

@@ -13,6 +13,7 @@ import (
 	"github.com/saromanov/lightstore/scan"
 	"github.com/saromanov/lightstore/snapshot"
 	"github.com/saromanov/lightstore/statistics"
+	"github.com/saromanov/lightstore/utils"
 )
 
 //Basic implmentation of key-value store(without assotiation with any db name)
@@ -204,10 +205,16 @@ func getItemOptions(items map[string]string) ds.ItemOptions {
 			itemopt.Index = value
 		}
 		if key == "_immutable" {
-			itemopt.Immutable = Bool(value)
+			itemopt.Immutable = false
+			if value == "true" {
+				itemopt.Immutable = true
+			}
 		}
 		if key == "_update" {
-			itemopt.Update = Bool(value)
+			itemopt.Update = false
+			if value == "true" {
+				itemopt.Update = true
+			}
 		}
 	}
 	fmt.Println("ITM: ", itemopt)
@@ -324,6 +331,11 @@ func (st *Store) PublishKeyValue(key, value string) {
 	st.pubsub.Publish(&PublishData{Title: key, Msg: value})
 }
 
+// ISCreated returns true of store was created
+func (st *Store) IsCreated() bool {
+	return true
+}
+
 func (st *Store) makeSnapshot() {
 	//This is only for testing
 	snap := snapshot.NewSnapshotObject("")
@@ -358,7 +370,7 @@ func (store *Store) ConstructFromConfig() {
 
 	every := store.config.Every
 	if len(every.Actions) > 0 {
-		store.Every(ActionsNamesToFuncs(every.Actions))
+		store.Every(utils.ActionsNamesToFuncs(every.Actions))
 	}
 
 	store.historyevent = history.NewHistory(5)
