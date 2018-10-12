@@ -11,8 +11,6 @@ import (
 //This module for loading configuration from config.yaml
 
 type Config struct {
-	// Path defines config path
-	Path string 
 	//Address for server
 	Address string
 	//port for server
