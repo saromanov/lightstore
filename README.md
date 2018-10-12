@@ -1,4 +1,5 @@
 # lightstore
+Key-Value store
 in Progress
 
 ## TODO
