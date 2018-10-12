@@ -250,7 +250,7 @@ func (st *Store) set(dbname string, key string, value interface{}, opt ds.ItemOp
 			log.Info(fmt.Sprintf("db with name %s is not active", dbname))
 			return false
 		} else if dbdata.limit != -1 && (dbdata.limit-dbdata.datacount) == 0 {
-			log.Info(fmt.Sprintf("db with name %s not availability to write, because contains maxumum possible number of data objrct"))
+			log.Info(fmt.Sprintf("db with name %s not availability to write, because contains maxumum possible number of data objrct", dbname))
 			return false
 		} else {
 			mainstore = dbdata.mainstore
