@@ -11,6 +11,8 @@ import (
 //This module for loading configuration from config.yaml
 
 type Config struct {
+	// Path defines config path
+	Path string 
 	//Address for server
 	Address string
 	//port for server
@@ -40,8 +42,11 @@ type Config struct {
 }
 
 //LoadConfigData provides load configuration or set default params
-func LoadConfigData() *Config {
-	data, err := ioutil.ReadFile(getConfigPath())
+func LoadConfigData(path string) *Config {
+	if path == "" {
+		path = getConfigPath()
+	}
+	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		return setDefaultParams()
 	}
