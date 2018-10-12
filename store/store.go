@@ -2,12 +2,15 @@ package store
 
 import (
 	"fmt"
-	"github.com/ryszard/goskiplist/skiplist"
+	"log"
 	"sync"
 	"time"
+
+	"github.com/ryszard/goskiplist/skiplist"
+	ds "github.com/saromanov/lightstore/datastructures"
 	"github.com/saromanov/lightstore/history"
-	"github.com/saromanov/lightstore/scan"
 	"github.com/saromanov/lightstore/rpc"
+	"github.com/saromanov/lightstore/scan"
 	"github.com/saromanov/lightstore/statistics"
 )
 
@@ -32,8 +35,8 @@ type Store struct {
 	config        *Config
 	pubsub        *Pubsub
 	//Event history
-	historyevent       *history.History
-	rpcdata       *rpc.RPCData
+	historyevent *history.History
+	rpcdata      *rpc.RPCData
 }
 
 // Open creates a new instance of lightstore
@@ -68,7 +71,7 @@ func (st *Store) processSystemKey(key string) {
 // CreateIndex implementes creational of teh new index
 func (st *Store) CreateIndex(index string) {
 	if index == "" {
-		log.Info(fmt.Sprintf("New index %s can't be created", index))
+		//log.Info(fmt.Sprintf("New index %s can't be created", index))
 		return
 	}
 	st.index.CreateIndex(index)
@@ -84,7 +87,7 @@ func (st *Store) CreateDB(dbname string) {
 	_, ok := st.dbs[dbname]
 	st.dbs[dbname] = CreateNewDB(dbname)
 	if !ok {
-		st.stat.dbnum += 1
+		st.stat.Dbnum += 1
 	}
 	st.lock.Unlock()
 }
@@ -115,19 +118,17 @@ func (st *Store) get(value string, dbname string) interface{} {
 	st.lock.RLock()
 	defer st.lock.RUnlock()
 	switch mainstore.(type) {
-	case *Dict:
+	case *ds.Dict:
 		result, ok := mainstore.(*Dict).Get(value)
 		if ok {
-			st.stat.num_reads += 1
-			store.historyevent.AddEvent("default", "Get")
+			st.stat.NumReads += 1
+			st.historyevent.AddEvent("default", "Get")
 			return result
 		}
-	case *BMtree:
-		fmt.Println("Not implemented yet")
 	case *skiplist.SkipList:
 		result, ok := mainstore.(*skiplist.SkipList).Get(value)
 		if ok {
-			st.stat.num_reads += 1
+			st.stat.NumReads += 1
 			return result
 		}
 	}
@@ -138,22 +139,22 @@ func (st *Store) get(value string, dbname string) interface{} {
 
 func (st *Store) AppendData(kvitem KVITEM) {
 	for key, value := range kvitem {
-		exist := store.Exist(key)
+		exist := st.Exist(key)
 		if exist {
 			data := []interface{}{value}
 			data = append(data, value)
-			store.set("", key, data, ItemOptions{})
+			st.set("", key, data, ds.ItemOptions{})
 		} else {
-			items := store.Get(key)
+			items := st.Get(key)
 			switch items.(type) {
 			case []interface{}:
 				items = append(items.([]interface{}), value)
-				store.historyevent.AddEvent("default", "Append")
-				store.set("",key, items, ItemOptions{})
+				st.historyevent.AddEvent("default", "Append")
+				st.set("", key, items, ds.ItemOptions{})
 			default:
-				data := []interface{}{store.Get(key)}
+				data := []interface{}{st.Get(key)}
 				data = append(data, value)
-				store.set("", key, data, ItemOptions{})
+				st.set("", key, data, ds.ItemOptions{})
 			}
 		}
 	}
@@ -168,7 +169,7 @@ func (st *Store) GetMany(keys []string) interface{} {
 		for i := 0; i < len(keys); i++ {
 			result = append(result, st.Get(keys[i]))
 		}
-		store.historyevent.AddEvent("default", "GetMany")
+		st.historyevent.AddEvent("default", "GetMany")
 		return result
 	}
 	return nil
@@ -195,8 +196,8 @@ func (st *Store) Set(items map[string]string) bool {
 
 //Before set data to the lightstore. Check if in current request
 //exists system keys with prefix _
-func getItemOptions(items map[string]string) ItemOptions {
-	itemopt := ItemOptions{}
+func getItemOptions(items map[string]string) ds.ItemOptions {
+	itemopt := ds.ItemOptions{}
 	for key, value := range items {
 		if key == "_index" {
 			itemopt.index = value
@@ -217,17 +218,17 @@ func getItemOptions(items map[string]string) ItemOptions {
 func (st *Store) Exist(key string) bool {
 	mainstore := st.mainstore
 	switch mainstore.(type) {
-	case *Dict:
+	case *ds.Dict:
 		return mainstore.(*Dict).Exist(key)
 	}
 	return false
 }
 
 func (st *Store) SetinDB(dbname string, key string, value interface{}) bool {
-	return st.set(dbname, key, value, ItemOptions{})
+	return st.set(dbname, key, value, ds.ItemOptions{})
 }
 
-func (st *Store) set(dbname string, key string, value interface{}, opt ItemOptions) bool {
+func (st *Store) set(dbname string, key string, value interface{}, opt ds.ItemOptions) bool {
 	st.lock.Lock()
 	defer st.lock.Unlock()
 	mainstore := st.mainstore
@@ -291,7 +292,7 @@ func (st *Store) Find(key string) interface{} {
 	return nil
 }
 
-func (st *Store) RepairData(key string) *RepairItem {
+func (st *Store) RepairData(key string) *ds.RepairItem {
 	fmt.Println(fmt.Sprintf("Try to repair key %s", key))
 	item, err := st.mainstore.(*Dict).GetFromRepair(key)
 	if err != nil {
@@ -301,7 +302,7 @@ func (st *Store) RepairData(key string) *RepairItem {
 }
 
 //Return statistics of usage
-func (st *Store) Stat() *Statistics {
+func (st *Store) Stat() *statistics.Statistics {
 	return st.stat
 }
 
@@ -309,20 +310,20 @@ func (st *Store) CloseLightStore() {
 	fmt.Println("End working: ", time.Now())
 }
 
-func (st*Store) SubscribeKey(item string){
+func (st *Store) SubscribeKey(item string) {
 	rpc.InitClient(nil).Get("Pubsub.Subscribe", &SubscribeData{Title: item}, nil)
 	//st.pubsub.Subscribe(&SubscribeData{Title: item})
 }
 
 func (st *Store) PublishInfo(key string) {
-	st.pubsub.Publish(&PublishData{Title: key, Msg:"newmsg"})
+	st.pubsub.Publish(&PublishData{Title: key, Msg: "newmsg"})
 }
 
-func (st *Store) PublishKeyValue(key, value string){
-	st.pubsub.Publish(&PublishData{Title: key, Msg:value})
+func (st *Store) PublishKeyValue(key, value string) {
+	st.pubsub.Publish(&PublishData{Title: key, Msg: value})
 }
 
-func (st *Store) makeSnapshot(){
+func (st *Store) makeSnapshot() {
 	//This is only for testing
 	snap := NewSnapshotObject()
 	snap.Write(&SnapshotObject{Crc32: "123", Data: "foobar", Dir: "/"})
@@ -349,13 +350,13 @@ func checkDS(name string) (result interface{}) {
 }
 
 //ConstructFromConfig provides creational lightstore params from config
-func (store *Store) ConstructFromConfig(){
+func (store *Store) ConstructFromConfig() {
 	if store.config == nil {
 		return
 	}
 
 	every := store.config.Every
-	if len(every.Actions) > 0{
+	if len(every.Actions) > 0 {
 		store.Every(ActionsNamesToFuncs(every.Actions))
 	}
 
@@ -365,8 +366,8 @@ func (store *Store) ConstructFromConfig(){
 //Every provides doing some operation every n seconds/minutes
 //Data for this doing, reading from config
 //For example: Doing snapshots every 1 minute
-func (store *Store) Every(funcs []func()){
-	go func(){
+func (store *Store) Every(funcs []func()) {
+	go func() {
 		for {
 			for _, f := range funcs {
 				go f()
