@@ -11,6 +11,7 @@ import (
 	log "github.com/saromanov/lightstore/logging"
 	"github.com/saromanov/lightstore/rpc"
 	"github.com/saromanov/lightstore/scan"
+	"github.com/saromanov/lightstore/snapshot"
 	"github.com/saromanov/lightstore/statistics"
 )
 
@@ -264,7 +265,7 @@ func (st *Store) set(dbname string, key string, value interface{}, opt ds.ItemOp
 			dbdata.datacount += 1
 		}
 		st.PublishKeyValue(key, dbname)
-		st.stat.num_writes += 1
+		st.stat.NumWrites += 1
 		fmt.Println(fmt.Sprintf("Stored in : %s", time.Since(starttime)))
 	}()
 
@@ -296,7 +297,7 @@ func (st *Store) RepairData(key string) *ds.RepairItem {
 	fmt.Println(fmt.Sprintf("Try to repair key %s", key))
 	item, err := st.mainstore.(*ds.Dict).GetFromRepair(key)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(err.Error())
 	}
 	return item
 }
@@ -325,8 +326,8 @@ func (st *Store) PublishKeyValue(key, value string) {
 
 func (st *Store) makeSnapshot() {
 	//This is only for testing
-	snap := NewSnapshotObject()
-	snap.Write(&SnapshotObject{Crc32: "123", Data: "foobar", Dir: "/"})
+	snap := snapshot.NewSnapshotObject("")
+	snap.Write(&snapshot.SnapshotObject{Crc32: "123", Data: "foobar", Dir: "/"})
 }
 
 //This private method provides checking inner datastructure for storing
@@ -344,7 +345,7 @@ func checkDS(name string) (result interface{}) {
 
 	/*B-tree structure as main store */
 	if name == "b-tree" {
-		result = InitBMTree()
+		result = ds.InitBMTree()
 	}
 	return result
 }
@@ -389,10 +390,10 @@ func InitStore(settings Settings) *Store {
 	store.keys = []string{}
 	store.dbs = make(map[string]*DB)
 	store.lock = mutex
-	store.stat = new(Statistics)
-	store.stat.start = starttime
+	store.stat = new(statistics.Statistics)
+	store.stat.Start = starttime
 	store.index = NewIndexing()
-	store.config = LoadConfigData()
+	store.config = LoadConfigData("")
 	store.ConstructFromConfig()
 	store.pubsub = PubsubInit()
 	rpc.RegisterRPCFunction(store.pubsub)
