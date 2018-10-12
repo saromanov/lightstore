@@ -357,7 +357,7 @@ func checkDS(name string) (result interface{}) {
 
 	/*B-tree structure as main store */
 	if name == "b-tree" {
-		result = ds.InitBMTree()
+		result = ds.InitBTree(10)
 	}
 	return result
 }
