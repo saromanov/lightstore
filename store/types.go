@@ -1,4 +1,4 @@
-package lightstore
+package store
 
 //This module provides basic types
 
