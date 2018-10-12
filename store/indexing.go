@@ -66,5 +66,5 @@ func (idx *Indexing) AddItem(name, value, location string) {
 }
 
 func (idx *Indexing) AddItemToCache(name, value, location string) {
-	idx.caching.AddToCache(value, 1000)
+	idx.caching.Put(value, 1000)
 }

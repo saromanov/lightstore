@@ -37,26 +37,25 @@ type Store struct {
 }
 
 // Open creates a new instance of lightstore
-func Open(c *Config) error {
+func Open(c *Config) *Store {
 	mutex := &sync.RWMutex{}
 	store := new(Store)
 	starttime := time.Now().UTC()
 	store.items = 0
-	store.mainstore = checkDS(settings.Innerdata)
+	store.mainstore = checkDS("")
 	store.keys = []string{}
 	store.dbs = make(map[string]*DB)
 	store.lock = mutex
-	store.stat = new(Statistics)
-	store.stat.start = starttime
+	store.stat = new(statistics.Statistics)
+	store.stat.Start = starttime
 	store.index = NewIndexing()
-	store.config = LoadConfigData()
+	store.config = LoadConfigData("")
 	store.ConstructFromConfig()
 	store.pubsub = PubsubInit()
 	rpc.RegisterRPCFunction(store.pubsub)
 	store.rpcdata = rpc.Init("")
 	store.rpcdata.Run()
 	return store
-	return nil
 }
 
 //After understanding, that key is system, make some work with them
