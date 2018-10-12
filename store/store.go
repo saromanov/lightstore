@@ -9,7 +9,6 @@ import (
 	"github.com/saromanov/lightstore/scan"
 	"github.com/saromanov/lightstore/rpc"
 	"github.com/saromanov/lightstore/statistics"
-	"github.com/saromanov/lightstore/datastructures"
 )
 
 //Basic implmentation of key-value store(without assotiation with any db name)
@@ -20,6 +19,7 @@ type Settings struct {
 	Innerdata string
 }
 
+// Store provides implementation of the main store
 type Store struct {
 	items         int
 	dbs           map[string]*DB
@@ -43,6 +43,7 @@ func (st *Store) processSystemKey(key string) {
 	}
 }
 
+// CreateIndex implementes creational of teh new index
 func (st *Store) CreateIndex(index string) {
 	if index == "" {
 		log.Info(fmt.Sprintf("New index %s can't be created", index))
