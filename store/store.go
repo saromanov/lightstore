@@ -2,13 +2,13 @@ package store
 
 import (
 	"fmt"
-	"log"
 	"sync"
 	"time"
 
 	"github.com/ryszard/goskiplist/skiplist"
 	ds "github.com/saromanov/lightstore/datastructures"
 	"github.com/saromanov/lightstore/history"
+	log "github.com/saromanov/lightstore/logging"
 	"github.com/saromanov/lightstore/rpc"
 	"github.com/saromanov/lightstore/scan"
 	"github.com/saromanov/lightstore/statistics"
@@ -71,7 +71,7 @@ func (st *Store) processSystemKey(key string) {
 // CreateIndex implementes creational of teh new index
 func (st *Store) CreateIndex(index string) {
 	if index == "" {
-		//log.Info(fmt.Sprintf("New index %s can't be created", index))
+		log.Info(fmt.Sprintf("New index %s can't be created", index))
 		return
 	}
 	st.index.CreateIndex(index)
@@ -119,7 +119,7 @@ func (st *Store) get(value string, dbname string) interface{} {
 	defer st.lock.RUnlock()
 	switch mainstore.(type) {
 	case *ds.Dict:
-		result, ok := mainstore.(*Dict).Get(value)
+		result, ok := mainstore.(*ds.Dict).Get(value)
 		if ok {
 			st.stat.NumReads += 1
 			st.historyevent.AddEvent("default", "Get")
@@ -200,13 +200,13 @@ func getItemOptions(items map[string]string) ds.ItemOptions {
 	itemopt := ds.ItemOptions{}
 	for key, value := range items {
 		if key == "_index" {
-			itemopt.index = value
+			itemopt.Index = value
 		}
 		if key == "_immutable" {
-			itemopt.immutable = Bool(value)
+			itemopt.Immutable = Bool(value)
 		}
 		if key == "_update" {
-			itemopt.update = Bool(value)
+			itemopt.Update = Bool(value)
 		}
 	}
 	fmt.Println("ITM: ", itemopt)
@@ -219,7 +219,7 @@ func (st *Store) Exist(key string) bool {
 	mainstore := st.mainstore
 	switch mainstore.(type) {
 	case *ds.Dict:
-		return mainstore.(*Dict).Exist(key)
+		return mainstore.(*ds.Dict).Exist(key)
 	}
 	return false
 }
@@ -252,8 +252,8 @@ func (st *Store) set(dbname string, key string, value interface{}, opt ds.ItemOp
 	go func() {
 		starttime := time.Now()
 		switch mainstore.(type) {
-		case *Dict:
-			mainstore.(*Dict).Set(key, value, opt)
+		case *ds.Dict:
+			mainstore.(*ds.Dict).Set(key, value, opt)
 		case *skiplist.SkipList:
 			mainstore.(*skiplist.SkipList).Set(key, value)
 		}
@@ -275,8 +275,8 @@ func (st *Store) set(dbname string, key string, value interface{}, opt ds.ItemOp
 //Remove provides clearning curent key
 func (st *Store) Remove(key string) {
 	switch st.mainstore.(type) {
-	case *Dict:
-		st.mainstore.(*Dict).Remove(key)
+	case *ds.Dict:
+		st.mainstore.(*ds.Dict).Remove(key)
 	case *skiplist.SkipList:
 		st.mainstore.(*skiplist.SkipList).Delete(key)
 	}
@@ -294,7 +294,7 @@ func (st *Store) Find(key string) interface{} {
 
 func (st *Store) RepairData(key string) *ds.RepairItem {
 	fmt.Println(fmt.Sprintf("Try to repair key %s", key))
-	item, err := st.mainstore.(*Dict).GetFromRepair(key)
+	item, err := st.mainstore.(*ds.Dict).GetFromRepair(key)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -331,7 +331,7 @@ func (st *Store) makeSnapshot() {
 
 //This private method provides checking inner datastructure for storing
 func checkDS(name string) (result interface{}) {
-	result = NewDict()
+	result = ds.NewDict()
 	/* SkipList datastructure as main store */
 	if name == "skiplist" {
 		result = skiplist.NewStringMap()
@@ -339,7 +339,7 @@ func checkDS(name string) (result interface{}) {
 
 	/* Simple map as main store */
 	if name == "dict" {
-		result = NewDict()
+		result = ds.NewDict()
 	}
 
 	/*B-tree structure as main store */

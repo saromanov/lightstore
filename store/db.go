@@ -2,6 +2,8 @@
 
 package store
 
+import ds "github.com/saromanov/lightstore/datastructures"
+
 type DB struct {
 	//db name
 	dbtitle string
@@ -19,7 +21,7 @@ type DB struct {
 
 //CreateNewDB provides new DB object
 func CreateNewDB(name string) *DB {
-	return &DB{name, -1, false, true, 0, NewDict()}
+	return &DB{name, -1, false, true, 0, ds.NewDict()}
 }
 
 //SetLimit provides set maximum number of data in this db

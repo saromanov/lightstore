@@ -20,10 +20,10 @@ func (d *Dict) Set(key string, value interface{}, op ItemOptions) {
 	if !ok {
 		d.Value[key] = NewItem(value)
 	}
-	if ok && op.update && !op.immutable {
+	if ok && op.Update && !op.Immutable {
 		d.Value[key].UpdateItem(value)
 	}
-	if ok && !op.immutable {
+	if ok && !op.Immutable {
 		d.Value[key] = NewItem(value)
 	} else {
 
