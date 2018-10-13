@@ -39,9 +39,12 @@ func (d *Dict) GetFromRepair(key string) (*RepairItem, error) {
 	return d.repair.GetFromRepair(key, "")
 }
 
-func (d *Dict) Exist(key string) bool {
-	_, ok := d.Value[key]
-	return ok
+func (d *Dict) Exist(key []byte) bool {
+	exist := d.Value.Get(key)
+	if exist == nil {
+		return false
+	}
+	return true
 }
 
 func (d *Dict) Remove(key string) {
