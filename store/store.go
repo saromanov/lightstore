@@ -26,16 +26,16 @@ type Settings struct {
 
 // Store provides implementation of the main store
 type Store struct {
-	items         int
-	dbs           map[string]*DB
-	store     interface{}
+	items     int
+	dbs       map[string]*DB
+	store     ds.Storage
 	storename string
-	keys          []string
-	lock          *sync.RWMutex
-	stat          *statistics.Statistics
-	index         *Indexing
-	config        *Config
-	pubsub        *Pubsub
+	keys      []string
+	lock      *sync.RWMutex
+	stat      *statistics.Statistics
+	index     *Indexing
+	config    *Config
+	pubsub    *Pubsub
 	//Event history
 	historyevent *history.History
 	rpcdata      *rpc.RPCData
@@ -183,7 +183,7 @@ func (st *Store) beforeSet(items KVITEM) *ReadyToSet {
 	return NewReadyToSet(items)
 }
 
-func (st *Store) Set(items map[string]string) bool {
+func (st *Store) Set(key, value []byte) bool {
 	before := st.beforeSet(items)
 	if before.ready {
 		opt := getItemOptions(before.syskeys)
