@@ -259,13 +259,8 @@ func (st *Store) set(dbname string, key string, value interface{}, opt ds.ItemOp
 }
 
 //Remove provides clearning curent key
-func (st *Store) Remove(key string) {
-	switch st.store.(type) {
-	case *ds.Dict:
-		st.store.(*ds.Dict).Remove(key)
-	case *skiplist.SkipList:
-		st.store.(*skiplist.SkipList).Delete(key)
-	}
+func (st *Store) Remove(key []byte) {
+	st.store.Delete(key)
 }
 
 func (st *Store) Find(key string) interface{} {
