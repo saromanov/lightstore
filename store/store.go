@@ -94,16 +94,16 @@ func (st *Store) CreateDB(dbname string) {
 	st.lock.Unlock()
 }
 
-func (st *Store) Get(value string) interface{} {
+func (st *Store) Get(value []byte) interface{} {
 	return st.get(value, "")
 }
 
-func (st *Store) GetFromDB(dbname string, value string) interface{} {
+func (st *Store) GetFromDB(dbname string, value []byte) interface{} {
 	return st.get(value, dbname)
 }
 
 //if dbname is not equal "", get data from db with name dbname
-func (st *Store) get(value string, dbname string) interface{} {
+func (st *Store) get(value []byte, dbname string) interface{} {
 	mainstore := st.mainstore
 	if dbname != "" {
 		//check db availability
