@@ -28,8 +28,8 @@ type Settings struct {
 type Store struct {
 	items         int
 	dbs           map[string]*DB
-	mainstore     interface{}
-	mainstorename string
+	store     interface{}
+	storename string
 	keys          []string
 	lock          *sync.RWMutex
 	stat          *statistics.Statistics
@@ -47,7 +47,7 @@ func Open(c *Config) *Store {
 	store := new(Store)
 	starttime := time.Now().UTC()
 	store.items = 0
-	store.mainstore = checkDS("")
+	store.store = checkDS("")
 	store.keys = []string{}
 	store.dbs = make(map[string]*DB)
 	store.lock = mutex
@@ -104,7 +104,7 @@ func (st *Store) GetFromDB(dbname string, value []byte) interface{} {
 
 //if dbname is not equal "", get data from db with name dbname
 func (st *Store) get(value []byte, dbname string) interface{} {
-	mainstore := st.mainstore
+	store := st.store
 	if dbname != "" {
 		//check db availability
 		dbdata, ok := st.dbs[dbname]
@@ -113,22 +113,22 @@ func (st *Store) get(value []byte, dbname string) interface{} {
 		} else if !dbdata.isactive {
 			log.Fatal(fmt.Sprintf("db with name %s is not active", dbname))
 		} else {
-			mainstore = dbdata.mainstore
+			store = dbdata.store
 		}
 	}
 
 	st.lock.RLock()
 	defer st.lock.RUnlock()
-	switch mainstore.(type) {
+	switch store.(type) {
 	case *ds.Dict:
-		result, ok := mainstore.(*ds.Dict).Get(value)
+		result, ok := store.(*ds.Dict).Get(value)
 		if ok {
 			st.stat.NumReads += 1
 			st.historyevent.AddEvent("default", "Get")
 			return result
 		}
 	case *skiplist.SkipList:
-		result, ok := mainstore.(*skiplist.SkipList).Get(value)
+		result, ok := store.(*skiplist.SkipList).Get(value)
 		if ok {
 			st.stat.NumReads += 1
 			return result
@@ -224,10 +224,10 @@ func getItemOptions(items map[string]string) ds.ItemOptions {
 //Exist check key in the lightstore
 //and return true if key exist and false otherwise
 func (st *Store) Exist(key string) bool {
-	mainstore := st.mainstore
-	switch mainstore.(type) {
+	store := st.store
+	switch store.(type) {
 	case *ds.Dict:
-		return mainstore.(*ds.Dict).Exist(key)
+		return store.(*ds.Dict).Exist(key)
 	}
 	return false
 }
@@ -239,7 +239,7 @@ func (st *Store) SetinDB(dbname string, key string, value interface{}) bool {
 func (st *Store) set(dbname string, key string, value interface{}, opt ds.ItemOptions) bool {
 	st.lock.Lock()
 	defer st.lock.Unlock()
-	mainstore := st.mainstore
+	store := st.store
 	if dbname != "" {
 		//check db availability
 		dbdata, ok := st.dbs[dbname]
@@ -253,17 +253,17 @@ func (st *Store) set(dbname string, key string, value interface{}, opt ds.ItemOp
 			log.Info(fmt.Sprintf("db with name %s not availability to write, because contains maxumum possible number of data objrct", dbname))
 			return false
 		} else {
-			mainstore = dbdata.mainstore
+			store = dbdata.store
 		}
 	}
 
 	go func() {
 		starttime := time.Now()
-		switch mainstore.(type) {
+		switch store.(type) {
 		case *ds.Dict:
-			mainstore.(*ds.Dict).Set(key, value, opt)
+			store.(*ds.Dict).Set(key, value, opt)
 		case *skiplist.SkipList:
-			mainstore.(*skiplist.SkipList).Set(key, value)
+			store.(*skiplist.SkipList).Set(key, value)
 		}
 
 		if dbname != "" {
@@ -282,11 +282,11 @@ func (st *Store) set(dbname string, key string, value interface{}, opt ds.ItemOp
 
 //Remove provides clearning curent key
 func (st *Store) Remove(key string) {
-	switch st.mainstore.(type) {
+	switch st.store.(type) {
 	case *ds.Dict:
-		st.mainstore.(*ds.Dict).Remove(key)
+		st.store.(*ds.Dict).Remove(key)
 	case *skiplist.SkipList:
-		st.mainstore.(*skiplist.SkipList).Delete(key)
+		st.store.(*skiplist.SkipList).Delete(key)
 	}
 }
 
@@ -302,7 +302,7 @@ func (st *Store) Find(key string) interface{} {
 
 func (st *Store) RepairData(key string) *ds.RepairItem {
 	fmt.Println(fmt.Sprintf("Try to repair key %s", key))
-	item, err := st.mainstore.(*ds.Dict).GetFromRepair(key)
+	item, err := st.store.(*ds.Dict).GetFromRepair(key)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -398,7 +398,7 @@ func InitStore(settings Settings) *Store {
 	store := new(Store)
 	starttime := time.Now().UTC()
 	store.items = 0
-	store.mainstore = checkDS(settings.Innerdata)
+	store.store = checkDS(settings.Innerdata)
 	store.keys = []string{}
 	store.dbs = make(map[string]*DB)
 	store.lock = mutex
