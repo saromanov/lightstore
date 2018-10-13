@@ -129,29 +129,6 @@ func (st *Store) get(key []byte, dbname string) interface{} {
 
 }
 
-func (st *Store) AppendData(kvitem KVITEM) {
-	for key, value := range kvitem {
-		exist := st.Exist(key)
-		if exist {
-			data := []interface{}{value}
-			data = append(data, value)
-			st.set("", key, data, ds.ItemOptions{})
-		} else {
-			items := st.Get(key)
-			switch items.(type) {
-			case []interface{}:
-				items = append(items.([]interface{}), value)
-				st.historyevent.AddEvent("default", "Append")
-				st.set("", key, items, ds.ItemOptions{})
-			default:
-				data := []interface{}{st.Get(key)}
-				data = append(data, value)
-				st.set("", key, data, ds.ItemOptions{})
-			}
-		}
-	}
-}
-
 //Get many kayes from list
 func (st *Store) GetMany(keys []string) interface{} {
 	result := make([]interface{}, len(keys))
