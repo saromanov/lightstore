@@ -205,13 +205,9 @@ func getItemOptions(items map[string]string) ds.ItemOptions {
 
 //Exist check key in the lightstore
 //and return true if key exist and false otherwise
-func (st *Store) Exist(key string) bool {
+func (st *Store) Exist(key []byte) bool {
 	store := st.store
-	switch store.(type) {
-	case *ds.Dict:
-		return store.(*ds.Dict).Exist(key)
-	}
-	return false
+	return store.Exist(key)
 }
 
 func (st *Store) SetinDB(dbname string, key string, value interface{}) bool {
