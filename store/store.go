@@ -129,8 +129,8 @@ func (st *Store) get(key []byte, dbname string) interface{} {
 
 }
 
-//Get many kayes from list
-func (st *Store) GetMany(keys []string) interface{} {
+//Get many keys from list
+func (st *Store) GetMany(keys [][]byte) interface{} {
 	result := make([]interface{}, len(keys))
 	st.lock.Lock()
 	defer st.lock.Unlock()
