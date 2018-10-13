@@ -1,33 +1,28 @@
 package datastructures
 
-import "github.com/saromanov/lightstore/statistics"
+import (
+	"github.com/saromanov/golib/hashmap"
+	"github.com/saromanov/lightstore/statistics"
+)
 
 type Dict struct {
-	Value  map[string]*Item
+	Value  *hashmap.HashMap
 	stat   statistics.ItemStatistics
 	repair *Repair
 }
 
 func NewDict() *Dict {
 	d := new(Dict)
-	d.Value = make(map[string]*Item)
+	d.Value = hashmap.New()
 	d.repair = NewRepair()
 	return d
 }
 
-func (d *Dict) Set(key string, value interface{}, op ItemOptions) {
-	_, ok := d.Value[key]
-	if !ok {
-		d.Value[key] = NewItem(value)
+func (d *Dict) Set(key []byte, value interface{}, op ItemOptions) {
+	if op.Immutable {
+		return
 	}
-	if ok && op.Update && !op.Immutable {
-		d.Value[key].UpdateItem(value)
-	}
-	if ok && !op.Immutable {
-		d.Value[key] = NewItem(value)
-	} else {
-
-	}
+	d.Value.Set(key, value)
 }
 
 func (d *Dict) Get(key string) (interface{}, bool) {
