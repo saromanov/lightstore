@@ -25,14 +25,12 @@ func (d *Dict) Set(key []byte, value interface{}, op ItemOptions) {
 	d.Value.Set(key, value)
 }
 
-func (d *Dict) Get(key string) (interface{}, bool) {
-	_, ok := d.Value[key]
-	if !ok {
-		return nil, ok
-	} else {
-		d.Value[key].stat.NumReads += 1
-		return d.Value[key].value, ok
+func (d *Dict) Get(key []byte) (interface{}, bool) {
+	value := d.Value.Get(key)
+	if value == nil {
+		return nil, false
 	}
+	return value, true
 }
 
 func (d *Dict) GetFromRepair(key string) (*RepairItem, error) {
