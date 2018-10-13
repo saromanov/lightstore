@@ -112,11 +112,12 @@ func (st *Store) get(key []byte, dbname string) interface{} {
 			log.Fatal(fmt.Sprintf("db with name %s is not found", dbname))
 		} else if !dbdata.isactive {
 			log.Fatal(fmt.Sprintf("db with name %s is not active", dbname))
-		} else {
-			store = dbdata.store
 		}
 	}
 
+	if store == nil {
+		return nil
+	}
 	st.lock.RLock()
 	defer st.lock.RUnlock()
 	result, err := store.Get(key)
