@@ -174,16 +174,8 @@ func (st *Store) beforeSet(items KVITEM) *ReadyToSet {
 }
 
 func (st *Store) Set(key, value []byte) bool {
-	before := st.beforeSet(items)
-	if before.ready {
-		opt := getItemOptions(before.syskeys)
-		for key, value := range before.kvitems {
-			st.set("", key, value, opt)
-		}
-		return true
-	} else {
-		return false
-	}
+	st.store.Put(key, value)
+	return true
 }
 
 //Before set data to the lightstore. Check if in current request
