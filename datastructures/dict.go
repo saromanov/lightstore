@@ -25,6 +25,8 @@ func (d *Dict) Set(key []byte, value interface{}, op ItemOptions) {
 	d.Value.Set(key, value)
 }
 
+// Get provides getting of value by the key
+// In the case if key is not found, its return nil and false
 func (d *Dict) Get(key []byte) (interface{}, bool) {
 	value := d.Value.Get(key)
 	if value == nil {
