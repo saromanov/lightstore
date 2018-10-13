@@ -191,7 +191,7 @@ func (st *Store) SetinDB(dbname string, key string, value interface{}) bool {
 	return st.set(dbname, key, value, ds.ItemOptions{})
 }
 
-func (st *Store) set(dbname string, key string, value interface{}, opt ds.ItemOptions) bool {
+func (st *Store) set(dbname string, key []byte, value []byte, opt ds.ItemOptions) bool {
 	st.lock.Lock()
 	defer st.lock.Unlock()
 	store := st.store
@@ -212,24 +212,18 @@ func (st *Store) set(dbname string, key string, value interface{}, opt ds.ItemOp
 		}
 	}
 
-	go func() {
+	go func(s ds.Storage) {
 		starttime := time.Now()
-		switch store.(type) {
-		case *ds.Dict:
-			store.(*ds.Dict).Set(key, value, opt)
-		case *skiplist.SkipList:
-			store.(*skiplist.SkipList).Set(key, value)
-		}
-
+		s.Put(key, value)
 		if dbname != "" {
 			dbdata, _ := st.dbs[dbname]
 			st.historyevent.AddEvent("deafult", "Set")
 			dbdata.datacount += 1
 		}
-		st.PublishKeyValue(key, dbname)
+		st.PublishKeyValue(string(key), string(dbname))
 		st.stat.NumWrites += 1
 		fmt.Println(fmt.Sprintf("Stored in : %s", time.Since(starttime)))
-	}()
+	}(store)
 
 	return true
 
