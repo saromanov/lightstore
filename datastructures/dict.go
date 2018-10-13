@@ -39,6 +39,7 @@ func (d *Dict) GetFromRepair(key string) (*RepairItem, error) {
 	return d.repair.GetFromRepair(key, "")
 }
 
+// Exist provides implementation for checking of key is exist
 func (d *Dict) Exist(key []byte) bool {
 	exist := d.Value.Get(key)
 	if exist == nil {
