@@ -103,7 +103,7 @@ func (st *Store) GetFromDB(dbname string, value []byte) interface{} {
 }
 
 //if dbname is not equal "", get data from db with name dbname
-func (st *Store) get(value []byte, dbname string) interface{} {
+func (st *Store) get(key []byte, dbname string) interface{} {
 	store := st.store
 	if dbname != "" {
 		//check db availability
@@ -119,23 +119,12 @@ func (st *Store) get(value []byte, dbname string) interface{} {
 
 	st.lock.RLock()
 	defer st.lock.RUnlock()
-	switch store.(type) {
-	case *ds.Dict:
-		result, ok := store.(*ds.Dict).Get(value)
-		if ok {
-			st.stat.NumReads += 1
-			st.historyevent.AddEvent("default", "Get")
-			return result
-		}
-	case *skiplist.SkipList:
-		result, ok := store.(*skiplist.SkipList).Get(value)
-		if ok {
-			st.stat.NumReads += 1
-			return result
-		}
+	result, err := store.Get(key)
+	if err == nil {
+		st.stat.NumReads++
 	}
 
-	return nil
+	return result
 
 }
 
@@ -343,7 +332,7 @@ func (st *Store) makeSnapshot() {
 }
 
 //This private method provides checking inner datastructure for storing
-func checkDS(name string) (result interface{}) {
+func checkDS(name string) (result ds.Storage) {
 	result = ds.NewDict()
 	/* SkipList datastructure as main store */
 	if name == "skiplist" {
