@@ -29,6 +29,9 @@ type Config struct {
 	Cachesize int
 	//Sise for blocks
 	Blocksize int
+	// Storage defines name of the type
+	// for inner storage
+	Storage string
 
 	Every struct {
 		Seconds int
@@ -78,6 +81,10 @@ func (conf *Config) setMissedValues() {
 	if conf.Historylimit == 0 {
 		conf.Historylimit = 1000
 	}
+
+	if conf.Storage == "" {
+		conf.Storage = "dict"
+	}
 }
 
 //In the case if config file is not exist or not full,
@@ -90,6 +97,7 @@ func setDefaultParams() *Config {
 	conf.Dbdir = setDefaultDBData()
 	conf.Cluster = "cluster1"
 	conf.Cachesize = 1024
+	conf.Storage = "dict"
 	return conf
 }
 
