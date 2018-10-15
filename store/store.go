@@ -23,6 +23,11 @@ type Settings struct {
 	Innerdata string
 }
 
+// write defines writing to store
+type write struct {
+	key []byte
+}
+
 // Store provides implementation of the main store
 type Store struct {
 	items     int
