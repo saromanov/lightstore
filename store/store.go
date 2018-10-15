@@ -151,7 +151,7 @@ func (st *Store) beforeSet(items KVITEM) *ReadyToSet {
 }
 
 func (st *Store) Set(key, value []byte) bool {
-	st.store.Put(key, value)
+	st.store.Put(key, value, ds.ItemOptions{})
 	return true
 }
 
@@ -208,7 +208,7 @@ func (st *Store) set(dbname string, key []byte, value []byte, opt ds.ItemOptions
 
 	go func(s ds.Storage) {
 		starttime := time.Now()
-		s.Put(key, value)
+		s.Put(key, value, ds.ItemOptions{})
 		if dbname != "" {
 			dbdata, _ := st.dbs[dbname]
 			st.historyevent.AddEvent("deafult", "Set")
