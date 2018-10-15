@@ -49,6 +49,7 @@ func (d *Dict) Exist(key []byte) bool {
 }
 
 // Remove provides removing of the record
-func (d *Dict) Delete(key []byte) {
+func (d *Dict) Delete(key []byte) error {
 	d.Value.Remove(key)
+	return nil
 }

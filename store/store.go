@@ -203,8 +203,6 @@ func (st *Store) set(dbname string, key []byte, value []byte, opt ds.ItemOptions
 		} else if dbdata.limit != -1 && (dbdata.limit-dbdata.datacount) == 0 {
 			log.Info(fmt.Sprintf("db with name %s not availability to write, because contains maxumum possible number of data objrct", dbname))
 			return false
-		} else {
-			store = dbdata.store
 		}
 	}
 
@@ -230,23 +228,14 @@ func (st *Store) Remove(key []byte) {
 	st.store.Delete(key)
 }
 
-func (st *Store) Find(key string) interface{} {
+func (st *Store) Find(key []byte) interface{} {
 	st.lock.Lock()
 	defer st.lock.Unlock()
-	scanner := scan.NewScan(key, st.keys)
-	if scanner.Find(key) {
+	scanner := scan.NewScan(string(key), st.keys)
+	if scanner.Find(string(key)) {
 		return st.get(key, "")
 	}
 	return nil
-}
-
-func (st *Store) RepairData(key string) *ds.RepairItem {
-	fmt.Println(fmt.Sprintf("Try to repair key %s", key))
-	item, err := st.store.(*ds.Dict).GetFromRepair(key)
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-	return item
 }
 
 //Return statistics of usage
