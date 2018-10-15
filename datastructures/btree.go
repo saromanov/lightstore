@@ -1,8 +1,6 @@
 package datastructures
 
 import (
-	"errors"
-
 	"github.com/google/btree"
 )
 
@@ -16,7 +14,7 @@ type BTree struct {
 func InitBTree(degree int) *BTree {
 	bt := &BTree{
 		repair: NewRepair(),
-		tree:   btree.New(degree),
+		Value:  btree.New(degree),
 	}
 	return bt
 }
@@ -25,17 +23,18 @@ func (d *BTree) Put(key []byte, value interface{}, op ItemOptions) error {
 	if op.Immutable {
 		return nil
 	}
-	d.Value.Set(key, value)
+	//d.Value.Set(key, value)
 	return nil
 }
 
 // Get provides getting of value by the key
 func (d *BTree) Get(key []byte) (interface{}, error) {
-	value, ok := d.Value.Get(key)
+	/*value, ok := d.Value.Get(key)
 	if !ok {
 		return nil, errors.New("unable to find element")
 	}
-	return value, nil
+	return value, nil*/
+	return nil, nil
 }
 
 func (d *BTree) GetFromRepair(key string) (*RepairItem, error) {
@@ -44,18 +43,10 @@ func (d *BTree) GetFromRepair(key string) (*RepairItem, error) {
 
 // Exist provides implementation for checking of key is exist
 func (d *BTree) Exist(key []byte) bool {
-	_, ok := d.Value.Get(key)
-	if !ok {
-		return false
-	}
-	return true
+	return false
 }
 
 // Remove provides removing of the record
-func (d *SkipList) Delete(key []byte) error {
-	_, ok := d.Value.Delete(key)
-	if !ok {
-		return errors.New("unable to delete element")
-	}
+func (d *BTree) Delete(key []byte) error {
 	return nil
 }
