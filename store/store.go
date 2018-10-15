@@ -5,7 +5,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ryszard/goskiplist/skiplist"
 	ds "github.com/saromanov/lightstore/datastructures"
 	"github.com/saromanov/lightstore/history"
 	log "github.com/saromanov/lightstore/logging"
@@ -276,7 +275,7 @@ func checkDS(name string) (result ds.Storage) {
 	result = ds.NewDict()
 	/* SkipList datastructure as main store */
 	if name == "skiplist" {
-		result = skiplist.NewStringMap()
+		result = ds.NewSkipList()
 	}
 
 	/* Simple map as main store */
