@@ -8,13 +8,13 @@ import (
 // over google btree package
 type BTree struct {
 	repair *Repair
-	Value  *btree.BTree
+	engine *btree.BTree
 }
 
 func InitBTree(degree int) *BTree {
 	bt := &BTree{
 		repair: NewRepair(),
-		Value:  btree.New(degree),
+		engine: btree.New(degree),
 	}
 	return bt
 }
