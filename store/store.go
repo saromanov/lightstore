@@ -123,6 +123,7 @@ func (st *Store) get(key []byte, dbname string) interface{} {
 	if err == nil {
 		st.stat.NumReads++
 	}
+	fmt.Println(string(result.([]byte)))
 
 	return result
 
