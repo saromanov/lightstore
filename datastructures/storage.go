@@ -4,7 +4,7 @@ package datastructures
 // store of key values
 type Storage interface {
 	Get([]byte) (interface{}, error)
-	Put([]byte, []byte, ItemOptions) error
+	Put([]byte, interface{}, ItemOptions) error
 	Delete([]byte) error
 	Exist([]byte) bool
 }

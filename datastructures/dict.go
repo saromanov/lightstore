@@ -20,11 +20,12 @@ func NewDict() *Dict {
 	return d
 }
 
-func (d *Dict) Put(key []byte, value interface{}, op ItemOptions) {
+func (d *Dict) Put(key []byte, value interface{}, op ItemOptions) error {
 	if op.Immutable {
-		return
+		return nil
 	}
 	d.Value.Set(key, value)
+	return nil
 }
 
 // Get provides getting of value by the key
