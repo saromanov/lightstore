@@ -1,6 +1,8 @@
 package datastructures
 
 import (
+	"errors"
+
 	"github.com/saromanov/golib/hashmap"
 	"github.com/saromanov/lightstore/statistics"
 )
@@ -18,7 +20,7 @@ func NewDict() *Dict {
 	return d
 }
 
-func (d *Dict) Set(key []byte, value interface{}, op ItemOptions) {
+func (d *Dict) Put(key []byte, value interface{}, op ItemOptions) {
 	if op.Immutable {
 		return
 	}
@@ -26,13 +28,12 @@ func (d *Dict) Set(key []byte, value interface{}, op ItemOptions) {
 }
 
 // Get provides getting of value by the key
-// In the case if key is not found, its return nil and false
-func (d *Dict) Get(key []byte) (interface{}, bool) {
+func (d *Dict) Get(key []byte) (interface{}, error) {
 	value := d.Value.Get(key)
 	if value == nil {
-		return nil, false
+		return nil, errors.New("unable to find element")
 	}
-	return value, true
+	return value, nil
 }
 
 func (d *Dict) GetFromRepair(key string) (*RepairItem, error) {
