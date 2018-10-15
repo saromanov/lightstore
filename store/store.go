@@ -187,10 +187,6 @@ func (st *Store) Exist(key []byte) bool {
 	return store.Exist(key)
 }
 
-func (st *Store) SetinDB(dbname string, key string, value interface{}) bool {
-	return st.set(dbname, key, value, ds.ItemOptions{})
-}
-
 func (st *Store) set(dbname string, key []byte, value []byte, opt ds.ItemOptions) bool {
 	st.lock.Lock()
 	defer st.lock.Unlock()
