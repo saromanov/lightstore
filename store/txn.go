@@ -2,7 +2,10 @@ package store
 
 import "errors"
 
-var errNoWrites = errors.New("unable to write on read-only mode")
+var (
+	errNoWrites = errors.New("unable to write on read-only mode")
+	errEmptyKey = errors.New("key is empty")
+)
 
 //https://docs.oracle.com/cd/E17275_01/html/api_reference/C/txn.html
 
@@ -76,6 +79,9 @@ func (t *Txn) set(entry *Entry) error {
 func (t *Txn) beforeSet(entry *Entry) error {
 	if !t.write {
 		return errNoWrites
+	}
+	if len(entry.key) == 0 {
+		return errEmptyKey
 	}
 	return nil
 }
