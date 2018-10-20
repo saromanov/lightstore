@@ -1,5 +1,9 @@
 package store
 
+import "errors"
+
+var errNoWrites = errors.New("unable to write on read-only mode")
+
 //https://docs.oracle.com/cd/E17275_01/html/api_reference/C/txn.html
 
 // write defines writing to store
@@ -13,6 +17,7 @@ type Txn struct {
 	count  int64
 	id     int64
 	reads  []int64
+	write  bool
 }
 
 // Entry defines new key value pair
@@ -35,6 +40,9 @@ func (t *Txn) Commit() error {
 // Set writes a new key value pair to the pending writes
 // It'll be applying after transaction
 func (t *Txn) Set(key, value []byte) error {
+	if !t.write {
+		return errNoWrites
+	}
 	entry := &Entry{
 		key:   key,
 		value: value,
