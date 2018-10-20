@@ -26,3 +26,18 @@ func (s *Store) NewTransaction() *Txn {
 	txn := &Txn{}
 	return txn
 }
+
+// Commit applies a new commit after modification
+func (t *Txn) Commit() error {
+	return nil
+}
+
+// Set writes a new key value pair to the pending writes
+// It'll be applying after transaction
+func (t *Txn) Set(key, value[]byte) error {
+	entry := Entry {
+		key: key,
+		value: value
+	}
+	return nil
+}
