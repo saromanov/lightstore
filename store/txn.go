@@ -71,3 +71,11 @@ func (t *Txn) set(entry *Entry) error {
 	t.writes = append(t.writes, entry)
 	return nil
 }
+
+// beforeSet checks properties before set of the entry
+func (t *Txn) beforeSet(entry *Entry) error {
+	if !t.write {
+		return errNoWrites
+	}
+	return nil
+}
