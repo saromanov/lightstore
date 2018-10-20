@@ -44,6 +44,9 @@ func (t *Txn) Close() {
 
 // Commit applies a new commit after modification
 func (t *Txn) Commit() error {
+	if len(t.writes) == 0 {
+		return nil
+	}
 	return nil
 }
 
