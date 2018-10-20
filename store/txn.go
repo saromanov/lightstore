@@ -25,7 +25,9 @@ type Entry struct {
 // NewTransaction creates a new transaction
 func (s *Store) NewTransaction() *Txn {
 	txn := &Txn{
-		store: s,
+		store:  s,
+		writes: []*Entry{},
+		reads:  []int64{},
 	}
 	return txn
 }
