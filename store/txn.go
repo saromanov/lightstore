@@ -9,7 +9,7 @@ type write struct {
 
 // Txn represents transaction
 type Txn struct {
-	writes []write
+	writes []*Entry
 	count  int64
 	id     int64
 	reads  []int64
@@ -43,5 +43,6 @@ func (t *Txn) Set(key, value []byte) error {
 }
 
 func (t *Txn) set(entry *Entry) error {
+	t.writes = append(t.writes, entry)
 	return nil
 }
