@@ -37,6 +37,11 @@ func (t *Txn) DB() *Store {
 	return t.store
 }
 
+// Close defines ending of transaction
+func (t *Txn) Close() {
+	t.store = nil
+}
+
 // Commit applies a new commit after modification
 func (t *Txn) Commit() error {
 	return nil
