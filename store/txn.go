@@ -6,11 +6,6 @@ var errNoWrites = errors.New("unable to write on read-only mode")
 
 //https://docs.oracle.com/cd/E17275_01/html/api_reference/C/txn.html
 
-// write defines writing to store
-type write struct {
-	key []byte
-}
-
 // Txn represents transaction
 type Txn struct {
 	writes []*Entry
