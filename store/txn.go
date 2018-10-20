@@ -47,6 +47,9 @@ func (t *Txn) Commit() error {
 	if len(t.writes) == 0 {
 		return nil
 	}
+	for _, w := range t.writes {
+		t.store.Set(w.key, w.value)
+	}
 	return nil
 }
 
