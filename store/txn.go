@@ -18,8 +18,9 @@ type Txn struct {
 
 // Entry defines new key value pair
 type Entry struct {
-	key   []byte
-	value []byte
+	key    []byte
+	value  []byte
+	expire uint64
 }
 
 // NewTransaction creates a new transaction
