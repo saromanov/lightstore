@@ -32,6 +32,11 @@ func (s *Store) NewTransaction() *Txn {
 	return txn
 }
 
+// DB retruns reference to store
+func (t *Txn) DB() *Store {
+	return t.store
+}
+
 // Commit applies a new commit after modification
 func (t *Txn) Commit() error {
 	return nil
