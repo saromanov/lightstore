@@ -60,9 +60,6 @@ func (t *Txn) Commit() error {
 // Set writes a new key value pair to the pending writes
 // It'll be applying after transaction
 func (t *Txn) Set(key, value []byte) error {
-	if !t.write {
-		return errNoWrites
-	}
 	entry := &Entry{
 		key:   key,
 		value: value,
@@ -71,6 +68,9 @@ func (t *Txn) Set(key, value []byte) error {
 }
 
 func (t *Txn) set(entry *Entry) error {
+	if err := t.beforeSet(entry); err != nil {
+		return err
+	}
 	t.writes = append(t.writes, entry)
 	return nil
 }
