@@ -13,6 +13,7 @@ type Txn struct {
 	id     int64
 	reads  []int64
 	write  bool
+	store  *Store
 }
 
 // Entry defines new key value pair
@@ -23,7 +24,9 @@ type Entry struct {
 
 // NewTransaction creates a new transaction
 func (s *Store) NewTransaction() *Txn {
-	txn := &Txn{}
+	txn := &Txn{
+		store: s,
+	}
 	return txn
 }
 
