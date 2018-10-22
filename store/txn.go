@@ -44,6 +44,11 @@ func (p *pendingWritesIterator) Next() {
 	p.nextIdx++
 }
 
+// GetKey returns current key on iterator
+func (p *pendingWritesIterator) GetKey() []byte {
+	return p.entries[p.nextIdx].key
+}
+
 // NewTransaction creates a new transaction
 func (s *Store) NewTransaction() *Txn {
 	txn := &Txn{
