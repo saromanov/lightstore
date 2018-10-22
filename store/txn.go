@@ -3,9 +3,12 @@ package store
 import "errors"
 
 var (
-	errNoWrites = errors.New("unable to write on read-only mode")
-	errEmptyKey = errors.New("key is empty")
+	errNoWrites     = errors.New("unable to write on read-only mode")
+	errEmptyKey     = errors.New("key is empty")
+	errLargeKeySize = errors.New("key size is larger then limit")
 )
+
+const maxKeySize = 16384
 
 //https://docs.oracle.com/cd/E17275_01/html/api_reference/C/txn.html
 
@@ -105,6 +108,9 @@ func (t *Txn) beforeSet(entry *Entry) error {
 	}
 	if len(entry.key) == 0 {
 		return errEmptyKey
+	}
+	if len(entry.key) > maxKeySize {
+		return errLargeKeySize
 	}
 	return nil
 }
