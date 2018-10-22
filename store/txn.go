@@ -53,11 +53,12 @@ func (p *pendingWritesIterator) GetKey() []byte {
 }
 
 // NewTransaction creates a new transaction
-func (s *Store) NewTransaction() *Txn {
+func (s *Store) NewTransaction(write bool) *Txn {
 	txn := &Txn{
 		store:  s,
 		writes: []*Entry{},
 		reads:  []int64{},
+		write:  write,
 	}
 	return txn
 }
