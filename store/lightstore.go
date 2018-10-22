@@ -11,3 +11,8 @@ func Open(c *Config) *Lightstore {
 		store: newStore(c),
 	}
 }
+
+// View creates new read-only transaction
+func View(fn func(*Txn) error) error {
+	return nil
+}
