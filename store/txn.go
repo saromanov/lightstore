@@ -27,11 +27,21 @@ type Entry struct {
 }
 
 // pendingWritesIterator provides iteration over
-// pednign writes
+// pednding writes
 type pendingWritesIterator struct {
 	entries []*Entry
 	nextIdx int
 	readTs  uint64
+}
+
+// Start is moving iteration to the start
+func (p *pendingWritesIterator) Start() {
+	p.nextIdx = 0
+}
+
+// Next moves to the second element of entries
+func (p *pendingWritesIterator) Next() {
+	p.nextIdx++
 }
 
 // NewTransaction creates a new transaction
