@@ -40,8 +40,8 @@ type Store struct {
 	rpcdata      *rpc.RPCData
 }
 
-// Open creates a new instance of lightstore
-func Open(c *Config) *Store {
+// newStore creates a new instance of lightstore
+func newStore(c *Config) *Store {
 	mutex := &sync.RWMutex{}
 	store := new(Store)
 	starttime := time.Now().UTC()
