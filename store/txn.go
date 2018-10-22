@@ -26,6 +26,14 @@ type Entry struct {
 	expire uint64
 }
 
+// pendingWritesIterator provides iteration over
+// pednign writes
+type pendingWritesIterator struct {
+	entries []*Entry
+	nextIdx int
+	readTs  uint64
+}
+
 // NewTransaction creates a new transaction
 func (s *Store) NewTransaction() *Txn {
 	txn := &Txn{
