@@ -2,6 +2,7 @@ package store
 
 import (
 	"errors"
+	"sort"
 	"time"
 )
 
@@ -101,6 +102,7 @@ func (t *Txn) Commit() error {
 	if len(t.writes) == 0 {
 		return nil
 	}
+	sort.Sort(t.writes)
 	for _, w := range t.writes {
 		t.store.Set(w.key, w.value)
 	}
