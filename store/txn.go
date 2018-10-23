@@ -73,6 +73,15 @@ func (t *Txn) Close() {
 	t.store = nil
 }
 
+// Delete provides removing value by the key
+func (t *Txn) Delete(key []byte) error {
+	if err := t.beforeSet(entry); err != nil {
+		return err
+	}
+	t.writes = append(t.writes, entry)
+	return nil
+}
+
 // Commit applies a new commit after modification
 func (t *Txn) Commit() error {
 	if len(t.writes) == 0 {
