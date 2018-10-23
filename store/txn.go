@@ -75,6 +75,9 @@ func (t *Txn) Close() {
 
 // Delete provides removing value by the key
 func (t *Txn) Delete(key []byte) error {
+	entry := &Entry{
+		key: key,
+	}
 	if err := t.beforeSet(entry); err != nil {
 		return err
 	}
