@@ -1,6 +1,9 @@
 package store
 
-import "errors"
+import (
+	"errors"
+	"time"
+)
 
 var (
 	errNoWrites     = errors.New("unable to write on read-only mode")
@@ -24,9 +27,10 @@ type Txn struct {
 
 // Entry defines new key value pair
 type Entry struct {
-	key    []byte
-	value  []byte
-	expire uint64
+	key       []byte
+	value     []byte
+	expire    uint64
+	timestamp int64
 }
 
 // pendingWritesIterator provides iteration over
@@ -76,7 +80,8 @@ func (t *Txn) Close() {
 // Delete provides removing value by the key
 func (t *Txn) Delete(key []byte) error {
 	entry := &Entry{
-		key: key,
+		key:       key,
+		timestamp: time.Now().Unix(),
 	}
 	if err := t.beforeSet(entry); err != nil {
 		return err
@@ -100,8 +105,9 @@ func (t *Txn) Commit() error {
 // It'll be applying after transaction
 func (t *Txn) Set(key, value []byte) error {
 	entry := &Entry{
-		key:   key,
-		value: value,
+		key:       key,
+		value:     value,
+		timestamp: time.Now().Unix(),
 	}
 	return t.set(entry)
 }
