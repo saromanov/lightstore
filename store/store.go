@@ -151,6 +151,8 @@ func (st *Store) beforeSet(items KVITEM) *ReadyToSet {
 }
 
 func (st *Store) Set(key, value []byte) bool {
+	st.lock.Lock()
+	defer st.lock.Unlock()
 	st.store.Put(key, value, ds.ItemOptions{})
 	return true
 }
