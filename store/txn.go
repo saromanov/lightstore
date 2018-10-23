@@ -18,7 +18,7 @@ const maxKeySize = 16384
 
 // Txn represents transaction
 type Txn struct {
-	writes []*Entry
+	writes EntrySlice
 	count  int64
 	id     int64
 	reads  []int64
@@ -34,7 +34,7 @@ type Entry struct {
 	timestamp int64
 }
 
-type EntrySlice []Entry
+type EntrySlice []*Entry
 
 func (a EntrySlice) Len() int           { return len(a) }
 func (a EntrySlice) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
@@ -43,7 +43,7 @@ func (a EntrySlice) Less(i, j int) bool { return a[i].timestamp < a[j].timestamp
 // pendingWritesIterator provides iteration over
 // pednding writes
 type pendingWritesIterator struct {
-	entries []*Entry
+	entries EntrySlice
 	nextIdx int
 	readTs  uint64
 }
