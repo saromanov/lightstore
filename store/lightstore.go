@@ -23,3 +23,13 @@ func (l *Lightstore) View(fn func(*Txn) error) error {
 	}
 	return nil
 }
+
+// Write provides write transaction
+func (l *Lightstore) Write(fn func(*Txn) error) error {
+	t := l.store.NewTransaction(true)
+	err := fn(t)
+	if err != nil {
+		return fmt.Errorf("unable to apply transaction: %v", err)
+	}
+	return nil
+}
