@@ -18,12 +18,13 @@ const maxKeySize = 16384
 
 // Txn represents transaction
 type Txn struct {
-	writes EntrySlice
-	count  int64
-	id     int64
-	reads  []int64
-	write  bool
-	store  *Store
+	writes    EntrySlice
+	count     int64
+	id        int64
+	reads     []int64
+	write     bool
+	store     *Store
+	timestamp int64
 }
 
 // Entry defines new key value pair
@@ -66,10 +67,11 @@ func (p *pendingWritesIterator) GetKey() []byte {
 // NewTransaction creates a new transaction
 func (s *Store) NewTransaction(write bool) *Txn {
 	txn := &Txn{
-		store:  s,
-		writes: []*Entry{},
-		reads:  []int64{},
-		write:  write,
+		store:     s,
+		writes:    []*Entry{},
+		reads:     []int64{},
+		write:     write,
+		timestamp: time.Now().UnixNano(),
 	}
 	return txn
 }
