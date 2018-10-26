@@ -9,7 +9,7 @@ type indexing interface {
 	DropIndex(value string)
 	DropIndexes(value []string)
 	IndexStatus(index string) int
-	AddItemToCache(name, value, location string)
+	AddToCache(name, value, location string)
 }
 
 type Indexing struct {
@@ -65,6 +65,6 @@ func (idx *Indexing) AddItem(name, value, location string) {
 	idx.location[value] = location
 }
 
-func (idx *Indexing) AddItemToCache(name, value, location string) {
+func (idx *Indexing) AddToCache(name, value, location string) {
 	idx.caching.Put(value, 1000)
 }
