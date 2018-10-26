@@ -244,7 +244,7 @@ func (st *Store) Find(key []byte) interface{} {
 	return nil
 }
 
-//Return statistics of usage
+// Stat retruns statistics on store
 func (st *Store) Stat() *statistics.Statistics {
 	return st.stat
 }
