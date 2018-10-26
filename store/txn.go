@@ -76,6 +76,11 @@ func (s *Store) NewTransaction(write bool) *Txn {
 	return txn
 }
 
+// Gettimestamp returns timestamp of current transaction
+func (t *Txn) GetTimestamp() int64 {
+	return t.timestamp
+}
+
 // DB retruns reference to store
 func (t *Txn) DB() *Store {
 	return t.store
