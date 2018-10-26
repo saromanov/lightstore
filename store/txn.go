@@ -82,6 +82,8 @@ func (t *Txn) DB() *Store {
 // Close defines ending of transaction
 func (t *Txn) Close() {
 	t.store = nil
+	t.writes = []*Entry{}
+	t.reads = []int64{}
 }
 
 // Delete provides removing value by the key
