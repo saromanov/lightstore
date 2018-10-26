@@ -118,7 +118,10 @@ func (st *Store) get(key []byte, dbname string) interface{} {
 		return nil
 	}
 	st.lock.RLock()
-	defer st.lock.RUnlock()
+	defer func() {
+		st.lock.RUnlock()
+		st.stat.NumReads++
+	}()
 	result, err := store.Get(key)
 	if err == nil {
 		st.stat.NumReads++
