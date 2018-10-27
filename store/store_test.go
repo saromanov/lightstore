@@ -9,6 +9,13 @@ func TestOpen(t *testing.T) {
 	if !s.IsCreated() {
 		t.Fatalf("unable to create db")
 	}
+}
+
+func TestWrite(t *testing.T) {
+	s := Open(nil)
+	if !s.IsCreated() {
+		t.Fatalf("unable to create db")
+	}
 	key := []byte("key")
 	valueFirst := []byte("value")
 	stored := s.Set(key, valueFirst)
