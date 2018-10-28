@@ -91,7 +91,7 @@ func (so *SnapshotObject) ReadNewest() {
 	}
 }
 
-//Return snapshotnames
+// checkAvailableSnapshots Returns snapshot names
 func checkAvailableSnapshots(dir string) []string {
 	files, err := ioutil.ReadDir(dir)
 	result := []string{}
