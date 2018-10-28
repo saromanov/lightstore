@@ -37,8 +37,8 @@ func NewSnapshotObject(path string) *SnapshotObject {
 }
 
 //Write provides storing of new snapshot
-func (so *SnapshotObject) Write(object *SnapshotObject) {
-	b, err := json.Marshal(object)
+func (so *SnapshotObject) Write() {
+	b, err := json.Marshal(so)
 	if err != nil {
 		panic(err)
 	}
