@@ -10,7 +10,6 @@ import (
 	log "github.com/saromanov/lightstore/logging"
 	"github.com/saromanov/lightstore/rpc"
 	"github.com/saromanov/lightstore/scan"
-	"github.com/saromanov/lightstore/snapshot"
 	"github.com/saromanov/lightstore/statistics"
 	"github.com/saromanov/lightstore/utils"
 )
@@ -273,8 +272,8 @@ func (st *Store) IsCreated() bool {
 
 func (st *Store) makeSnapshot() {
 	//This is only for testing
-	snap := snapshot.NewSnapshotObject("")
-	snap.Write(&snapshot.SnapshotObject{Crc32: "123", Data: "foobar", Dir: "/"})
+	snap := NewSnapshotObject("")
+	snap.Write(&SnapshotObject{Crc32: "123", Data: "foobar", Dir: "/"})
 }
 
 //This private method provides checking inner datastructure for storing

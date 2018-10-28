@@ -1,5 +1,5 @@
 // snapshot provides creating of shanpshots
-package snapshot
+package store
 
 import (
 	"encoding/json"
