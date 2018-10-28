@@ -24,12 +24,14 @@ type SnapshotObject struct {
 	Crc32 string
 	Data  string
 	Dir   string
+	st    *Store
 }
 
 //NewSnapshotObject object provides initialization od new snapshot
-func NewSnapshotObject(path string) *SnapshotObject {
+func NewSnapshotObject(st *Store, path string) *SnapshotObject {
 	so := new(SnapshotObject)
 	so.Dir = "."
+	so.st = st
 	if path != "" {
 		so.Dir = path
 	}
@@ -48,6 +50,13 @@ func (so *SnapshotObject) Write() {
 		panic(err)
 	}
 
+}
+
+// WriteNew is a temp method for writing of
+// snapshots with entries
+func (so *SnapshotObject) WriteNew() error {
+
+	return nil
 }
 
 //Read provides reading snapshot and store data to lightstore
