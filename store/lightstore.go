@@ -14,6 +14,11 @@ func Open(c *Config) *Lightstore {
 	}
 }
 
+// IsCreated retruns true if Lightstore was initialized
+func (l *Lightstore) IsCreated() bool {
+	return l.store.IsCreated()
+}
+
 // View creates new read-only transaction
 func (l *Lightstore) View(fn func(*Txn) error) error {
 	t := l.store.NewTransaction(false)
