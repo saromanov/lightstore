@@ -5,6 +5,7 @@ import "fmt"
 // Lightstore defines main struct for db
 type Lightstore struct {
 	store *Store
+	errTransactions
 }
 
 // Open provides creating of lightstore object
