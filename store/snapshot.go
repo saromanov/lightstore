@@ -13,6 +13,7 @@ import (
 	"strings"
 
 	"github.com/op/go-logging"
+	"github.com/saromanov/lightstore/proto"
 )
 
 var log = logging.MustGetLogger("lightstore_log")
@@ -66,6 +67,11 @@ func (so *SnapshotObject) WriteNew() error {
 	}
 	fmt.Printf("% x", buf.Bytes())
 	return nil
+}
+
+func (so *SnapshotObject) write(){
+	kv := &proto.KV{}
+	kv.Marshal()
 }
 
 //Read provides reading snapshot and store data to lightstore
