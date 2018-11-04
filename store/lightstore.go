@@ -4,8 +4,8 @@ import "fmt"
 
 // Lightstore defines main struct for db
 type Lightstore struct {
-	store *Store
-	errTransactions
+	store           *Store
+	errTransactions []string
 }
 
 // Open provides creating of lightstore object
@@ -25,6 +25,7 @@ func (l *Lightstore) View(fn func(*Txn) error) error {
 	t := l.store.NewTransaction(false)
 	err := fn(t)
 	if err != nil {
+		l.errTransactions = append(l.errTransactions, t.ID())
 		return fmt.Errorf("unable to apply transaction: %v", err)
 	}
 	return nil
@@ -35,6 +36,7 @@ func (l *Lightstore) Write(fn func(*Txn) error) error {
 	t := l.store.NewTransaction(true)
 	err := fn(t)
 	if err != nil {
+		l.errTransactions = append(l.errTransactions, t.ID())
 		return fmt.Errorf("unable to apply transaction: %v", err)
 	}
 	return nil
