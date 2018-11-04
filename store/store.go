@@ -84,12 +84,12 @@ func (st *Store) CheckExistDB(value string) bool {
 
 func (st *Store) CreateDB(dbname string) {
 	st.lock.Lock()
+	defer st.lock.Unlock()
 	_, ok := st.dbs[dbname]
 	st.dbs[dbname] = CreateNewDB(dbname)
 	if !ok {
 		st.stat.Dbnum += 1
 	}
-	st.lock.Unlock()
 }
 
 func (st *Store) Get(value []byte) interface{} {
@@ -103,6 +103,9 @@ func (st *Store) GetFromDB(dbname string, value []byte) interface{} {
 //if dbname is not equal "", get data from db with name dbname
 func (st *Store) get(key []byte, dbname string) interface{} {
 	store := st.store
+	if store == nil {
+		return nil
+	}
 	if dbname != "" {
 		//check db availability
 		dbdata, ok := st.dbs[dbname]
@@ -113,9 +116,6 @@ func (st *Store) get(key []byte, dbname string) interface{} {
 		}
 	}
 
-	if store == nil {
-		return nil
-	}
 	st.lock.RLock()
 	defer func() {
 		st.lock.RUnlock()
