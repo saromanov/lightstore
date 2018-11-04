@@ -248,7 +248,7 @@ func (st *Store) Stat() *statistics.Statistics {
 	return st.stat
 }
 
-func (st *Store) CloseLightStore() {
+func (st *Store) Close() {
 	fmt.Println("End working: ", time.Now())
 }
 
