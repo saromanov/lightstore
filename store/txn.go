@@ -84,6 +84,11 @@ func (t *Txn) GetTimestamp() int64 {
 	return t.timestamp
 }
 
+// ID returns id of transaction
+func (t *Txn) ID() string {
+	return t.id
+}
+
 // DB retruns reference to store
 func (t *Txn) DB() *Store {
 	return t.store
