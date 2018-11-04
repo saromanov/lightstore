@@ -4,6 +4,8 @@ import (
 	"errors"
 	"sort"
 	"time"
+
+	"github.com/satori/go.uuid"
 )
 
 var (
@@ -20,7 +22,7 @@ const maxKeySize = 16384
 type Txn struct {
 	writes    EntrySlice
 	count     int64
-	id        int64
+	id        string
 	reads     []int64
 	write     bool
 	store     *Store
@@ -67,6 +69,7 @@ func (p *pendingWritesIterator) GetKey() []byte {
 // NewTransaction creates a new transaction
 func (s *Store) NewTransaction(write bool) *Txn {
 	txn := &Txn{
+		id:        uuid.Must(uuid.NewV4()),
 		store:     s,
 		writes:    []*Entry{},
 		reads:     []int64{},
