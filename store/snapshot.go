@@ -59,7 +59,7 @@ func (so *SnapshotObject) Write() {
 
 // WriteNew is a temp method for writing of
 // snapshots with entries
-func (so *SnapshotObject) WriteNew() error {
+func (so *SnapshotObject) WriteNew(w io.Writer) error {
 	buf := new(bytes.Buffer)
 	var pi float64 = math.Pi
 	err := binary.Write(buf, binary.LittleEndian, pi)
