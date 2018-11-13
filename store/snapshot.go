@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"io"
 	"math"
 	"os"
 	"path"
@@ -69,9 +70,17 @@ func (so *SnapshotObject) WriteNew() error {
 	return nil
 }
 
-func (so *SnapshotObject) write(){
+func (so *SnapshotObject) write(w io.Writer) error{
 	kv := &proto.KV{}
-	kv.Marshal()
+	buf, err := kv.Marshal()
+	if err != nil {
+		return fmt.Errorf("unable to marshal data to snapshot: %v", err)
+	}
+	_, err := w.Write(buf)
+	if err != nil {
+		return fmt.Errorf("unable to write data to snapshot: %v", err)
+	}
+	return nil
 }
 
 //Read provides reading snapshot and store data to lightstore
