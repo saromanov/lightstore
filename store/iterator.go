@@ -9,9 +9,21 @@ type Item struct {
 	txn   *Txn
 }
 
+// Iterator provides iterating over the KV pairs
+type Iterator struct {
+	txn     *Txn
+	lastKey []byte
+	closed  bool
+}
+
 // Key returns key of the item
 func (i *Item) Key() []byte {
 	return i.key
+}
+
+// Copykey provides copy of the current key
+func (i *Item) CopyKey(src []byte) []byte {
+	return copy(i.key, src)
 }
 
 func copy(f, s []byte) []byte {
