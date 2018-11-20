@@ -6,8 +6,8 @@ import (
 	"io"
 )
 
-// Compress provides compression of data
-func Compress(data []byte) []byte {
+// compress provides compression of data
+func compress(data []byte) []byte {
 	var b bytes.Buffer
 
 	w := zlib.NewWriter(&b)
@@ -16,8 +16,8 @@ func Compress(data []byte) []byte {
 	return b.Bytes()
 }
 
-// Decompress provides decompression of data
-func Decompress(data []byte) []byte {
+// decompress provides decompression of data
+func decompress(data []byte) []byte {
 	var buf bytes.Buffer
 	b := bytes.NewReader(data)
 	r, err := zlib.NewReader(b)
