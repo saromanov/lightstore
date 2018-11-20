@@ -21,6 +21,12 @@ type Iterator struct {
 	txn     *Txn
 	lastKey []byte
 	closed  bool
+	item    *Item
+}
+
+// Item retruns current item from iterator
+func (it *Iterator) Item() *Item {
+	return it.item
 }
 
 // Key returns key of the item
