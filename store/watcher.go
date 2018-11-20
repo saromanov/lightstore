@@ -10,16 +10,22 @@ type watcher struct {
 	watch *fsnotify.Watcher
 }
 
-func newWatcher() (*watcher, error) {
+func newWatcher(path string) (*watcher, error) {
 	w, err := fsnotify.NewWatcher()
 	if err != nil {
 		return nil, err
 	}
+	err = watcher.Add(path)
+	if err != nil {
+    	return nil, err
+	}
+
 	return &watcher{
 		watch: w,
 	}, nil
 }
 
+func (w*watcher) 
 // Close provides ending work of file watcher
 func (w *watcher) Close() {
 	watcher.Close()
