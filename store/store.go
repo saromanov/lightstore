@@ -128,6 +128,9 @@ func (st *Store) get(key []byte, dbname string) interface{} {
 		st.stat.NumFailedReads++
 		return nil
 	}
+	if st.compression {
+		result = decompress(result)
+	}
 	fmt.Println(string(result.([]byte)))
 
 	return result
@@ -159,6 +162,9 @@ func (st *Store) beforeSet(items KVITEM) *ReadyToSet {
 func (st *Store) Set(key, value []byte) bool {
 	st.lock.Lock()
 	defer st.lock.Unlock()
+	if st.compression {
+		value = compress(value)
+	}
 	st.store.Put(key, value, ds.ItemOptions{})
 	return true
 }
