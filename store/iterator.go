@@ -1,5 +1,7 @@
 package store
 
+import "fmt"
+
 // Item defines struct for item on iterator
 type Item struct {
 	key   []byte
@@ -7,6 +9,11 @@ type Item struct {
 	err   error
 	next  *Item
 	txn   *Txn
+}
+
+// String retruns string representation of Item
+func (i *Item) String() string {
+	return fmt.Sprintf("%q", i.Key())
 }
 
 // Iterator provides iterating over the KV pairs
