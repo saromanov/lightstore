@@ -10,6 +10,7 @@ import (
 
 //This module for loading configuration from config.yaml
 
+// Config defines main config for Lightstore
 type Config struct {
 	//Address for server
 	Address string
@@ -43,6 +44,10 @@ type Config struct {
 
 	// Set compression of data
 	Compression bool
+
+	// Mode provides setting of the mode of Lightstore
+	// Trivial, Server, Cluster
+	Mode string
 }
 
 //LoadConfigData provides load configuration or set default params
