@@ -8,6 +8,12 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+const (
+	TrivialMode = "Trivial"
+	ServerMode  = "Server"
+	ClusterMode = "Cluster"
+)
+
 //This module for loading configuration from config.yaml
 
 // Config defines main config for Lightstore
@@ -93,6 +99,15 @@ func (conf *Config) setMissedValues() {
 	if conf.Storage == "" {
 		conf.Storage = "dict"
 	}
+
+	conf.Mode = checkMode(conf.Mode)
+}
+
+func checkMode(mode string) string {
+	if mode != TrivialMode && mode != ServerMode && mode != ClusterMode {
+		return TrivialMode
+	}
+	return mode
 }
 
 //In the case if config file is not exist or not full,
