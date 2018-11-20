@@ -3,6 +3,8 @@
 package store
 
 import (
+	"fmt"
+
 	"github.com/fsnotify/fsnotify"
 )
 
@@ -17,7 +19,7 @@ func newWatcher(path string) (*watcher, error) {
 	}
 	err = watcher.Add(path)
 	if err != nil {
-    	return nil, err
+		return nil, err
 	}
 
 	return &watcher{
@@ -25,7 +27,30 @@ func newWatcher(path string) (*watcher, error) {
 	}, nil
 }
 
-func (w*watcher) 
+// Do provides starting of the worker
+func (w *watcher) Do() {
+	done := make(chan bool)
+	go func() {
+		for {
+			select {
+			case event, ok := <-watcher.Events:
+				if !ok {
+					return
+				}
+				if event.Op&fsnotify.Write == fsnotify.Write {
+					log.Println("modified file:", event.Name)
+				}
+			case err, ok := <-watcher.Errors:
+				if !ok {
+					return
+				}
+				fmt.Println("Watcher error: ", err)
+			}
+		}
+	}()
+	<-done
+}
+
 // Close provides ending work of file watcher
 func (w *watcher) Close() {
 	watcher.Close()

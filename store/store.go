@@ -38,6 +38,7 @@ type Store struct {
 	historyevent *history.History
 	rpcdata      *rpc.RPCData
 	compression  bool
+	fileWatcher  *watcher
 }
 
 // newStore creates a new instance of lightstore
@@ -46,6 +47,7 @@ func newStore(c *Config) *Store {
 	store := new(Store)
 	starttime := time.Now().UTC()
 	store.items = 0
+	store.watcher = newWatcher(".")
 	store.store = checkDS("")
 	store.keys = []string{}
 	store.compression = c.Compression
