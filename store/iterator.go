@@ -29,6 +29,11 @@ func (it *Iterator) Item() *Item {
 	return it.item
 }
 
+// Valid returns false if current item is invalid
+func (it *Iterator) Valid() bool {
+	return it.item != nil
+}
+
 // Key returns key of the item
 func (i *Item) Key() []byte {
 	return i.key
