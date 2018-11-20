@@ -103,6 +103,7 @@ func (conf *Config) setMissedValues() {
 	conf.Mode = checkMode(conf.Mode)
 }
 
+// checkMode provides setting of Lightstore mode to config
 func checkMode(mode string) string {
 	if mode != TrivialMode && mode != ServerMode && mode != ClusterMode {
 		return TrivialMode
