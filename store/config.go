@@ -40,6 +40,9 @@ type Config struct {
 
 	//Limit list for the history of events
 	Historylimit int
+
+	// Set compression of data
+	Compression bool
 }
 
 //LoadConfigData provides load configuration or set default params

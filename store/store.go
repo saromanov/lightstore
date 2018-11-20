@@ -37,6 +37,7 @@ type Store struct {
 	//Event history
 	historyevent *history.History
 	rpcdata      *rpc.RPCData
+	compression  bool
 }
 
 // newStore creates a new instance of lightstore
@@ -47,6 +48,7 @@ func newStore(c *Config) *Store {
 	store.items = 0
 	store.store = checkDS("")
 	store.keys = []string{}
+	store.compression = c.Compression
 	store.dbs = make(map[string]*DB)
 	store.lock = mutex
 	store.stat = new(statistics.Statistics)
