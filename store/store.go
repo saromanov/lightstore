@@ -155,6 +155,7 @@ func (st *Store) beforeSet(items KVITEM) *ReadyToSet {
 	return NewReadyToSet(items)
 }
 
+// Set provides setting of key-value pair
 func (st *Store) Set(key, value []byte) bool {
 	st.lock.Lock()
 	defer st.lock.Unlock()
