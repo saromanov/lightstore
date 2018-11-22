@@ -1,6 +1,7 @@
 package store
 
 import (
+	"errors"
 	"fmt"
 	"sync"
 	"time"
@@ -21,6 +22,11 @@ const param = 0
 const (
 	MaxKeySize   = 512
 	MaxValueSize = 32768
+)
+
+var (
+	errMaxKeySize   = errors.New("key size is greather then max")
+	errMaxValueSize = errors.New("value size is greather then max")
 )
 
 type Settings struct {
@@ -157,15 +163,18 @@ func (st *Store) GetMany(keys [][]byte) interface{} {
 }
 
 //check and split keys on system and not
-func (st *Store) beforeSet(items KVITEM) *ReadyToSet {
+func (st *Store) beforeSetKeys(items KVITEM) *ReadyToSet {
 	//Vefore set, check split system keys with prefix _ and simple keys
 	return NewReadyToSet(items)
 }
 
 // Set provides setting of key-value pair
-func (st *Store) Set(key, value []byte) bool {
+func (st *Store) Set(key, value []byte) error {
 	st.lock.Lock()
 	defer st.lock.Unlock()
+	if err := st.beforeSet(key, balue); err != nil {
+		return err
+	}
 	if st.compression {
 		value = compress(value)
 	}
@@ -175,8 +184,12 @@ func (st *Store) Set(key, value []byte) bool {
 
 func (st *Store) beforeSet(key, value []byte) error {
 	if len(key) > MaxKeySize {
-
+		return errMaxKeySize
 	}
+	if len(value) > MaxValueSize {
+		return errMaxValueSize
+	}
+	return nil
 }
 
 //Before set data to the lightstore. Check if in current request
