@@ -18,6 +18,11 @@ import (
 
 const param = 0
 
+const (
+	MaxKeySize   = 512
+	MaxValueSize = 32768
+)
+
 type Settings struct {
 	Innerdata string
 }
@@ -166,6 +171,12 @@ func (st *Store) Set(key, value []byte) bool {
 	}
 	st.store.Put(key, value, ds.ItemOptions{})
 	return true
+}
+
+func (st *Store) beforeSet(key, value []byte) error {
+	if len(key) > MaxKeySize {
+
+	}
 }
 
 //Before set data to the lightstore. Check if in current request
