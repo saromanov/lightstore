@@ -96,12 +96,9 @@ func (st *Store) CreateDB(dbname string) {
 	}
 }
 
+// Get provides getting of the value by the key
 func (st *Store) Get(value []byte) interface{} {
 	return st.get(value, "")
-}
-
-func (st *Store) GetFromDB(dbname string, value []byte) interface{} {
-	return st.get(value, dbname)
 }
 
 //if dbname is not equal "", get data from db with name dbname
