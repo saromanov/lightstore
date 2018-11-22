@@ -12,7 +12,6 @@ import (
 	"github.com/saromanov/lightstore/rpc"
 	"github.com/saromanov/lightstore/scan"
 	"github.com/saromanov/lightstore/statistics"
-	"github.com/saromanov/lightstore/utils"
 )
 
 //Basic implmentation of key-value store(without assotiation with any db name)
@@ -336,7 +335,7 @@ func (store *Store) ConstructFromConfig() {
 
 	every := store.config.Every
 	if len(every.Actions) > 0 {
-		store.Every(utils.ActionsNamesToFuncs(every.Actions))
+		//store.Every(utils.ActionsNamesToFuncs(every.Actions))
 	}
 
 	store.historyevent = history.NewHistory(5)
