@@ -50,6 +50,21 @@ func TestTwoCommits(t *testing.T) {
 	}
 }
 
+func TestWriteOnReadOnly(t *testing.T) {
+	light := Open(nil)
+	defer light.Close()
+	err := light.View(func(txn *Txn) error {
+		err := txn.Set([]byte("foo"), []byte("bar"))
+		if err == nil {
+			return fmt.Errorf("unable to write on read-only transaction")
+		}
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("unable to write data: %v", err)
+	}
+}
+
 func TestGetData(t *testing.T) {
 	light := Open(nil)
 	defer light.Close()
