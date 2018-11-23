@@ -97,9 +97,7 @@ func (t *Txn) DB() *Store {
 
 // Close defines ending of transaction
 func (t *Txn) Close() {
-	t.store = nil
-	t.writes = []*Entry{}
-	t.reads = []int64{}
+	t.close()
 }
 
 // Delete provides removing value by the key
@@ -128,6 +126,13 @@ func (t *Txn) Commit() error {
 		t.store.Set(w.key, w.value)
 	}
 	return nil
+}
+
+// close provides closing of transaction
+func (t *Txn) close() {
+	t.store = nil
+	t.writes = []*Entry{}
+	t.reads = []int64{}
 }
 
 // Rollback provides rolling back current
