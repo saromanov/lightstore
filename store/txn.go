@@ -115,11 +115,11 @@ func (t *Txn) Delete(key []byte) error {
 
 // Commit applies a new commit after modification
 func (t *Txn) Commit() error {
-	if len(t.writes) == 0 {
-		return nil
-	}
 	if t.store == nil {
 		return errNoStorage
+	}
+	if len(t.writes) == 0 {
+		return nil
 	}
 	sort.Sort(t.writes)
 	for _, w := range t.writes {
