@@ -2,6 +2,13 @@ package logging
 
 import log "github.com/sirupsen/logrus"
 
+// Logger defines basic interface for logging
+type Logger interface {
+	Errorf(string, ...interface{})
+	Infof(string, ...interface{})
+	Warningf(string, ...interface{})
+}
+
 // Info provides implementation of
 // writing Info level message
 func Info(title string) {
