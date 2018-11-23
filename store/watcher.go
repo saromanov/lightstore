@@ -4,6 +4,7 @@ package store
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/fsnotify/fsnotify"
 )
@@ -17,7 +18,7 @@ func newWatcher(path string) (*watcher, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = watcher.Add(path)
+	err = w.Add(path)
 	if err != nil {
 		return nil, err
 	}
@@ -33,14 +34,14 @@ func (w *watcher) Do() {
 	go func() {
 		for {
 			select {
-			case event, ok := <-watcher.Events:
+			case event, ok := <-w.watch.Events:
 				if !ok {
 					return
 				}
 				if event.Op&fsnotify.Write == fsnotify.Write {
 					log.Println("modified file:", event.Name)
 				}
-			case err, ok := <-watcher.Errors:
+			case err, ok := <-w.watch.Errors:
 				if !ok {
 					return
 				}
@@ -53,5 +54,5 @@ func (w *watcher) Do() {
 
 // Close provides ending work of file watcher
 func (w *watcher) Close() {
-	watcher.Close()
+	w.watch.Close()
 }
