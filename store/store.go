@@ -175,14 +175,13 @@ func (st *Store) beforeSetKeys(items KVITEM) *ReadyToSet {
 func (st *Store) Set(key, value []byte) error {
 	st.lock.Lock()
 	defer st.lock.Unlock()
-	if err := st.beforeSet(key, balue); err != nil {
+	if err := st.beforeSet(key, value); err != nil {
 		return err
 	}
 	if st.compression {
 		value = compress(value)
 	}
-	st.store.Put(key, value, ds.ItemOptions{})
-	return true
+	return st.store.Put(key, value, ds.ItemOptions{})
 }
 
 func (st *Store) beforeSet(key, value []byte) error {
@@ -306,9 +305,6 @@ func (st *Store) IsCreated() bool {
 }
 
 func (st *Store) makeSnapshot() {
-	//This is only for testing
-	snap := NewSnapshotObject("")
-	snap.Write(&SnapshotObject{Crc32: "123", Data: "foobar", Dir: "/"})
 }
 
 //This private method provides checking inner datastructure for storing
