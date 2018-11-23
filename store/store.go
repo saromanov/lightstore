@@ -53,6 +53,9 @@ type Store struct {
 
 // newStore creates a new instance of lightstore
 func newStore(c *Config) *Store {
+	if c == nil {
+		c = LoadConfigData("")
+	}
 	mutex := &sync.RWMutex{}
 	store := new(Store)
 	starttime := time.Now().UTC()
