@@ -69,7 +69,7 @@ func (p *pendingWritesIterator) GetKey() []byte {
 // NewTransaction creates a new transaction
 func (s *Store) NewTransaction(write bool) *Txn {
 	txn := &Txn{
-		id:        uuid.Must(uuid.NewV4()),
+		id:        uuid.Must(uuid.NewV4()).String(),
 		store:     s,
 		writes:    []*Entry{},
 		reads:     []int64{},

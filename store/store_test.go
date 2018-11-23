@@ -12,14 +12,14 @@ func TestOpen(t *testing.T) {
 }
 
 func TestWrite(t *testing.T) {
-	s := Open(nil)
+	s := newStore(nil)
 	if !s.IsCreated() {
 		t.Fatalf("unable to create db")
 	}
 	key := []byte("key")
 	valueFirst := []byte("value")
 	stored := s.Set(key, valueFirst)
-	if !stored {
+	if stored != nil {
 		t.Fatalf("unable to store data")
 	}
 	data := s.Get(key)
