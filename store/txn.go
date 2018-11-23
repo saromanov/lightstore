@@ -12,6 +12,7 @@ var (
 	errNoWrites     = errors.New("unable to write on read-only mode")
 	errEmptyKey     = errors.New("key is empty")
 	errLargeKeySize = errors.New("key size is larger then limit")
+	errNoStorage    = errors.New("storage is not defined")
 )
 
 const maxKeySize = 16384
@@ -119,6 +120,9 @@ func (t *Txn) Commit() error {
 	if len(t.writes) == 0 {
 		return nil
 	}
+	if t.store == nil {
+		return errNoStorage
+	}
 	sort.Sort(t.writes)
 	for _, w := range t.writes {
 		t.store.Set(w.key, w.value)
@@ -129,6 +133,7 @@ func (t *Txn) Commit() error {
 // Set writes a new key value pair to the pending writes
 // It'll be applying after transaction
 func (t *Txn) Set(key, value []byte) error {
+
 	entry := &Entry{
 		key:       key,
 		value:     value,
