@@ -28,6 +28,28 @@ func TestSetData(t *testing.T) {
 	}
 }
 
+func TestTwoCommits(t *testing.T) {
+	light := Open(nil)
+	defer light.Close()
+	err := light.Write(func(txn *Txn) error {
+		err := txn.Set([]byte("foo"), []byte("bar"))
+		if err != nil {
+			return err
+		}
+
+		if err := txn.Commit(); err != nil {
+			return err
+		}
+		if err := txn.Commit(); err == nil {
+			return fmt.Errorf("should return error on second commit")
+		}
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("unable to write data: %v", err)
+	}
+}
+
 func TestGetData(t *testing.T) {
 	light := Open(nil)
 	defer light.Close()
