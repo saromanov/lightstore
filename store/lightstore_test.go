@@ -43,11 +43,8 @@ func TestGetData(t *testing.T) {
 	}
 
 	err = light.View(func(txn *Txn) error {
-		data, err := txn.Get([]byte("foo"))
-		if err != nil {
-			return err
-		}
-		if data != []byte("bar") {
+		data := txn.Get([]byte("foo"))
+		if string(data) != "bar" {
 			return fmt.Errorf("unable to get data")
 		}
 		return nil

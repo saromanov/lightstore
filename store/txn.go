@@ -137,6 +137,11 @@ func (t *Txn) Set(key, value []byte) error {
 	return t.set(entry)
 }
 
+// Get returns value by the key
+func (t *Txn) Get(key []byte) []byte {
+	return t.store.Get(key)
+}
+
 func (t *Txn) set(entry *Entry) error {
 	if err := t.beforeSet(entry); err != nil {
 		return err
