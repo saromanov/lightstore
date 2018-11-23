@@ -13,11 +13,9 @@ import (
 	"path"
 	"strings"
 
-	"github.com/op/go-logging"
+	log "github.com/saromanov/lightstore/logging"
 	"github.com/saromanov/lightstore/proto"
 )
-
-var log = logging.MustGetLogger("lightstore_log")
 
 //Basic snapshot for all data in ligtstore
 
@@ -107,14 +105,14 @@ func (so *SnapshotObject) ReadNewest() {
 	} else {
 		stat, err := os.Stat(snapshots[0])
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal(err.Error())
 		}
 		modtime := stat.ModTime()
 
 		for _, fi := range snapshots {
 			item, err := os.Stat(fi)
 			if err != nil {
-				log.Fatal(err)
+				log.Fatal(err.Error())
 			}
 
 			if item.ModTime().After(modtime) {

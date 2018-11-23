@@ -111,12 +111,12 @@ func (st *Store) CreateDB(dbname string) {
 }
 
 // Get provides getting of the value by the key
-func (st *Store) Get(value []byte) interface{} {
+func (st *Store) Get(value []byte) []byte {
 	return st.get(value, "")
 }
 
 //if dbname is not equal "", get data from db with name dbname
-func (st *Store) get(key []byte, dbname string) interface{} {
+func (st *Store) get(key []byte, dbname string) []byte {
 	store := st.store
 	if store == nil {
 		return nil
@@ -141,12 +141,13 @@ func (st *Store) get(key []byte, dbname string) interface{} {
 		st.stat.NumFailedReads++
 		return nil
 	}
+
 	if st.compression {
-		result = decompress(result)
+		result = decompress(result.([]byte))
 	}
 	fmt.Println(string(result.([]byte)))
 
-	return result
+	return result.([]byte)
 
 }
 

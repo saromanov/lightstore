@@ -23,8 +23,7 @@ func TestWrite(t *testing.T) {
 		t.Fatalf("unable to store data")
 	}
 	data := s.Get(key)
-	value := data.([]byte)
-	if string(value) != string(valueFirst) {
+	if string(data) != string(valueFirst) {
 		t.Fatalf("unable to get data")
 	}
 }
