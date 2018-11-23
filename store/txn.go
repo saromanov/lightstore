@@ -125,6 +125,7 @@ func (t *Txn) Commit() error {
 	for _, w := range t.writes {
 		t.store.Set(w.key, w.value)
 	}
+	t.Close()
 	return nil
 }
 
