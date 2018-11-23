@@ -12,7 +12,7 @@ var (
 	errNoWrites     = errors.New("unable to write on read-only mode")
 	errEmptyKey     = errors.New("key is empty")
 	errLargeKeySize = errors.New("key size is larger then limit")
-	errNoStorage    = errors.New("storage is not defined")
+	errNoStorage    = errors.New("storage is not defined or transaction was closed")
 )
 
 const maxKeySize = 16384
