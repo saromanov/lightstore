@@ -6,8 +6,8 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"io"
+	"io/ioutil"
 	"math"
 	"os"
 	"path"
@@ -70,13 +70,13 @@ func (so *SnapshotObject) WriteNew(w io.Writer) error {
 	return nil
 }
 
-func (so *SnapshotObject) write(w io.Writer) error{
-	kv := &proto.KV{}
+func (so *SnapshotObject) write(w io.Writer) error {
+	kv := &protos.KVPair{}
 	buf, err := kv.Marshal()
 	if err != nil {
 		return fmt.Errorf("unable to marshal data to snapshot: %v", err)
 	}
-	_, err := w.Write(buf)
+	_, err = w.Write(buf)
 	if err != nil {
 		return fmt.Errorf("unable to write data to snapshot: %v", err)
 	}

@@ -57,7 +57,11 @@ func newStore(c *Config) *Store {
 	store := new(Store)
 	starttime := time.Now().UTC()
 	store.items = 0
-	store.watcher = newWatcher(".")
+	fileWatcher, err := newWatcher(".")
+	if err != nil {
+		log.Info(fmt.Sprintf("unable to init file watcher: %v", err))
+	}
+	store.fileWatcher = fileWatcher
 	store.store = checkDS("")
 	store.keys = []string{}
 	store.compression = c.Compression
