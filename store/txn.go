@@ -130,6 +130,16 @@ func (t *Txn) Commit() error {
 	return nil
 }
 
+// Rollback provides rolling back current
+// pending transactions
+func (t *Txn) Rollback() {
+	t.rollback()
+}
+
+func (t *Txn) rollback() {
+	t.writes = t.writes[:0]
+}
+
 // Set writes a new key value pair to the pending writes
 // It'll be applying after transaction
 func (t *Txn) Set(key, value []byte) error {
