@@ -10,7 +10,6 @@ import (
 	"github.com/saromanov/lightstore/history"
 	log "github.com/saromanov/lightstore/logging"
 	"github.com/saromanov/lightstore/rpc"
-	"github.com/saromanov/lightstore/scan"
 	"github.com/saromanov/lightstore/statistics"
 )
 
@@ -277,10 +276,6 @@ func (st *Store) Remove(key []byte) {
 func (st *Store) Find(key []byte) interface{} {
 	st.lock.Lock()
 	defer st.lock.Unlock()
-	scanner := scan.NewScan(string(key), st.keys)
-	if scanner.Find(string(key)) {
-		return st.get(key, "")
-	}
 	return nil
 }
 
