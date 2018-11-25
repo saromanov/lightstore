@@ -120,6 +120,9 @@ func (st *Store) Get(value []byte) []byte {
 
 //if dbname is not equal "", get data from db with name dbname
 func (st *Store) get(key []byte, dbname string) []byte {
+	if st == nil {
+		return nil
+	}
 	store := st.store
 	if store == nil {
 		return nil
