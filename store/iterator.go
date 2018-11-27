@@ -44,6 +44,9 @@ func (it *Iterator) Valid() bool {
 // Next provides getting of the next element
 // on iterator
 func (it *Iterator) Next() *Item {
+	if it.txn == nil {
+		return nil
+	}
 	return it.item
 }
 
