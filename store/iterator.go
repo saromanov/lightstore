@@ -37,7 +37,7 @@ func (it *Iterator) Valid() bool {
 // Next provides getting of the next element
 // on iterator
 func (it *Iterator) Next() *Item {
-	return it.Item
+	return it.item
 }
 
 // Key returns key of the item
