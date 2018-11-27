@@ -29,6 +29,7 @@ type Iterator struct {
 	lastKey []byte
 	closed  bool
 	item    *Item
+	opt     IteratorOptions
 }
 
 // Item retruns current item from iterator

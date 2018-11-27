@@ -146,6 +146,14 @@ func (t *Txn) rollback() {
 	t.writes = t.writes[:0]
 }
 
+// NewIterator creates a new iterator under transaction
+func (t *Txn) NewIterator(opt IteratorOptions) *Iterator {
+	return &Iterator{
+		txn: t,
+		opt: opt,
+	}
+}
+
 // Set writes a new key value pair to the pending writes
 // It'll be applying after transaction
 func (t *Txn) Set(key, value []byte) error {
