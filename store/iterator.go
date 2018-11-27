@@ -37,6 +37,11 @@ func (it *Iterator) Item() *Item {
 	return it.item
 }
 
+// First defines start point for iteration
+func (it *Iterator) First() {
+	it.lastKey = it.lastKey[:0]
+}
+
 // Valid returns false if current item is invalid
 func (it *Iterator) Valid() bool {
 	return it.item != nil
@@ -56,7 +61,7 @@ func (i *Item) Key() []byte {
 	return i.key
 }
 
-// Copykey provides copy of the current key
+// CopyKey provides copy of the current key
 func (i *Item) CopyKey(src []byte) []byte {
 	return copy(i.key, src)
 }
