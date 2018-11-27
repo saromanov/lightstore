@@ -34,6 +34,12 @@ func (it *Iterator) Valid() bool {
 	return it.item != nil
 }
 
+// Next provides getting of the next element
+// on iterator
+func (it *Iterator) Next() *Item {
+	return it.Item
+}
+
 // Key returns key of the item
 func (i *Item) Key() []byte {
 	return i.key
