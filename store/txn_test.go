@@ -17,3 +17,16 @@ func TestTxnStart(t *testing.T) {
 		t.Fatal("unable to get result")
 	}
 }
+
+func TestIteratorWithNoOptions(t *testing.T) {
+	st := newStore(nil)
+	txn := st.NewTransaction(true)
+	err := txn.Set([]byte("foo"), []byte("bar"))
+	if err != nil {
+		t.Fatal("unable to insert data")
+	}
+	it := txn.NewIterator(IteratorOptions{})
+	for it.First(); it.Valid(); it.Next() {
+		itm := it.Item()
+	}
+}
