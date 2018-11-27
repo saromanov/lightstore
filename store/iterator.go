@@ -16,6 +16,13 @@ func (i *Item) String() string {
 	return fmt.Sprintf("%q", i.Key())
 }
 
+// IteratorOptions defines options
+// for iterator
+type IteratorOptions struct {
+	Prefix []byte
+	Size   uint
+}
+
 // Iterator provides iterating over the KV pairs
 type Iterator struct {
 	txn     *Txn
