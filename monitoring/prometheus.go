@@ -18,10 +18,20 @@ var (
 		Help:    "RPC latency distributions.",
 		Buckets: prometheus.LinearBuckets(*normMean-5**normDomain, .5**normDomain, 20),
 	})
+	opsInsert = prometheus.NewCounter(prometheus.CounterOpts{
+		Name: "lightstore_insert_total",
+		Help: "Number of inserts",
+	})
+	opsGet = prometheus.NewCounter(prometheus.CounterOpts{
+		Name: "lightstore_get_total",
+		Help: "Number of read operations",
+	})
 )
 
 // Init provides initialization of the Prometheus
 func Init() {
 	prometheus.MustRegister(rpcDurations)
 	prometheus.MustRegister(rpcDurationsHistogram)
+	prometheus.MustRegister(opsInsert)
+	prometheus.MustRegister(opsGet)
 }
