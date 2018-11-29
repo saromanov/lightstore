@@ -10,9 +10,9 @@ const (
 )
 
 var (
-	rpcDurationsHistogram = prometheus.NewHistogram(prometheus.HistogramOpts{
-		Name:    "rpc_durations_histogram_seconds",
-		Help:    "RPC latency distributions.",
+	rpcErrorsHistogram = prometheus.NewHistogram(prometheus.HistogramOpts{
+		Name:    "errors_histogram_total",
+		Help:    "Distribution of errors after handling of data",
 		Buckets: prometheus.LinearBuckets(normMean-5*normDomain, .5*normDomain, 20),
 	})
 	opsInsert = prometheus.NewCounter(prometheus.CounterOpts{
@@ -34,7 +34,7 @@ var (
 
 // Init provides initialization of the Prometheus
 func Init() {
-	prometheus.MustRegister(rpcDurationsHistogram)
+	prometheus.MustRegister(rpcErrorsHistogram)
 	prometheus.MustRegister(opsInsert)
 	prometheus.MustRegister(opsGet)
 }
