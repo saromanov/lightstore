@@ -16,6 +16,11 @@ func (i *Item) String() string {
 	return fmt.Sprintf("%q", i.Key())
 }
 
+// Value returns current value of Item
+func (i *Item) Value(f func([]byte) error) error {
+	return nil
+}
+
 // IteratorOptions defines options
 // for iterator
 type IteratorOptions struct {
