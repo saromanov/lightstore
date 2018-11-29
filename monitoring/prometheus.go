@@ -10,6 +10,7 @@ const (
 )
 
 var (
+	// Buckets should contains numbers for all types of errors
 	rpcErrorsHistogram = prometheus.NewHistogram(prometheus.HistogramOpts{
 		Name:    "errors_histogram_total",
 		Help:    "Distribution of errors after handling of data",
@@ -31,6 +32,15 @@ var (
 		},
 	)
 )
+
+// Monitoring provides definition for monitoring(Prometheus)
+type Monitoring struct {
+}
+
+// Inc provides increment on metrics
+func Inc(value float64) {
+	rpcErrorsHistogram.Observe(value)
+}
 
 // Init provides initialization of the Prometheus
 func Init() {
