@@ -30,3 +30,18 @@ func TestIteratorWithNoOptions(t *testing.T) {
 		itm := it.Item()
 	}
 }
+
+func TestIteratorWithSize(t *testing.T) {
+	st := newStore(nil)
+	txn := st.NewTransaction(true)
+	err := txn.Set([]byte("foo"), []byte("bar"))
+	if err != nil {
+		t.Fatal("unable to insert data")
+	}
+	it := txn.NewIterator(IteratorOptions{
+		Size: 4,
+	})
+	for it.First(); it.Valid(); it.Next() {
+		itm := it.Item()
+	}
+}
