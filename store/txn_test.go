@@ -11,9 +11,13 @@ func TestTxnStart(t *testing.T) {
 	txn := st.NewTransaction(true)
 	err := txn.Set([]byte("foo"), []byte("bar"))
 	if err != nil {
-		t.Fatal("unable to insert data")
+		t.Fatalf("unable to insert data: %v", err)
 	}
+	txn.Commit()
 	result := txn.Get([]byte("foo"))
+	if result == nil {
+		t.Fatal("result value is empty")
+	}
 	if bytes.Compare(result, []byte("bar")) != 0 {
 		t.Fatal("unable to get result")
 	}
