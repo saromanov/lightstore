@@ -24,7 +24,7 @@ type Txn struct {
 	writes    EntrySlice
 	count     int64
 	id        string
-	reads     []int64
+	reads     EntrySlice
 	write     bool
 	store     *Store
 	timestamp int64
@@ -74,7 +74,7 @@ func (s *Store) NewTransaction(write bool) *Txn {
 		id:        uuid.Must(uuid.NewV4()).String(),
 		store:     s,
 		writes:    []*Entry{},
-		reads:     []int64{},
+		reads:     []*Entry{},
 		write:     write,
 		timestamp: time.Now().UnixNano(),
 	}
@@ -143,8 +143,8 @@ func (t *Txn) handleCommit(writes EntrySlice, action func(*Entry)) {
 // close provides closing of transaction
 func (t *Txn) close() {
 	t.store = nil
-	t.writes = []*Entry{}
-	t.reads = []int64{}
+	t.writes = t.writes[:0]
+	t.reads = t.reads[:0]
 }
 
 // Rollback provides rolling back current
