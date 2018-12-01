@@ -9,6 +9,7 @@ import (
 	ds "github.com/saromanov/lightstore/datastructures"
 	"github.com/saromanov/lightstore/history"
 	log "github.com/saromanov/lightstore/logging"
+	"github.com/saromanov/lightstore/monitoring"
 	"github.com/saromanov/lightstore/rpc"
 	"github.com/saromanov/lightstore/statistics"
 )
@@ -62,6 +63,9 @@ func newStore(c *Config) *Store {
 	fileWatcher, err := newWatcher(".")
 	if err != nil {
 		log.Info(fmt.Sprintf("unable to init file watcher: %v", err))
+	}
+	if c.Monitoring {
+		monitoring.Init()
 	}
 	store.fileWatcher = fileWatcher
 	store.store = checkDS("")
