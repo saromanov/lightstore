@@ -36,6 +36,7 @@ type Entry struct {
 	value     []byte
 	expire    uint64
 	timestamp int64
+	isDelete  bool
 }
 
 type EntrySlice []*Entry
@@ -105,6 +106,7 @@ func (t *Txn) Delete(key []byte) error {
 	entry := &Entry{
 		key:       key,
 		timestamp: time.Now().Unix(),
+		isDelete:  true,
 	}
 	if err := t.beforeSet(entry); err != nil {
 		return err
