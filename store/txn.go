@@ -165,6 +165,15 @@ func (t *Txn) NewIterator(opt IteratorOptions) *Iterator {
 	}
 }
 
+// Get returns value by the key
+func (t *Txn) Get(key []byte) []byte {
+	entry := &Entry{
+		key: key,
+	}
+	t.reads = append(t.reads, entry)
+	return t.store.Get(key)
+}
+
 // Set writes a new key value pair to the pending writes
 // It'll be applying after transaction
 func (t *Txn) Set(key, value []byte) error {
@@ -175,11 +184,6 @@ func (t *Txn) Set(key, value []byte) error {
 		timestamp: time.Now().Unix(),
 	}
 	return t.set(entry)
-}
-
-// Get returns value by the key
-func (t *Txn) Get(key []byte) []byte {
-	return t.store.Get(key)
 }
 
 func (t *Txn) set(entry *Entry) error {
