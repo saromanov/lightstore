@@ -124,11 +124,20 @@ func (t *Txn) Commit() error {
 		return nil
 	}
 	sort.Sort(t.writes)
-	for _, w := range t.writes {
-		t.store.Set(w.key, w.value)
-	}
+	t.handleCommit(t.writes, func(e *Entry) {
+		if e.isDelete {
+			t.store.Remove(e.key)
+		}
+		t.store.Set(e.key, e.value)
+	})
 	t.Close()
 	return nil
+}
+
+func (t *Txn) handleCommit(writes EntrySlice, action func(*Entry)) {
+	for _, w := range t.writes {
+		action(w)
+	}
 }
 
 // close provides closing of transaction
