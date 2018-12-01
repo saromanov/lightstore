@@ -54,6 +54,10 @@ type Config struct {
 	// Mode provides setting of the mode of Lightstore
 	// Trivial, Server, Cluster
 	Mode string
+
+	// If this flag is true then enable Prometheus
+	// as monitoring provider
+	Monitoring bool
 }
 
 //LoadConfigData provides load configuration or set default params
@@ -122,6 +126,7 @@ func setDefaultParams() *Config {
 	conf.Cluster = "cluster1"
 	conf.Cachesize = 1024
 	conf.Storage = "dict"
+	conf.Monitoring = false
 	return conf
 }
 
