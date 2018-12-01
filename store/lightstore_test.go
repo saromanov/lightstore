@@ -28,6 +28,23 @@ func TestSetData(t *testing.T) {
 	}
 }
 
+func TestSet100Data(t *testing.T) {
+	light := Open(nil)
+	defer light.Close()
+	for i := 0; i < 100; i++ {
+		err := light.Write(func(txn *Txn) error {
+			err := txn.Set([]byte(fmt.Sprintf("%d", i)), []byte(fmt.Sprintf("%d", i)))
+			if err != nil {
+				return err
+			}
+			return nil
+		})
+		if err != nil {
+			t.Fatalf("unable to insert data")
+		}
+	}
+}
+
 func TestTwoCommits(t *testing.T) {
 	light := Open(nil)
 	defer light.Close()

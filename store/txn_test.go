@@ -2,6 +2,7 @@ package store
 
 import (
 	"bytes"
+	"fmt"
 	"testing"
 )
 
@@ -31,6 +32,9 @@ func TestIteratorWithNoOptions(t *testing.T) {
 		err := itm.Value(func(v []byte) error {
 			return nil
 		})
+		if err != nil {
+			t.Fatalf("unable to get value: %v", err)
+		}
 	}
 }
 
@@ -46,5 +50,6 @@ func TestIteratorWithSize(t *testing.T) {
 	})
 	for it.First(); it.Valid(); it.Next() {
 		itm := it.Item()
+		fmt.Println(itm)
 	}
 }
