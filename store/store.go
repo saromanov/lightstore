@@ -1,7 +1,6 @@
 package store
 
 import (
-	"errors"
 	"fmt"
 	"sync"
 	"time"
@@ -21,11 +20,6 @@ const param = 0
 const (
 	MaxKeySize   = 512
 	MaxValueSize = 32768
-)
-
-var (
-	errMaxKeySize   = errors.New("key size is greather then max")
-	errMaxValueSize = errors.New("value size is greather then max")
 )
 
 type Settings struct {
