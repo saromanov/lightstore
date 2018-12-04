@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"flag"
+	"log"
+	"strings"
 
 	"github.com/saromanov/lightstore/store"
 )
@@ -18,6 +20,17 @@ var ls *store.Lightstore
 func initLightStore() {
 	ls = store.Open(nil)
 }
+
+func parseCommands() {
+	flag.Parse()
+	if *put != "" {
+		pair := strings.Split(*put, "")
+		if len(pair) != 2 {
+			log.Fatal("unable to get key value pair from 'put' command. Should be 'key value'")
+		}
+	}
+}
 func main() {
 	initLightStore()
+	parseCommands()
 }
