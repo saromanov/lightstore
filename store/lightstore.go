@@ -47,3 +47,8 @@ func (l *Lightstore) Close() error {
 	l.store.Close()
 	return nil
 }
+
+// getStore returns store engine of lightstore
+func (l *Lightstore) getStore() *Store {
+	return l.store
+}

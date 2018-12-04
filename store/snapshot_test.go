@@ -18,7 +18,7 @@ func TestSnapshot(t *testing.T) {
 		t.Fatalf("unable to write data: %v", err)
 	}
 
-	snp := NewSnapshot(light, "./snapshot1")
+	snap := NewSnapshot(light.getStore(), "./snapshot1")
 	err = snap.Write(nil)
 	if err != nil {
 		t.Fatalf("unable to write snapshot: %v", err)
