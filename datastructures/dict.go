@@ -55,3 +55,8 @@ func (d *Dict) Delete(key []byte) error {
 	d.engine.Remove(key)
 	return nil
 }
+
+// Next provides iteration over collection
+func (d *Dict) Next() (interface{}, error) {
+	return nil, nil
+}
