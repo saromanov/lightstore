@@ -4,7 +4,6 @@ package store
 import (
 	"bytes"
 	"encoding/binary"
-	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -41,23 +40,9 @@ func NewSnapshot(st *Store, path string) *SnapshotObject {
 	return so
 }
 
-//Write provides storing of new snapshot
-func (so *SnapshotObject) Write() {
-	b, err := json.Marshal(so)
-	if err != nil {
-		panic(err)
-	}
-
-	errwrite := ioutil.WriteFile(path.Join(so.Dir, "snap1.lssnapshot"), b, 0777)
-	if errwrite != nil {
-		panic(err)
-	}
-
-}
-
-// WriteNew is a temp method for writing of
+// Write is a method for writing of
 // snapshots with entries
-func (so *SnapshotObject) WriteNew(w io.Writer) error {
+func (so *SnapshotObject) Write(w io.Writer) error {
 	buf := new(bytes.Buffer)
 	var pi float64 = math.Pi
 	err := binary.Write(buf, binary.LittleEndian, pi)
