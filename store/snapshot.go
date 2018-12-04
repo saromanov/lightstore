@@ -30,8 +30,8 @@ type SnapshotObject struct {
 	st    *Store
 }
 
-//NewSnapshotObject object provides initialization od new snapshot
-func NewSnapshotObject(st *Store, path string) *SnapshotObject {
+//NewSnapshot object provides initialization od new snapshot
+func NewSnapshot(st *Store, path string) *SnapshotObject {
 	so := new(SnapshotObject)
 	so.Dir = "."
 	so.st = st
