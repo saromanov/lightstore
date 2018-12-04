@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"flag"
+
+	"github.com/saromanov/lightstore/store"
 )
 
 var (
@@ -11,6 +13,11 @@ var (
 	restore = flag.String("restore", "", "restore of the data")
 )
 
-func main() {
+var ls *store.Lightstore
 
+func initLightStore() {
+	ls = store.Open(nil)
+}
+func main() {
+	initLightStore()
 }
