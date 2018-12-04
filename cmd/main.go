@@ -2,14 +2,15 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"strings"
-
+	"github.com/spf13/cobra"
 	"github.com/saromanov/lightstore/store"
 )
 
 var (
-	put     = flag.String("put", "", "put of the key value pair")
+	put     = flag.String("put", "put", "put of the key value pair")
 	get     = flag.String("get", "", "get of the value by the key")
 	backup  = flag.String("backup", "", "backup of the data")
 	restore = flag.String("restore", "", "restore of the data")
@@ -23,6 +24,7 @@ func initLightStore() {
 
 func parseCommands() {
 	flag.Parse()
+	fmt.Println(*put)
 	if *put != "" {
 		pair := strings.Split(*put, "")
 		if len(pair) != 2 {
@@ -31,6 +33,5 @@ func parseCommands() {
 	}
 }
 func main() {
-	initLightStore()
-	parseCommands()
+	cmd.Execute()
 }
