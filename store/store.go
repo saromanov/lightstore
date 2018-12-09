@@ -71,7 +71,7 @@ func newStore(c *Config) *Store {
 	store.stat.Start = starttime
 	store.index = NewIndexing()
 	store.config = LoadConfigData("")
-	store.ConstructFromConfig()
+	store.historyevent = history.NewHistory(5)
 	store.pubsub = PubsubInit()
 	rpc.RegisterRPCFunction(store.pubsub)
 	store.rpcdata = rpc.Init("")
@@ -325,20 +325,6 @@ func checkDS(name string) (result ds.Storage) {
 		result = ds.InitBTree(10)
 	}
 	return result
-}
-
-//ConstructFromConfig provides creational lightstore params from config
-func (store *Store) ConstructFromConfig() {
-	if store.config == nil {
-		return
-	}
-
-	every := store.config.Every
-	if len(every.Actions) > 0 {
-		//store.Every(utils.ActionsNamesToFuncs(every.Actions))
-	}
-
-	store.historyevent = history.NewHistory(5)
 }
 
 //Every provides doing some operation every n seconds/minutes
