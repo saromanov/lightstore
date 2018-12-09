@@ -64,6 +64,7 @@ func (it *Iterator) Next() *Item {
 // Close provides closing of iterator
 func (it *Iterator) Close() {
 	it.txn = nil
+	it.item = nil
 }
 
 // Key returns key of the item
