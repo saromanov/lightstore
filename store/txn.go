@@ -154,6 +154,9 @@ func (t *Txn) NewIterator(opt IteratorOptions) *Iterator {
 	return &Iterator{
 		txn: t,
 		opt: opt,
+		item: &Item{
+			key: t.store.first(),
+		},
 	}
 }
 

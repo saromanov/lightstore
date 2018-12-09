@@ -271,6 +271,10 @@ func (st *Store) Remove(key []byte) {
 	st.store.Delete(key)
 }
 
+func (st *Store) first() []byte {
+	return st.store.First().([]byte)
+}
+
 func (st *Store) Find(key []byte) interface{} {
 	st.lock.Lock()
 	defer st.lock.Unlock()
