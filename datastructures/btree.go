@@ -46,6 +46,11 @@ func (d *BTree) Exist(key []byte) bool {
 	return false
 }
 
+// FIrst retruns min element from storage
+func (d *BTree) First() interface{} {
+	return d.engine.Min()
+}
+
 // Remove provides removing of the record
 func (d *BTree) Delete(key []byte) error {
 	return nil
