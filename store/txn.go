@@ -151,8 +151,6 @@ func (t *Txn) rollback() {
 
 // NewIterator creates a new iterator under transaction
 func (t *Txn) NewIterator(opt IteratorOptions) *Iterator {
-	st := t.store
-	
 	return &Iterator{
 		txn: t,
 		opt: opt,

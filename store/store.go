@@ -357,7 +357,6 @@ func InitStore(settings Settings) *Store {
 	store.stat.Start = starttime
 	store.index = NewIndexing()
 	store.config = LoadConfigData("")
-	store.ConstructFromConfig()
 	store.pubsub = PubsubInit()
 	rpc.RegisterRPCFunction(store.pubsub)
 	store.rpcdata = rpc.Init("")
