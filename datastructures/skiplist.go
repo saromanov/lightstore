@@ -50,6 +50,11 @@ func (d *SkipList) Exist(key []byte) bool {
 	return true
 }
 
+// First returns first element on storage
+func (d *SkipList) First() interface{} {
+	return d.engine.SeekToFirst().Key()
+}
+
 // Remove provides removing of the record
 func (d *SkipList) Delete(key []byte) error {
 	_, ok := d.engine.Delete(key)
