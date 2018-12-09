@@ -61,6 +61,11 @@ func (it *Iterator) Next() *Item {
 	return it.item
 }
 
+// Close provides closing of iterator
+func (it *Iterator) Close() {
+	it.txn = nil
+}
+
 // Key returns key of the item
 func (i *Item) Key() []byte {
 	return i.key
