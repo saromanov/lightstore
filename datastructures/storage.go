@@ -7,5 +7,5 @@ type Storage interface {
 	Put([]byte, interface{}, ItemOptions) error
 	Delete([]byte) error
 	Exist([]byte) bool
-	Next()(interface{}, error)
+	First() interface{}
 }

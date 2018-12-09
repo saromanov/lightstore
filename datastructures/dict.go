@@ -50,6 +50,11 @@ func (d *Dict) Exist(key []byte) bool {
 	return true
 }
 
+// First returns first key from collection
+func (d *Dict) First() interface{} {
+	return d.engine.FirstKey()
+}
+
 // Remove provides removing of the record
 func (d *Dict) Delete(key []byte) error {
 	d.engine.Remove(key)
