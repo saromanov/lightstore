@@ -49,8 +49,11 @@ func (it *Iterator) First() {
 }
 
 func (it *Iterator) makeItem() *Item {
+	store := it.txn.store
+	key := store.first()
 	return &Item{
-		key: it.txn.store.first(),
+		key:   key,
+		value: store.Get(key),
 	}
 }
 
