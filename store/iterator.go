@@ -45,7 +45,11 @@ func (it *Iterator) Item() *Item {
 // First defines start point for iteration
 func (it *Iterator) First() {
 	it.lastKey = it.lastKey[:0]
-	it.item = &Item{
+	it.item = it.makeItem()
+}
+
+func (it *Iterator) makeItem() *Item {
+	return &Item{
 		key: it.txn.store.first(),
 	}
 }
