@@ -45,7 +45,9 @@ func (it *Iterator) Item() *Item {
 // First defines start point for iteration
 func (it *Iterator) First() {
 	it.lastKey = it.lastKey[:0]
-	it.key = it.store.first()
+	it.item = &Item{
+		key: it.txn.store.first(),
+	}
 }
 
 // Valid returns false if current item is invalid
