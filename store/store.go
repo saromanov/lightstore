@@ -111,8 +111,8 @@ func (st *Store) CreateDB(dbname string) {
 }
 
 // Get provides getting of the value by the key
-func (st *Store) Get(value []byte) []byte {
-	return st.get(value, "")
+func (st *Store) Get(key []byte) []byte {
+	return st.get(key, "")
 }
 
 //if dbname is not equal "", get data from db with name dbname
