@@ -58,6 +58,12 @@ type Config struct {
 	// If this flag is true then enable Prometheus
 	// as monitoring provider
 	Monitoring bool
+
+	// MaxKeySize defines maximum key size for store
+	MaxKeySize uint
+
+	// MaxValueSize defines maximum valuze size for store
+	MaxValueSize uint
 }
 
 //LoadConfigData provides load configuration or set default params
