@@ -132,6 +132,8 @@ func defaultConfig() *Config {
 	conf.Cachesize = 1024
 	conf.Storage = "dict"
 	conf.Monitoring = false
+	conf.MaxKeySize = MaxKeySize
+	conf.MaxValueSize = MaxValueSize
 	return conf
 }
 

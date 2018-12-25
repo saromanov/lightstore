@@ -48,7 +48,7 @@ type Store struct {
 // newStore creates a new instance of lightstore
 func newStore(c *Config) *Store {
 	if c == nil {
-		c = LoadConfigData("")
+		c = defaultConfig()
 	}
 	mutex := &sync.RWMutex{}
 	store := new(Store)
@@ -70,7 +70,7 @@ func newStore(c *Config) *Store {
 	store.stat = new(statistics.Statistics)
 	store.stat.Start = starttime
 	store.index = NewIndexing()
-	store.config = LoadConfigData("")
+	store.config = c
 	store.historyevent = history.NewHistory(5)
 	store.pubsub = PubsubInit()
 	rpc.RegisterRPCFunction(store.pubsub)
