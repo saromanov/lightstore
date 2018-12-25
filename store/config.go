@@ -67,7 +67,7 @@ func LoadConfigData(path string) *Config {
 	}
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
-		return setDefaultParams()
+		return defaultConfig()
 	}
 	var conf Config
 	yamlerr := yaml.Unmarshal(data, &conf)
