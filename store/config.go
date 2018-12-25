@@ -115,9 +115,8 @@ func checkMode(mode string) string {
 	return mode
 }
 
-//In the case if config file is not exist or not full,
-// set for each param default value
-func setDefaultParams() *Config {
+// defaultConfig creates default attributes for DB
+func defaultConfig() *Config {
 	conf := new(Config)
 	conf.Address = "localhost"
 	conf.Port = 8080
