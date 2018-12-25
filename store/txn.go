@@ -181,6 +181,17 @@ func (t *Txn) Set(key, value []byte) error {
 	return t.set(entry)
 }
 
+// SetWithTTL provides setting of key with Time To Live(TTL)
+func (t *Txn) SetWithTTL(key, value []byte, duration time.Time) error {
+	entry := &Entry{
+		key:       key,
+		value:     value,
+		timestamp: time.Now().Unix(),
+		expire:    uint64(duration.Unix()),
+	}
+	return t.set(entry)
+}
+
 func (t *Txn) set(entry *Entry) error {
 	if err := t.beforeSet(entry); err != nil {
 		return err
