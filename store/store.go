@@ -72,8 +72,6 @@ func newStore(c *Config) *Store {
 	store.index = NewIndexing()
 	store.config = c
 	store.historyevent = history.NewHistory(5)
-	store.pubsub = PubsubInit()
-	rpc.RegisterRPCFunction(store.pubsub)
 	store.rpcdata = rpc.Init("")
 	store.rpcdata.Run()
 	return store
