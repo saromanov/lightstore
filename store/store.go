@@ -146,7 +146,6 @@ func (st *Store) get(key []byte, dbname string) []byte {
 	if st.compression {
 		result = decompress(result.([]byte))
 	}
-	fmt.Println(string(result.([]byte)))
 
 	return result.([]byte)
 
