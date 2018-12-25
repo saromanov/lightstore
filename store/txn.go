@@ -7,8 +7,6 @@ import (
 	"github.com/satori/go.uuid"
 )
 
-const maxKeySize = 16384
-
 //https://docs.oracle.com/cd/E17275_01/html/api_reference/C/txn.html
 
 // Txn represents transaction
@@ -208,8 +206,14 @@ func (t *Txn) beforeSet(entry *Entry) error {
 	if len(entry.key) == 0 {
 		return errEmptyKey
 	}
-	if len(entry.key) > maxKeySize {
+	if uint(len(entry.key)) > t.store.config.MaxKeySize {
 		return errLargeKeySize
 	}
+	return nil
+}
+
+// beforeGet provides providing of operations before output
+// of key to get
+func (t *Txn) beforeGet(entry *Entry) error {
 	return nil
 }

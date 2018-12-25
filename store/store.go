@@ -18,8 +18,8 @@ import (
 const param = 0
 
 const (
-	MaxKeySize   = 512
-	MaxValueSize = 32768
+	MaxKeySize   uint = 512
+	MaxValueSize uint = 32768
 )
 
 type Settings struct {
@@ -189,10 +189,10 @@ func (st *Store) Set(key, value []byte) error {
 }
 
 func (st *Store) beforeSet(key, value []byte) error {
-	if len(key) > MaxKeySize {
+	if uint(len(key)) > MaxKeySize {
 		return errMaxKeySize
 	}
-	if len(value) > MaxValueSize {
+	if uint(len(value)) > MaxValueSize {
 		return errMaxValueSize
 	}
 	return nil
