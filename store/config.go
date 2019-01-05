@@ -9,8 +9,11 @@ import (
 )
 
 const (
+	// TrivialMode defines simple key-value store
 	TrivialMode = "Trivial"
-	ServerMode  = "Server"
+	// Server mode creates server for key-value
+	ServerMode = "Server"
+	// ClusterMode creates cluster for store
 	ClusterMode = "Cluster"
 )
 
