@@ -50,7 +50,7 @@ func newStore(c *Config) *Store {
 	}
 	mutex := &sync.RWMutex{}
 	store := new(Store)
-	starttime := time.Now().UTC()
+	startTime := time.Now().UTC()
 	store.items = 0
 	fileWatcher, err := newWatcher(".")
 	if err != nil {
@@ -66,7 +66,7 @@ func newStore(c *Config) *Store {
 	store.dbs = make(map[string]*DB)
 	store.lock = mutex
 	store.stat = new(statistics.Statistics)
-	store.stat.Start = starttime
+	store.stat.Start = startTime
 	store.index = NewIndexing()
 	store.config = c
 	store.historyevent = history.NewHistory(5)
@@ -243,7 +243,7 @@ func (st *Store) set(dbname string, key []byte, value []byte, opt ds.ItemOptions
 	}
 
 	go func(s ds.Storage) {
-		starttime := time.Now()
+		startTime := time.Now()
 		s.Put(key, value, ds.ItemOptions{})
 		if dbname != "" {
 			dbdata, _ := st.dbs[dbname]
@@ -252,7 +252,7 @@ func (st *Store) set(dbname string, key []byte, value []byte, opt ds.ItemOptions
 		}
 		st.PublishKeyValue(string(key), string(dbname))
 		st.stat.NumWrites += 1
-		fmt.Println(fmt.Sprintf("Stored in : %s", time.Since(starttime)))
+		fmt.Println(fmt.Sprintf("Stored in : %s", time.Since(startTime)))
 	}(store)
 
 	return true
@@ -343,14 +343,14 @@ func InitStore(settings Settings) *Store {
 	*/
 	mutex := &sync.RWMutex{}
 	store := new(Store)
-	starttime := time.Now().UTC()
+	startTime := time.Now().UTC()
 	store.items = 0
 	store.store = checkDS(settings.Innerdata)
 	store.keys = []string{}
 	store.dbs = make(map[string]*DB)
 	store.lock = mutex
 	store.stat = new(statistics.Statistics)
-	store.stat.Start = starttime
+	store.stat.Start = startTime
 	store.index = NewIndexing()
 	store.config = LoadConfigData("")
 	store.pubsub = PubsubInit()
