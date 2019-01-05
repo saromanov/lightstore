@@ -1,15 +1,16 @@
 package store
-import
-(
+
+import (
 	"strings"
 )
+
 //Actions provides state of DB
 
 //ReadyToSet provides checking of kv before set
 type ReadyToSet struct {
 	kvitems KVITEM
 	syskeys KVITEM
-	ready bool
+	ready   bool
 }
 
 func NewReadyToSet(rawitems KVITEM) *ReadyToSet {
@@ -17,13 +18,12 @@ func NewReadyToSet(rawitems KVITEM) *ReadyToSet {
 	rts.syskeys = kvItems(rawitems, func(str string) bool {
 		return checkSystemKeys(str)
 	})
-	rts.kvitems = kvItems(rawitems, func(str string)bool {
+	rts.kvitems = kvItems(rawitems, func(str string) bool {
 		return !checkSystemKeys(str)
 	})
 	rts.ready = true
 	return rts
 }
-
 
 func kvItems(rawitems KVITEM, pred func(string) bool) KVITEM {
 	result := KVITEM{}

@@ -2,7 +2,7 @@
 
 package store
 
-import ds "github.com/saromanov/lightstore/datastructures"
+import ds "github.com/saromanov/lightstore/backend"
 
 type DB struct {
 	//db name

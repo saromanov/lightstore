@@ -1,7 +1,6 @@
 package backend
 
-import
-(
+import (
 	"crypto/sha256"
 	"encoding/hex"
 	"github.com/saromanov/gohasha"

@@ -7,9 +7,9 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strings"
-	"log"
 )
 
 type (
@@ -30,9 +30,9 @@ func NewClient(addr string) *Client {
 	return cl
 }
 
-func (cl *Client) Ping()(bool, error){
+func (cl *Client) Ping() (bool, error) {
 	resp, err := http.Get(fmt.Sprintf("%s/ping", cl.addr))
-	if err != nil{
+	if err != nil {
 		return false, errors.New(fmt.Sprintf("Server by address %s is not ready", cl.addr))
 	}
 
@@ -41,7 +41,7 @@ func (cl *Client) Ping()(bool, error){
 }
 
 //Set basic key-value to lightstore
-func (cl *Client) Set(key, value string)(int, error) {
+func (cl *Client) Set(key, value string) (int, error) {
 	jsonStr := fmt.Sprintf(`{"%s":"%s"}`, key, value)
 	return cl.set(jsonStr)
 }
@@ -51,7 +51,7 @@ func (cl *Client) set(jsonStr string) (int, error) {
 	return cl.sendRequest(url, bytes.NewBuffer([]byte(jsonStr)))
 }
 
-func (cl *Client) sendRequest(url string, buff *bytes.Buffer)(int, error){
+func (cl *Client) sendRequest(url string, buff *bytes.Buffer) (int, error) {
 	req, err := cl.NewRequest("POST", url, buff)
 	req.Header.Set("X-Custom-Header", "lightstore")
 	req.Header.Set("Content-Type", "application/json")
@@ -73,7 +73,7 @@ func (cl *Client) sendRequest(url string, buff *bytes.Buffer)(int, error){
 	}
 }
 
-func (cl *Client) NewRequest(method string, url string, buff *bytes.Buffer)(*http.Request, error) {
+func (cl *Client) NewRequest(method string, url string, buff *bytes.Buffer) (*http.Request, error) {
 	if buff == nil {
 		return http.NewRequest("POST", url, nil)
 	}
@@ -162,13 +162,13 @@ func (cl *Client) SetToPage(pagename, key, value string) (int, error) {
 	return cl.sendRequest(url, bytes.NewBuffer([]byte(jsonStr)))
 }
 
-func (cl *Client) GetFromPage(pagename, key string)string{
+func (cl *Client) GetFromPage(pagename, key string) string {
 	url := fmt.Sprintf("%s/dbget/%s/%s", cl.addr, pagename, key)
 	return cl.get(url)
 }
 
 //SerializeKey provides serialization key data
-func (cl *Client) SerializeKey(key string, value string) string{
+func (cl *Client) SerializeKey(key string, value string) string {
 	url := fmt.Sprintf("%s/serialize/%s/%s", cl.addr, key, value)
 	return cl.get(url)
 }
@@ -183,7 +183,7 @@ func (cl *Client) Find(key string) string {
 	return cl.get(url)
 }
 
-func (cl *Client) Subscribe(key string){
+func (cl *Client) Subscribe(key string) {
 	url := fmt.Sprintf("%s/subscribe/%s", cl.addr, key)
 	cl.get(url)
 }
@@ -193,7 +193,7 @@ func (cl *Client) Remove(key string) {
 	cl.remove(url)
 }
 
-func (cl *Client) Repair(key string)interface{} {
+func (cl *Client) Repair(key string) interface{} {
 	url := fmt.Sprintf("%s/repair/%s", cl.addr, key)
 	return cl.get(url)
 }

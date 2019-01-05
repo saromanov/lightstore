@@ -5,11 +5,10 @@ import (
 	"sync"
 	"time"
 
-	ds "github.com/saromanov/lightstore/datastructures"
+	ds "github.com/saromanov/lightstore/backend"
 	"github.com/saromanov/lightstore/history"
 	log "github.com/saromanov/lightstore/logging"
 	"github.com/saromanov/lightstore/monitoring"
-	"github.com/saromanov/lightstore/rpc"
 	"github.com/saromanov/lightstore/statistics"
 )
 
@@ -40,7 +39,6 @@ type Store struct {
 	pubsub    *Pubsub
 	//Event history
 	historyevent *history.History
-	rpcdata      *rpc.RPCData
 	compression  bool
 	fileWatcher  *watcher
 }
@@ -72,8 +70,6 @@ func newStore(c *Config) *Store {
 	store.index = NewIndexing()
 	store.config = c
 	store.historyevent = history.NewHistory(5)
-	store.rpcdata = rpc.Init("")
-	store.rpcdata.Run()
 	return store
 }
 
@@ -84,7 +80,7 @@ func (st *Store) processSystemKey(key string) {
 	}
 }
 
-// CreateIndex implementes creational of teh new index
+// CreateIndex implements creational of the new index
 func (st *Store) CreateIndex(index string) {
 	if index == "" {
 		log.Info(fmt.Sprintf("New index %s can't be created", index))
@@ -251,7 +247,7 @@ func (st *Store) set(dbname string, key []byte, value []byte, opt ds.ItemOptions
 		s.Put(key, value, ds.ItemOptions{})
 		if dbname != "" {
 			dbdata, _ := st.dbs[dbname]
-			st.historyevent.AddEvent("deafult", "Set")
+			st.historyevent.AddEvent("default", "Set")
 			dbdata.datacount += 1
 		}
 		st.PublishKeyValue(string(key), string(dbname))
@@ -288,8 +284,7 @@ func (st *Store) Close() {
 }
 
 func (st *Store) SubscribeKey(item string) {
-	rpc.InitClient(nil).Get("Pubsub.Subscribe", &SubscribeData{Title: item}, nil)
-	//st.pubsub.Subscribe(&SubscribeData{Title: item})
+
 }
 
 func (st *Store) PublishInfo(key string) {
@@ -359,8 +354,5 @@ func InitStore(settings Settings) *Store {
 	store.index = NewIndexing()
 	store.config = LoadConfigData("")
 	store.pubsub = PubsubInit()
-	rpc.RegisterRPCFunction(store.pubsub)
-	store.rpcdata = rpc.Init("")
-	store.rpcdata.Run()
 	return store
 }

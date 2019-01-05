@@ -1,11 +1,10 @@
 package store
 
-import
-(
-	"time"
+import (
 	"errors"
-	"sync"
 	"fmt"
+	"sync"
+	"time"
 )
 
 type Pubsub struct {
@@ -14,13 +13,13 @@ type Pubsub struct {
 	queue []PubsubObject
 }
 
-type SubscribeData struct{
+type SubscribeData struct {
 	Title string
 }
 
-type PublishData struct{
+type PublishData struct {
 	Title string
-	Msg string
+	Msg   string
 }
 
 type PubsubObject struct {
@@ -30,7 +29,7 @@ type PubsubObject struct {
 	msg string
 }
 
-func PubsubInit()*Pubsub{
+func PubsubInit() *Pubsub {
 	ps := new(Pubsub)
 	ps.mutex = &sync.RWMutex{}
 	ps.queue = []PubsubObject{}
@@ -38,14 +37,13 @@ func PubsubInit()*Pubsub{
 	return ps
 }
 
-
 //Subscribe provides subscibtion to the specific key
 //for example on the db title
-func (ps *Pubsub) Subscribe(si* SubscribeData, value* interface{}) error{
+func (ps *Pubsub) Subscribe(si *SubscribeData, value *interface{}) error {
 	ps.inner[si.Title] = PubsubObject{}
 	var wg sync.WaitGroup
-    wg.Add(1)
-	go func(){
+	wg.Add(1)
+	go func() {
 		for {
 			item, err := ps.receive()
 			if err == nil {
@@ -68,7 +66,7 @@ func (ps *Pubsub) Publish(po *PublishData) {
 	ps.publish(po.Title, po.Msg)
 }
 
-func (ps *Pubsub) receive()(PubsubObject, error){
+func (ps *Pubsub) receive() (PubsubObject, error) {
 	ps.mutex.RLock()
 	defer ps.mutex.RUnlock()
 	defer ps.popElement()
@@ -79,26 +77,25 @@ func (ps *Pubsub) receive()(PubsubObject, error){
 	return ps.queue[0], nil
 }
 
-
 //If we get new message, construct new notification
-func (ps *Pubsub) publish(title, msg string){
+func (ps *Pubsub) publish(title, msg string) {
 	item, ok := ps.inner[title]
 	if !ok {
 		//TODO set some error
 	} else {
-		ps.queue = append(ps.queue, PubsubObject{once:item.once, msg:msg})
+		ps.queue = append(ps.queue, PubsubObject{once: item.once, msg: msg})
 	}
 }
 
 //Pop one element from the queue
-func (ps *Pubsub) popElement(){
+func (ps *Pubsub) popElement() {
 	if len(ps.queue) > 0 {
 		ps.queue = append(ps.queue[:0], ps.queue[1:]...)
 	}
 }
 
 //clearQueue from all elements
-func (ps *Pubsub) clearQueue(){
+func (ps *Pubsub) clearQueue() {
 	ps.mutex.RLock()
 	ps.queue = ps.queue[:0]
 	defer ps.mutex.RUnlock()
