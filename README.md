@@ -1,4 +1,6 @@
 # lightstore
+[![Go Report Card](https://goreportcard.com/badge/github.com/saromanov/lightstore)](https://goreportcard.com/report/github.com/saromanov/lightstore)
+
 Key-Value store
 in Progress
 
