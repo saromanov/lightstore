@@ -1,4 +1,4 @@
-package datastructures
+package backend
 
 // Storage provides basic abstraction over
 // store of key values

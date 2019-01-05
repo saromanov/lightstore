@@ -1,4 +1,4 @@
-package datastructures
+package backend
 
 import (
 	"github.com/google/btree"
