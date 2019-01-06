@@ -70,10 +70,10 @@ func (it *Iterator) Next() *Item {
 	if it.txn == nil {
 		return nil
 	}
-	key := it.store.next(it.element)
+	key := it.txn.store.next(it.element)
 	return &Item{
 		key:   key,
-		value: store.Get(key),
+		value: it.txn.store.Get(key),
 	}
 }
 

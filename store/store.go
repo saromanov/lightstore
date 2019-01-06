@@ -268,6 +268,10 @@ func (st *Store) first() []byte {
 	return st.store.First().([]byte)
 }
 
+func (st *Store) next(i int) []byte {
+	return nil
+}
+
 func (st *Store) Find(key []byte) interface{} {
 	st.lock.Lock()
 	defer st.lock.Unlock()
