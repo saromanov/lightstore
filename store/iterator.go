@@ -70,8 +70,11 @@ func (it *Iterator) Next() *Item {
 	if it.txn == nil {
 		return nil
 	}
-
-	return it.item
+	key := it.store.next(it.element)
+	return &Item{
+		key:   key,
+		value: store.Get(key),
+	}
 }
 
 // Close provides closing of iterator
