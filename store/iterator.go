@@ -60,7 +60,7 @@ func (it *Iterator) makeItem() *Item {
 
 // Valid returns false if current item is invalid
 func (it *Iterator) Valid() bool {
-	return it.item != nil
+	return it.item != nil && it.item.key != nil
 }
 
 // Next provides getting of the next element
@@ -71,10 +71,11 @@ func (it *Iterator) Next() *Item {
 		return nil
 	}
 	key := it.txn.store.next(it.element)
-	return &Item{
+	it.item = &Item{
 		key:   key,
 		value: it.txn.store.Get(key),
 	}
+	return it.item
 }
 
 // Close provides closing of iterator
