@@ -35,6 +35,7 @@ type Iterator struct {
 	closed  bool
 	item    *Item
 	opt     IteratorOptions
+	element int
 }
 
 // Item retruns current item from iterator
@@ -65,9 +66,11 @@ func (it *Iterator) Valid() bool {
 // Next provides getting of the next element
 // on iterator
 func (it *Iterator) Next() *Item {
+	it.element++
 	if it.txn == nil {
 		return nil
 	}
+
 	return it.item
 }
 
