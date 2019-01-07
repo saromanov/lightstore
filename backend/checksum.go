@@ -15,6 +15,9 @@ func Checksum(data string) string {
 
 // Hash provides hashing of data
 func Hash(data string) string {
+	if data == "" {
+		return ""
+	}
 	hashstr, err := gohasha.GoHasha(&gohasha.GohashaOptions{Data: data})
 	if err != nil {
 		panic(err)
