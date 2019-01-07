@@ -269,7 +269,11 @@ func (st *Store) first() []byte {
 }
 
 func (st *Store) next(i int) []byte {
-	return nil
+	response := st.store.Next(i)
+	if response == nil {
+		return nil
+	}
+	return response.([]byte)
 }
 
 func (st *Store) Find(key []byte) interface{} {

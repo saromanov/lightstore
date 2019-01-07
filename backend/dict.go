@@ -63,5 +63,5 @@ func (d *Dict) Delete(key []byte) error {
 
 // Next provides iteration over collection
 func (d *Dict) Next(i int) interface{} {
-	return nil
+	return d.engine.GetKeyByIndex(i)
 }

@@ -1,8 +1,6 @@
 package backend
 
-import (
-	"github.com/google/btree"
-)
+import "github.com/google/btree"
 
 // BTree provides implementation of btree
 // over google btree package
@@ -11,6 +9,7 @@ type BTree struct {
 	engine *btree.BTree
 }
 
+// InitBTree provides initialization of the B-Tree
 func InitBTree(degree int) *BTree {
 	bt := &BTree{
 		repair: NewRepair(),
@@ -19,11 +18,11 @@ func InitBTree(degree int) *BTree {
 	return bt
 }
 
+// Put provides store of the key and value
 func (d *BTree) Put(key []byte, value interface{}, op ItemOptions) error {
 	if op.Immutable {
 		return nil
 	}
-	//d.Value.Set(key, value)
 	return nil
 }
 
@@ -35,10 +34,6 @@ func (d *BTree) Get(key []byte) (interface{}, error) {
 	}
 	return value, nil*/
 	return nil, nil
-}
-
-func (d *BTree) GetFromRepair(key string) (*RepairItem, error) {
-	return d.repair.GetFromRepair(key, "")
 }
 
 // Exist provides implementation for checking of key is exist
