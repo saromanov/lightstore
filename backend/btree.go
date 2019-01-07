@@ -55,3 +55,8 @@ func (d *BTree) First() interface{} {
 func (d *BTree) Delete(key []byte) error {
 	return nil
 }
+
+// Next provides iteration to the next element of storage
+func (d *BTree) Next(i int) interface{} {
+	return nil
+}

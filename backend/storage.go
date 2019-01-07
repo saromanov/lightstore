@@ -8,4 +8,5 @@ type Storage interface {
 	Delete([]byte) error
 	Exist([]byte) bool
 	First() interface{}
+	Next(int) interface{}
 }

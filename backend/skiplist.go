@@ -63,3 +63,8 @@ func (d *SkipList) Delete(key []byte) error {
 	}
 	return nil
 }
+
+// Next provides iteration to the next element of storage
+func (d *SkipList) Next(i int) interface{} {
+	return nil
+}
