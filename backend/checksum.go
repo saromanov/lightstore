@@ -6,12 +6,14 @@ import (
 	"github.com/saromanov/gohasha"
 )
 
+// Checksum provides getting of checksum on string
 func Checksum(data string) string {
 	check := sha256.New()
 	check.Write([]byte(data))
 	return hex.EncodeToString(check.Sum(nil))
 }
 
+// Hash provides hashing of data
 func Hash(data string) string {
 	hashstr, err := gohasha.GoHasha(&gohasha.GohashaOptions{Data: data})
 	if err != nil {
