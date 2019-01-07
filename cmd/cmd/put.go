@@ -32,7 +32,3 @@ func put(cmd *cobra.Command, args []string) {
 		log.Fatalf("unable to write data: %v", err)
 	}
 }
-
-func init() {
-	rootCmd.AddCommand(putCmd)
-}

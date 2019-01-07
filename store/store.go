@@ -14,8 +14,6 @@ import (
 
 //Basic implmentation of key-value store(without assotiation with any db name)
 
-const param = 0
-
 const (
 	MaxKeySize   uint = 512
 	MaxValueSize uint = 32768
@@ -191,31 +189,6 @@ func (st *Store) beforeSet(key, value []byte) error {
 	return nil
 }
 
-//Before set data to the lightstore. Check if in current request
-//exists system keys with prefix _
-func getItemOptions(items map[string]string) ds.ItemOptions {
-	itemopt := ds.ItemOptions{}
-	for key, value := range items {
-		if key == "_index" {
-			itemopt.Index = value
-		}
-		if key == "_immutable" {
-			itemopt.Immutable = false
-			if value == "true" {
-				itemopt.Immutable = true
-			}
-		}
-		if key == "_update" {
-			itemopt.Update = false
-			if value == "true" {
-				itemopt.Update = true
-			}
-		}
-	}
-	fmt.Println("ITM: ", itemopt)
-	return itemopt
-}
-
 //Exist check key in the lightstore
 //and return true if key exist and false otherwise
 func (st *Store) Exist(key []byte) bool {
@@ -259,7 +232,7 @@ func (st *Store) set(dbname string, key []byte, value []byte, opt ds.ItemOptions
 
 }
 
-//Remove provides clearning curent key
+//Remove provides clearning current key
 func (st *Store) Remove(key []byte) {
 	st.store.Delete(key)
 }

@@ -1,6 +1,9 @@
 package security
 
 import (
+	"log"
+	"time"
+	"math/big"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
@@ -30,13 +33,13 @@ func CreateCertificate(Country, Organization, OrganizationalUnit string) {
 
 	priv, _ := rsa.GenerateKey(rand.Reader, 1024)
 	pub := &priv.PublicKey
-	ca_b, err := x509.CreateCertificate(rand.Reader, ca, ca, pub, priv)
+	cab, err := x509.CreateCertificate(rand.Reader, ca, ca, pub, priv)
 	if err != nil {
 		log.Println("create ca failed", err)
 		return
 	}
-	ca_f := "ca.pem"
-	log.Println("write to", ca_f)
-	ioutil.WriteFile(ca_f, ca_b, 0777)
+	caf := "ca.pem"
+	log.Println("write to", caf)
+	ioutil.WriteFile(caf, cab, 0777)
 
 }

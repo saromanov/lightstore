@@ -56,18 +56,18 @@ func InitDBMonitoring() *DBMonitoring {
 func (dbm *DBMonitoring) IncrWrites() {
 	dbm.lock.RLock()
 	defer dbm.lock.RUnlock()
-	dbm.dbstat.NumWrites += 1
+	dbm.dbstat.NumWrites++
 }
 
 //IncrRead provides increment of total number of reads
 func (dbm *DBMonitoring) IncrReads() {
 	dbm.lock.RLock()
 	defer dbm.lock.RUnlock()
-	dbm.dbstat.NumReads += 1
+	dbm.dbstat.NumReads++
 }
 
 //This struct provides information about server
 type ServerStat struct {
-	time_alive  time.Time
+	timeAlive  time.Time
 	numproblems int
 }

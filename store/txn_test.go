@@ -13,7 +13,10 @@ func TestTxnStart(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unable to insert data: %v", err)
 	}
-	txn.Commit()
+	err = txn.Commit()
+	if err != nil {
+		t.Fatalf("unable to commit: %v", err)
+	}
 	result := txn.Get([]byte("foo"))
 	if result == nil {
 		t.Fatal("result value is empty")

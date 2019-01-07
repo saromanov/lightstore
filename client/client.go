@@ -33,7 +33,7 @@ func NewClient(addr string) *Client {
 func (cl *Client) Ping() (bool, error) {
 	resp, err := http.Get(fmt.Sprintf("%s/ping", cl.addr))
 	if err != nil {
-		return false, errors.New(fmt.Sprintf("Server by address %s is not ready", cl.addr))
+		return false, fmt.Errorf("server by address %s is not ready", cl.addr)
 	}
 
 	resp.Body.Close()
@@ -67,10 +67,9 @@ func (cl *Client) sendRequest(url string, buff *bytes.Buffer) (int, error) {
 
 	if strings.HasPrefix(resp.Status, "200") {
 		return 1, nil
-	} else {
-		body, _ := ioutil.ReadAll(resp.Body)
-		return 0, errors.New(string(body))
 	}
+	body, _ := ioutil.ReadAll(resp.Body)
+	return 0, errors.New(string(body))
 }
 
 func (cl *Client) NewRequest(method string, url string, buff *bytes.Buffer) (*http.Request, error) {
@@ -90,7 +89,7 @@ func (cl *Client) SetMap(values KV) (int, error) {
 			result += ","
 		}
 		result += fmt.Sprintf(`"%s":"%s"`, key, value)
-		c += 1
+		c++
 	}
 	result += "}"
 	return cl.set(result)
@@ -123,9 +122,8 @@ func (*Client) get(url string) string {
 		}
 		result := string(body)
 		return result[1 : len(result)-1]
-	} else {
-		return ""
 	}
+	return ""
 }
 
 func (*Client) remove(url string) string {
@@ -145,9 +143,8 @@ func (*Client) remove(url string) string {
 		}
 		result := string(body)
 		return result[1 : len(result)-1]
-	} else {
-		return ""
 	}
+	return ""
 }
 
 //CreatePage provides create new page on the lightstore
