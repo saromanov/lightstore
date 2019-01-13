@@ -238,6 +238,13 @@ func (st *Store) Remove(key []byte) {
 }
 
 func (st *Store) first() []byte {
+	if st == nil {
+		return nil
+	}
+	item := st.store.First()
+	if item == nil {
+		return nil
+	}
 	return st.store.First().([]byte)
 }
 
