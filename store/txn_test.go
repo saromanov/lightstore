@@ -40,7 +40,7 @@ func TestIteratorWithNoOptions(t *testing.T) {
 		}
 	}
 	txn.Commit()
-	it := txn.NewIterator(IteratorOptions{})
+	it, _ := txn.NewIterator(IteratorOptions{})
 	for it.First(); it.Valid(); it.Next() {
 		itm := it.Item()
 		err := itm.Value(func(v []byte) error {
@@ -52,6 +52,20 @@ func TestIteratorWithNoOptions(t *testing.T) {
 	}
 }
 
+func TestIteratorWithClosedTransaction(t *testing.T) {
+	st := newStore(nil)
+	txn := st.NewTransaction(true)
+	for i := 0; i < 10; i++ {
+		err := txn.Set([]byte(fmt.Sprintf("%d", i)), []byte(fmt.Sprintf("bar+%d", i)))
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+	txn.Commit()
+	_, err := txn.NewIterator(IteratorOptions{})
+	assert.EqualError(t, err, errTransactionCompleted.Error(), "error response is not equal")
+}
+
 func TestIteratorWithNoSize(t *testing.T) {
 	st := newStore(nil)
 	txn := st.NewTransaction(true)
@@ -59,7 +73,7 @@ func TestIteratorWithNoSize(t *testing.T) {
 	if err != nil {
 		t.Fatal("unable to insert data")
 	}
-	it := txn.NewIterator(IteratorOptions{})
+	it, _ := txn.NewIterator(IteratorOptions{})
 	for it.First(); it.Valid(); it.Next() {
 		itm := it.Item()
 		err := itm.Value(func(v []byte) error {
@@ -81,7 +95,8 @@ func TestIteratorWithSize(t *testing.T) {
 		}
 	}
 	txn.Commit()
-	it := txn.NewIterator(IteratorOptions{
+	txn2 := st.NewTransaction(true)
+	it, _ := txn2.NewIterator(IteratorOptions{
 		Size: 4,
 	})
 	count := 0
