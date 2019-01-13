@@ -10,6 +10,7 @@ import (
 
 func TestTxnStart(t *testing.T) {
 	st := newStore(nil)
+	defer st.Close()
 	txn := st.NewTransaction(true)
 	err := txn.Set([]byte("foo"), []byte("bar"))
 	if err != nil {
@@ -19,7 +20,8 @@ func TestTxnStart(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unable to commit: %v", err)
 	}
-	result := txn.Get([]byte("foo"))
+	txn2 := st.NewTransaction(false)
+	result := txn2.Get([]byte("foo"))
 	if result == nil {
 		t.Fatal("result value is empty")
 	}

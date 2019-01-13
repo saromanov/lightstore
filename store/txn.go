@@ -1,6 +1,7 @@
 package store
 
 import (
+	"fmt"
 	"sort"
 	"time"
 
@@ -118,7 +119,7 @@ func (t *Txn) Commit() error {
 		if e.isDelete {
 			t.store.Remove(e.key)
 		}
-		t.store.Set(e.key, e.value)
+		fmt.Println("EEE: ", t.store.Set(e.key, e.value))
 	})
 	t.Close()
 	return nil
