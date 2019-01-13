@@ -91,6 +91,24 @@ func (it *Iterator) Next() *Item {
 	return it.item
 }
 
+// checkPrefix provides checking of the prefix on key
+func (it *Iterator) checkPrefix(key []byte) bool {
+	prefixLen := len(it.prefix)
+	if prefixLen == 0 {
+		return true
+	}
+	if prefixLen > len(key) {
+		return false
+	}
+	for i := 0; i < prefixLen; i++ {
+		if key[i] != it.prefix[i] {
+			return false
+		}
+	}
+
+	return true
+}
+
 // Close provides closing of iterator
 func (it *Iterator) Close() {
 	it.txn = nil
