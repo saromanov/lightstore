@@ -26,6 +26,7 @@ func (i *Item) Value(f func([]byte) error) error {
 type IteratorOptions struct {
 	Prefix []byte
 	Size   uint
+	Limit  uint
 }
 
 // Iterator provides iterating over the KV pairs
@@ -36,6 +37,7 @@ type Iterator struct {
 	item    *Item
 	opt     IteratorOptions
 	element int
+	limit   uint
 }
 
 // Item retruns current item from iterator
@@ -67,6 +69,9 @@ func (it *Iterator) Valid() bool {
 // on iterator
 func (it *Iterator) Next() *Item {
 	it.element++
+	if it.element > int(it.limit) {
+		return nil
+	}
 	if it.txn == nil {
 		return nil
 	}
