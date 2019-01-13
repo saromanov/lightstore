@@ -84,6 +84,9 @@ func (it *Iterator) Next() *Item {
 		it.item = nil
 		return nil
 	}
+	if !it.checkPrefix(key) {
+		return nil
+	}
 	it.item = &Item{
 		key:   key,
 		value: it.txn.store.Get(key),
