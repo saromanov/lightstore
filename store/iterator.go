@@ -69,7 +69,7 @@ func (it *Iterator) Valid() bool {
 // on iterator
 func (it *Iterator) Next() *Item {
 	it.element++
-	if it.element > int(it.limit) {
+	if it.limit > 0 && it.element > int(it.limit) {
 		return nil
 	}
 	if it.txn == nil {
