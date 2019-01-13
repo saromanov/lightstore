@@ -159,9 +159,10 @@ func (t *Txn) NewIterator(opt IteratorOptions) (*Iterator, error) {
 		return nil, errTransactionCompleted
 	}
 	return &Iterator{
-		txn:   t,
-		opt:   opt,
-		limit: opt.Limit,
+		prefix: opt.Prefix,
+		txn:    t,
+		opt:    opt,
+		limit:  opt.Limit,
 		item: &Item{
 			key: t.store.first(),
 		},

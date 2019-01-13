@@ -38,6 +38,7 @@ type Iterator struct {
 	opt     IteratorOptions
 	element int
 	limit   uint
+	prefix  []byte
 }
 
 // Item retruns current item from iterator
