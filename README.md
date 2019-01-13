@@ -7,6 +7,33 @@
 Key-Value store
 in Progress
 
+## Table of Contents
+* [Getting Started](#getting-started)
+    + [Installing](#installing)
+    + [Create database](#create-database)
+
+## Getting Started
+
+### Installing
+
+```sh
+$ go get github.com/saromanov/lightstore/...
+```
+
+### Create Database
+Easy steps for create a new database
+```go
+package main
+
+import "github.com/saromanov/lightstore/store"
+
+func main() {
+	light := store.Open(nil)
+	defer light.Close()
+}
+```
+This creates a new database with default config
+
 ## TODO
 Indexing
 Distributed (Consensus, Failure detection)
