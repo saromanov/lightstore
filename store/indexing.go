@@ -1,7 +1,5 @@
 package store
 
-import "github.com/saromanov/lightstore/cache"
-
 //Indexing in lightstore
 
 type indexing interface {
@@ -9,13 +7,11 @@ type indexing interface {
 	DropIndex(value string)
 	DropIndexes(value []string)
 	IndexStatus(index string) int
-	AddToCache(name, value, location string)
 }
 
 type Indexing struct {
 	index      map[string][]string
 	location   map[string]string
-	caching    *cache.Cache
 	maxsize    int
 	maxindexes int
 }
@@ -24,7 +20,6 @@ func NewIndexing() *Indexing {
 	idx := new(Indexing)
 	idx.index = make(map[string][]string)
 	idx.location = make(map[string]string)
-	idx.caching = cache.New(1000)
 	idx.maxsize = 1000000
 	idx.maxindexes = 10000
 	return idx
@@ -63,8 +58,4 @@ func (idx *Indexing) IndexStatus(index string) int {
 func (idx *Indexing) AddItem(name, value, location string) {
 	idx.index[name] = append(idx.index[name], value)
 	idx.location[value] = location
-}
-
-func (idx *Indexing) AddToCache(name, value, location string) {
-	idx.caching.Put(value, 1000)
 }
