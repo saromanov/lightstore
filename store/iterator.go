@@ -21,6 +21,11 @@ func (i *Item) Value(f func([]byte) error) error {
 	return nil
 }
 
+// ValueData returns current value of Item
+func (i *Item) ValueData() []byte {
+	return i.value
+}
+
 // IteratorOptions defines options
 // for iterator
 type IteratorOptions struct {

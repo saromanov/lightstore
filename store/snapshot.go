@@ -48,8 +48,8 @@ func (so *SnapshotObject) Write(w io.Writer) error {
 	for it.First(); it.Valid(); it.Next() {
 		itm := it.Item()
 		data := &protos.KVPair{
-			Key:   item.key,
-			Value: item.value,
+			Key:   itm.Key(),
+			Value: itm.ValueData(),
 		}
 		err := binary.Write(buf, binary.LittleEndian, data)
 		if err != nil {
