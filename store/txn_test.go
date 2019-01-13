@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"fmt"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestTxnStart(t *testing.T) {
@@ -29,6 +31,28 @@ func TestTxnStart(t *testing.T) {
 func TestIteratorWithNoOptions(t *testing.T) {
 	st := newStore(nil)
 	txn := st.NewTransaction(true)
+	for i := 0; i < 10; i++ {
+		err := txn.Set([]byte(fmt.Sprintf("%d", i)), []byte(fmt.Sprintf("bar+%d", i)))
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+	txn.Commit()
+	it := txn.NewIterator(IteratorOptions{})
+	for it.First(); it.Valid(); it.Next() {
+		itm := it.Item()
+		err := itm.Value(func(v []byte) error {
+			return nil
+		})
+		if err != nil {
+			t.Fatalf("unable to get value: %v", err)
+		}
+	}
+}
+
+func TestIteratorWithNoSize(t *testing.T) {
+	st := newStore(nil)
+	txn := st.NewTransaction(true)
 	err := txn.Set([]byte("foo"), []byte("bar"))
 	if err != nil {
 		t.Fatal("unable to insert data")
@@ -48,15 +72,26 @@ func TestIteratorWithNoOptions(t *testing.T) {
 func TestIteratorWithSize(t *testing.T) {
 	st := newStore(nil)
 	txn := st.NewTransaction(true)
-	err := txn.Set([]byte("foo"), []byte("barfoo"))
-	if err != nil {
-		t.Fatal("unable to insert data")
+	for i := 0; i < 10; i++ {
+		err := txn.Set([]byte(fmt.Sprintf("%d", i)), []byte(fmt.Sprintf("bar+%d", i)))
+		if err != nil {
+			t.Fatal(err)
+		}
 	}
+	txn.Commit()
 	it := txn.NewIterator(IteratorOptions{
 		Size: 4,
 	})
+	count := 0
 	for it.First(); it.Valid(); it.Next() {
 		itm := it.Item()
-		fmt.Println(itm)
+		err := itm.Value(func(v []byte) error {
+			return nil
+		})
+		if err != nil {
+			t.Fatalf("unable to get value: %v", err)
+		}
+		count++
 	}
+	assert.Equal(t, count, 4, "Count of return elements is not equal")
 }
