@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"math"
 	"os"
 	"path"
 	"strings"
@@ -44,12 +43,20 @@ func NewSnapshot(st *Store, path string) *SnapshotObject {
 // snapshots with entries
 func (so *SnapshotObject) Write(w io.Writer) error {
 	buf := new(bytes.Buffer)
-	var pi float64 = math.Pi
-	err := binary.Write(buf, binary.LittleEndian, pi)
-	if err != nil {
-		fmt.Println("binary.Write failed:", err)
+	txn := so.st.NewTransaction(false)
+	it, _ := txn.NewIterator(IteratorOptions{})
+	for it.First(); it.Valid(); it.Next() {
+		itm := it.Item()
+		data := &protos.KVPair{
+			Key:   item.key,
+			Value: item.value,
+		}
+		err := binary.Write(buf, binary.LittleEndian, data)
+		if err != nil {
+			fmt.Println("binary.Write failed:", err)
+		}
+		fmt.Printf("% x", buf.Bytes())
 	}
-	fmt.Printf("% x", buf.Bytes())
 	return nil
 }
 
