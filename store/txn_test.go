@@ -40,7 +40,8 @@ func TestIteratorWithNoOptions(t *testing.T) {
 		}
 	}
 	txn.Commit()
-	it, _ := txn.NewIterator(IteratorOptions{})
+	txn2 := st.NewTransaction(false)
+	it, _ := txn2.NewIterator(IteratorOptions{})
 	for it.First(); it.Valid(); it.Next() {
 		itm := it.Item()
 		err := itm.Value(func(v []byte) error {
