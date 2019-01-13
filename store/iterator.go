@@ -62,7 +62,7 @@ func (it *Iterator) makeItem() *Item {
 
 // Valid returns false if current item is invalid
 func (it *Iterator) Valid() bool {
-	return it.item != nil && it.item.key != nil
+	return it.item != nil
 }
 
 // Next provides getting of the next element
@@ -70,9 +70,11 @@ func (it *Iterator) Valid() bool {
 func (it *Iterator) Next() *Item {
 	it.element++
 	if it.limit > 0 && it.element > int(it.limit) {
+		it.item = nil
 		return nil
 	}
 	if it.txn == nil {
+		it.item = nil
 		return nil
 	}
 	key := it.txn.store.next(it.element)
