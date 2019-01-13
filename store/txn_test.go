@@ -73,7 +73,10 @@ func TestIteratorWithNoSize(t *testing.T) {
 	if err != nil {
 		t.Fatal("unable to insert data")
 	}
-	it, _ := txn.NewIterator(IteratorOptions{})
+	txn.Commit()
+	txn2 := st.NewTransaction(true)
+	it, _ := txn2.NewIterator(IteratorOptions{})
+	count := 0
 	for it.First(); it.Valid(); it.Next() {
 		itm := it.Item()
 		err := itm.Value(func(v []byte) error {
@@ -82,10 +85,12 @@ func TestIteratorWithNoSize(t *testing.T) {
 		if err != nil {
 			t.Fatalf("unable to get value: %v", err)
 		}
+		count++
 	}
+	assert.Equal(t, count, 1, "Count of return elements is not equal")
 }
 
-func TestIteratorWithSize(t *testing.T) {
+func TestIteratorWithLimit(t *testing.T) {
 	st := newStore(nil)
 	txn := st.NewTransaction(true)
 	for i := 0; i < 10; i++ {
@@ -97,7 +102,7 @@ func TestIteratorWithSize(t *testing.T) {
 	txn.Commit()
 	txn2 := st.NewTransaction(true)
 	it, _ := txn2.NewIterator(IteratorOptions{
-		Size: 4,
+		Limit: 4,
 	})
 	count := 0
 	for it.First(); it.Valid(); it.Next() {
