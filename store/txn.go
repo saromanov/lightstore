@@ -1,12 +1,15 @@
 package store
 
 import (
+	"errors"
 	"fmt"
 	"sort"
 	"time"
 
 	"github.com/satori/go.uuid"
 )
+
+var errTransactionCompleted = errors.New("transaction was completed")
 
 //https://docs.oracle.com/cd/E17275_01/html/api_reference/C/txn.html
 
@@ -19,6 +22,7 @@ type Txn struct {
 	write     bool
 	store     *Store
 	timestamp int64
+	complete  bool
 }
 
 // Entry defines new key value pair
@@ -136,6 +140,7 @@ func (t *Txn) close() {
 	t.store = nil
 	t.writes = t.writes[:0]
 	t.reads = t.reads[:0]
+	t.complete = true
 }
 
 // Rollback provides rolling back current
@@ -149,7 +154,10 @@ func (t *Txn) rollback() {
 }
 
 // NewIterator creates a new iterator under transaction
-func (t *Txn) NewIterator(opt IteratorOptions) *Iterator {
+func (t *Txn) NewIterator(opt IteratorOptions) (*Iterator, error) {
+	if t.complete {
+		return nil, errTransactionCompleted
+	}
 	return &Iterator{
 		txn:   t,
 		opt:   opt,
@@ -157,7 +165,7 @@ func (t *Txn) NewIterator(opt IteratorOptions) *Iterator {
 		item: &Item{
 			key: t.store.first(),
 		},
-	}
+	}, nil
 }
 
 // Get returns value by the key
