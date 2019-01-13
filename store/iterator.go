@@ -49,6 +49,7 @@ func (it *Iterator) Item() *Item {
 func (it *Iterator) First() {
 	it.lastKey = it.lastKey[:0]
 	it.item = it.makeItem()
+	it.element = 0
 }
 
 func (it *Iterator) makeItem() *Item {
@@ -69,7 +70,7 @@ func (it *Iterator) Valid() bool {
 // on iterator
 func (it *Iterator) Next() *Item {
 	it.element++
-	if it.limit > 0 && it.element > int(it.limit) {
+	if it.limit > 0 && it.element == int(it.limit) {
 		it.item = nil
 		return nil
 	}
@@ -78,6 +79,10 @@ func (it *Iterator) Next() *Item {
 		return nil
 	}
 	key := it.txn.store.next(it.element)
+	if len(key) == 0 {
+		it.item = nil
+		return nil
+	}
 	it.item = &Item{
 		key:   key,
 		value: it.txn.store.Get(key),
