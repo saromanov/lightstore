@@ -160,12 +160,6 @@ func (st *Store) GetMany(keys [][]byte) interface{} {
 	return nil
 }
 
-//check and split keys on system and not
-func (st *Store) beforeSetKeys(items KVITEM) *ReadyToSet {
-	//Vefore set, check split system keys with prefix _ and simple keys
-	return NewReadyToSet(items)
-}
-
 // Set provides setting of key-value pair
 func (st *Store) Set(key, value []byte) error {
 	st.lock.Lock()
