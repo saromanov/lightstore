@@ -9,10 +9,14 @@ type Lightstore struct {
 }
 
 // Open provides creating of lightstore object
-func Open(c *Config) *Lightstore {
-	return &Lightstore{
-		store: newStore(c),
+func Open(c *Config) (*Lightstore, error) {
+	store, err := newStore(c)
+	if err != nil {
+		return nil, err
 	}
+	return &Lightstore{
+		store: store,
+	}, nil
 }
 
 // IsCreated retruns true if Lightstore was initialized

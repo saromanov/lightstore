@@ -67,6 +67,9 @@ type Config struct {
 
 	// MaxValueSize defines maximum valuze size for store
 	MaxValueSize uint
+
+	// LoadPath provides definition for load data from disk
+	LoadPath string
 }
 
 //LoadConfigData provides load configuration or set default params

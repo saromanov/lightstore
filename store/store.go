@@ -39,7 +39,7 @@ type Store struct {
 }
 
 // newStore creates a new instance of lightstore
-func newStore(c *Config) *Store {
+func newStore(c *Config) (*Store, error) {
 	if c == nil {
 		c = defaultConfig()
 	}
@@ -64,7 +64,15 @@ func newStore(c *Config) *Store {
 	store.stat.Start = startTime
 	store.index = NewIndexing()
 	store.config = c
-	return store
+	if err := loadData(c.LoadPath); err != nil {
+		return nil, fmt.Errorf("unable to load data: %v", err)
+	}
+	return store, nil
+}
+
+// loadData provides loading of data from path
+func loadData(path string) error {
+	return nil
 }
 
 //After understanding, that key is system, make some work with them
