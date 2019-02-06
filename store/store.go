@@ -37,7 +37,7 @@ type Store struct {
 	pubsub      *Pubsub
 	compression bool
 	fileWatcher *watcher
-	fileStore   *os.File
+	writer      *Writer
 }
 
 // newStore creates a new instance of lightstore
@@ -67,10 +67,11 @@ func newStore(c *Config) (*Store, error) {
 	store.index = NewIndexing()
 	c.setMissedValues()
 	store.config = c
-	store.fileStore, err = loadData(c.LoadPath)
+	fileStore, err := loadData(c.LoadPath)
 	if err != nil {
 		return nil, fmt.Errorf("unable to load data: %v", err)
 	}
+	store.writer = &Writer{file: fileStore}
 	return store, nil
 }
 
@@ -193,7 +194,7 @@ func (st *Store) Set(key, value []byte) error {
 }
 
 func (st *Store) writeToLogFile(key, value []byte) error {
-	return nil
+	return st.writer.AddSetCommand(key, value)
 }
 
 func (st *Store) beforeSet(key, value []byte) error {
