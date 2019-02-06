@@ -19,6 +19,11 @@ func Open(c *Config) (*Lightstore, error) {
 	}, nil
 }
 
+// OpenStrict provides creating of lightstore object only with db path
+func OpenStrict(path string) (*Lightstore, error) {
+	return Open(&Config{LoadPath: path})
+}
+
 // IsCreated retruns true if Lightstore was initialized
 func (l *Lightstore) IsCreated() bool {
 	return l.store.IsCreated()
