@@ -28,12 +28,23 @@ package main
 import "github.com/saromanov/lightstore/store"
 
 func main() {
-	light := store.Open(nil)
+    light, err := store.Open(nil)
+    if err != nil {
+        panic(err)
+    }
 	defer light.Close()
 }
 ```
 This creates a new database with default config
 
+Or create database only with path to db file
+```go
+light, err := store.OpenStrict("db.db")
+if err != nil {
+	panic(err)
+}
+defer light.Close()
+```
 ## TODO
 Indexing
 Distributed (Consensus, Failure detection)
