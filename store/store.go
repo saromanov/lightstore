@@ -37,6 +37,7 @@ type Store struct {
 	pubsub      *Pubsub
 	compression bool
 	fileWatcher *watcher
+	fileStore   *os.File
 }
 
 // newStore creates a new instance of lightstore
@@ -66,22 +67,23 @@ func newStore(c *Config) (*Store, error) {
 	store.index = NewIndexing()
 	c.setMissedValues()
 	store.config = c
-	if err := loadData(c.LoadPath); err != nil {
+	store.fileStore, err = loadData(c.LoadPath)
+	if err != nil {
 		return nil, fmt.Errorf("unable to load data: %v", err)
 	}
 	return store, nil
 }
 
 // loadData provides loading of data from path
-func loadData(path string) error {
+func loadData(path string) (*os.File, error) {
 	if path == "" {
-		return nil
+		return nil, nil
 	}
-	_, err := os.OpenFile(path, os.O_CREATE|os.O_RDWR, 0666)
+	f, err := os.OpenFile(path, os.O_CREATE|os.O_RDWR, 0666)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return f, nil
 }
 
 //After understanding, that key is system, make some work with them
