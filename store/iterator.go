@@ -17,8 +17,8 @@ func (i *Item) String() string {
 }
 
 // Value returns current value of Item
-func (i *Item) Value(f func([]byte) error) error {
-	return nil
+func (i *Item) Value() []byte {
+	return i.value
 }
 
 // ValueData returns current value of Item
