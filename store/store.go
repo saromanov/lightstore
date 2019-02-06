@@ -73,6 +73,9 @@ func newStore(c *Config) (*Store, error) {
 
 // loadData provides loading of data from path
 func loadData(path string) error {
+	if path == "" {
+		return nil
+	}
 	_, err := os.OpenFile(path, os.O_CREATE|os.O_RDWR, 0666)
 	if err != nil {
 		return err
