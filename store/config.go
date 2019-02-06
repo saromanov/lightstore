@@ -116,6 +116,14 @@ func (conf *Config) setMissedValues() {
 		conf.Storage = "dict"
 	}
 
+	if conf.MaxKeySize == 0 {
+		conf.MaxKeySize = MaxKeySize
+	}
+
+	if conf.MaxValueSize == 0 {
+		conf.MaxValueSize = MaxValueSize
+	}
+
 	conf.Mode = checkMode(conf.Mode)
 }
 

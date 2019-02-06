@@ -64,6 +64,7 @@ func newStore(c *Config) (*Store, error) {
 	store.stat = new(statistics.Statistics)
 	store.stat.Start = startTime
 	store.index = NewIndexing()
+	c.setMissedValues()
 	store.config = c
 	if err := loadData(c.LoadPath); err != nil {
 		return nil, fmt.Errorf("unable to load data: %v", err)
