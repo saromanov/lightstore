@@ -184,7 +184,16 @@ func (st *Store) Set(key, value []byte) error {
 	if st.compression {
 		value = compress(value)
 	}
-	return st.store.Put(key, value, ds.ItemOptions{})
+	err := st.store.Put(key, value, ds.ItemOptions{})
+	if err != nil {
+		return err
+	}
+
+	return st.writeToLogFile(key, value)
+}
+
+func (st *Store) writeToLogFile(key, value []byte) error {
+	return nil
 }
 
 func (st *Store) beforeSet(key, value []byte) error {

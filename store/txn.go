@@ -121,6 +121,8 @@ func (t *Txn) Commit() error {
 	t.handleCommit(t.writes, func(e *Entry) {
 		if e.isDelete {
 			t.store.Remove(e.key)
+		} else {
+			t.store.Set(e.key, e.value)
 		}
 	})
 	t.Close()
