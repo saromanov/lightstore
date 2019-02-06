@@ -2,6 +2,7 @@ package store
 
 import (
 	"fmt"
+	"os"
 	"sync"
 	"time"
 
@@ -72,6 +73,10 @@ func newStore(c *Config) (*Store, error) {
 
 // loadData provides loading of data from path
 func loadData(path string) error {
+	_, err := os.OpenFile(path, os.O_CREATE|os.O_RDWR, 0666)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

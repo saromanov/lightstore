@@ -48,7 +48,9 @@ func (l *Lightstore) Write(fn func(*Txn) error) error {
 
 // Close provides closing of Lightstore session
 func (l *Lightstore) Close() error {
-	l.store.Close()
+	if l != nil && l.store != nil {
+		l.store.Close()
+	}
 	return nil
 }
 
