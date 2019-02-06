@@ -6,7 +6,6 @@ import (
 	"time"
 
 	ds "github.com/saromanov/lightstore/backend"
-	"github.com/saromanov/lightstore/history"
 	log "github.com/saromanov/lightstore/logging"
 	"github.com/saromanov/lightstore/monitoring"
 	"github.com/saromanov/lightstore/statistics"
@@ -25,20 +24,18 @@ type Settings struct {
 
 // Store provides implementation of the main store
 type Store struct {
-	items     int
-	dbs       map[string]*DB
-	store     ds.Storage
-	storename string
-	keys      []string
-	lock      *sync.RWMutex
-	stat      *statistics.Statistics
-	index     *Indexing
-	config    *Config
-	pubsub    *Pubsub
-	//Event history
-	historyevent *history.History
-	compression  bool
-	fileWatcher  *watcher
+	items       int
+	dbs         map[string]*DB
+	store       ds.Storage
+	storename   string
+	keys        []string
+	lock        *sync.RWMutex
+	stat        *statistics.Statistics
+	index       *Indexing
+	config      *Config
+	pubsub      *Pubsub
+	compression bool
+	fileWatcher *watcher
 }
 
 // newStore creates a new instance of lightstore
@@ -67,7 +64,6 @@ func newStore(c *Config) *Store {
 	store.stat.Start = startTime
 	store.index = NewIndexing()
 	store.config = c
-	store.historyevent = history.NewHistory(5)
 	return store
 }
 
@@ -154,7 +150,6 @@ func (st *Store) GetMany(keys [][]byte) interface{} {
 		for i := 0; i < len(keys); i++ {
 			result = append(result, st.Get(keys[i]))
 		}
-		st.historyevent.AddEvent("default", "GetMany")
 		return result
 	}
 	return nil
@@ -214,7 +209,6 @@ func (st *Store) set(dbname string, key []byte, value []byte, opt ds.ItemOptions
 		s.Put(key, value, ds.ItemOptions{})
 		if dbname != "" {
 			dbdata, _ := st.dbs[dbname]
-			st.historyevent.AddEvent("default", "Set")
 			dbdata.datacount += 1
 		}
 		st.PublishKeyValue(string(key), string(dbname))
