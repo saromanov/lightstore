@@ -9,7 +9,10 @@ import (
 )
 
 func TestTxnStart(t *testing.T) {
-	st := newStore(nil)
+	st, err := newStore(nil)
+	if err != nil {
+		t.Fatalf("unable to init store: %v", err)
+	}
 	defer st.Close()
 	txn := st.NewTransaction(true)
 	err := txn.Set([]byte("foo"), []byte("bar"))
@@ -31,7 +34,10 @@ func TestTxnStart(t *testing.T) {
 }
 
 func TestIteratorWithNoOptions(t *testing.T) {
-	st := newStore(nil)
+	st, err := newStore(nil)
+	if err != nil {
+		t.Fatalf("unable to init store: %v", err)
+	}
 	txn := st.NewTransaction(true)
 	for i := 0; i < 10; i++ {
 		err := txn.Set([]byte(fmt.Sprintf("%d", i)), []byte(fmt.Sprintf("bar+%d", i)))
@@ -68,7 +74,10 @@ func TestIteratorWithClosedTransaction(t *testing.T) {
 }
 
 func TestIteratorWithNoSize(t *testing.T) {
-	st := newStore(nil)
+	st, err := newStore(nil)
+	if err != nil {
+		t.Fatalf("unable to init store: %v", err)
+	}
 	txn := st.NewTransaction(true)
 	err := txn.Set([]byte("foo"), []byte("bar"))
 	if err != nil {
@@ -92,7 +101,10 @@ func TestIteratorWithNoSize(t *testing.T) {
 }
 
 func TestIteratorWithLimit(t *testing.T) {
-	st := newStore(nil)
+	st, err := newStore(nil)
+	if err != nil {
+		t.Fatalf("unable to init store: %v", err)
+	}
 	txn := st.NewTransaction(true)
 	for i := 0; i < 10; i++ {
 		err := txn.Set([]byte(fmt.Sprintf("%d", i)), []byte(fmt.Sprintf("bar+%d", i)))
