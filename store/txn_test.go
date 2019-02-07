@@ -15,7 +15,7 @@ func TestTxnStart(t *testing.T) {
 	}
 	defer st.Close()
 	txn := st.NewTransaction(true)
-	err := txn.Set([]byte("foo"), []byte("bar"))
+	err = txn.Set([]byte("foo"), []byte("bar"))
 	if err != nil {
 		t.Fatalf("unable to insert data: %v", err)
 	}
@@ -79,7 +79,7 @@ func TestIteratorWithNoSize(t *testing.T) {
 		t.Fatalf("unable to init store: %v", err)
 	}
 	txn := st.NewTransaction(true)
-	err := txn.Set([]byte("foo"), []byte("bar"))
+	err = txn.Set([]byte("foo"), []byte("bar"))
 	if err != nil {
 		t.Fatal("unable to insert data")
 	}
