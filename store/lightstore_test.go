@@ -6,7 +6,10 @@ import (
 )
 
 func TestOpenLightstore(t *testing.T) {
-	light := Open(nil)
+	light, err := Open(nil)
+	if err != nil {
+		t.Fatalf("unable to init store: %v", err)
+	}
 	defer light.Close()
 	if !light.IsCreated() {
 		t.Fatalf("unable to create db")
@@ -14,9 +17,12 @@ func TestOpenLightstore(t *testing.T) {
 }
 
 func TestSetData(t *testing.T) {
-	light := Open(nil)
+	light, err := Open(nil)
+	if err != nil {
+		t.Fatalf("unable to init store: %v", err)
+	}
 	defer light.Close()
-	err := light.Write(func(txn *Txn) error {
+	err = light.Write(func(txn *Txn) error {
 		err := txn.Set([]byte("foo"), []byte("bar"))
 		if err != nil {
 			return err
@@ -29,7 +35,10 @@ func TestSetData(t *testing.T) {
 }
 
 func TestSet100Data(t *testing.T) {
-	light := Open(nil)
+	light, err := Open(nil)
+	if err != nil {
+		t.Fatalf("unable to init store: %v", err)
+	}
 	defer light.Close()
 	for i := 0; i < 100; i++ {
 		err := light.Write(func(txn *Txn) error {
@@ -46,9 +55,12 @@ func TestSet100Data(t *testing.T) {
 }
 
 func TestTwoCommits(t *testing.T) {
-	light := Open(nil)
+	light, err := Open(nil)
+	if err != nil {
+		t.Fatalf("unable to init store: %v", err)
+	}
 	defer light.Close()
-	err := light.Write(func(txn *Txn) error {
+	err = light.Write(func(txn *Txn) error {
 		err := txn.Set([]byte("foo"), []byte("bar"))
 		if err != nil {
 			return err
@@ -68,9 +80,12 @@ func TestTwoCommits(t *testing.T) {
 }
 
 func TestWriteOnReadOnly(t *testing.T) {
-	light := Open(nil)
+	light, err := Open(nil)
+	if err != nil {
+		t.Fatalf("unable to init store: %v", err)
+	}
 	defer light.Close()
-	err := light.View(func(txn *Txn) error {
+	err = light.View(func(txn *Txn) error {
 		err := txn.Set([]byte("foo"), []byte("bar"))
 		if err == nil {
 			return fmt.Errorf("unable to write on read-only transaction")
@@ -83,9 +98,12 @@ func TestWriteOnReadOnly(t *testing.T) {
 }
 
 func TestGetData(t *testing.T) {
-	light := Open(nil)
+	light, err := Open(nil)
+	if err != nil {
+		t.Fatalf("unable to init store: %v", err)
+	}
 	defer light.Close()
-	err := light.Write(func(txn *Txn) error {
+	err = light.Write(func(txn *Txn) error {
 		err := txn.Set([]byte("foo"), []byte("bar"))
 		if err != nil {
 			return err
@@ -109,10 +127,13 @@ func TestGetData(t *testing.T) {
 }
 
 func TestGetNotFoundData(t *testing.T) {
-	light := Open(nil)
+	light, err := Open(nil)
+	if err != nil {
+		t.Fatalf("unable to init store: %v", err)
+	}
 	defer light.Close()
 
-	err := light.View(func(txn *Txn) error {
+	err = light.View(func(txn *Txn) error {
 		data := txn.Get([]byte("foo"))
 		if len(data) != 0 {
 			return fmt.Errorf("expecting empty result")
@@ -125,10 +146,13 @@ func TestGetNotFoundData(t *testing.T) {
 }
 
 func TestViewData(t *testing.T) {
-	light := Open(nil)
+	light, err := Open(nil)
+	if err != nil {
+		t.Fatalf("unable to init store: %v", err)
+	}
 	defer light.Close()
 
-	err := light.View(func(txn *Txn) error {
+	err = light.View(func(txn *Txn) error {
 		data := txn.Get([]byte("foo"))
 		if len(data) != 0 {
 			return fmt.Errorf("expecting empty result")
@@ -141,10 +165,13 @@ func TestViewData(t *testing.T) {
 }
 
 func TestDeleteData(t *testing.T) {
-	light := Open(nil)
+	light, err := Open(nil)
+	if err != nil {
+		t.Fatalf("unable to init store: %v", err)
+	}
 	defer light.Close()
 
-	err := light.Write(func(txn *Txn) error {
+	err = light.Write(func(txn *Txn) error {
 		err := txn.Set([]byte("foo"), []byte("bar"))
 		if err != nil {
 			return err

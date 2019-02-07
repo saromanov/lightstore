@@ -5,7 +5,10 @@ import (
 )
 
 func TestIteratorBasic(t *testing.T) {
-	s := newStore(nil)
+	s, err := newStore(nil)
+	if err != nil {
+		t.Fatalf("unable to init store: %v", err)
+	}
 	if !s.IsCreated() {
 		t.Fatalf("unable to create db")
 	}

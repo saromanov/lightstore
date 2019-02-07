@@ -60,7 +60,10 @@ func TestIteratorWithNoOptions(t *testing.T) {
 }
 
 func TestIteratorWithClosedTransaction(t *testing.T) {
-	st := newStore(nil)
+	st, err := newStore(nil)
+	if err != nil {
+		t.Fatalf("unable to init store: %v", err)
+	}
 	txn := st.NewTransaction(true)
 	for i := 0; i < 10; i++ {
 		err := txn.Set([]byte(fmt.Sprintf("%d", i)), []byte(fmt.Sprintf("bar+%d", i)))
