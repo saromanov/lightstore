@@ -71,7 +71,7 @@ func (ps *Pubsub) receive() (PubsubObject, error) {
 	defer ps.mutex.RUnlock()
 	defer ps.popElement()
 	if len(ps.queue) == 0 {
-		return PubsubObject{}, errors.New("Can't receive new object")
+		return PubsubObject{}, errors.New("can't receive new object")
 	}
 
 	return ps.queue[0], nil

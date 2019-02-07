@@ -36,7 +36,7 @@ func (idx *Indexing) DropIndex(value string) {
 
 //DropIndexes provides removing indexes from store
 func (idx *Indexing) DropIndexes(values []string) {
-	for key, _ := range idx.index {
+	for key := range idx.index {
 		for _, value := range values {
 			if key == value {
 				delete(idx.index, key)

@@ -114,7 +114,7 @@ func (st *Store) CreateDB(dbname string) {
 	_, ok := st.dbs[dbname]
 	st.dbs[dbname] = CreateNewDB(dbname)
 	if !ok {
-		st.stat.Dbnum += 1
+		st.stat.Dbnum++
 	}
 }
 
