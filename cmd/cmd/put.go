@@ -15,7 +15,10 @@ var putCmd = &cobra.Command{
 }
 
 func put(cmd *cobra.Command, args []string) {
-	ls := store.Open(nil)
+	ls, err := store.Open(nil)
+	if err != nil {
+		panic(err)
+	}
 	if len(args) != 2 {
 		log.Fatal("put command should contains 2 arguments")
 	}
