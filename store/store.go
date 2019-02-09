@@ -102,7 +102,7 @@ func loadData(st *Store, path string) error {
 		} else if bytes.Compare(line, []byte("end;")) == 0 {
 			if commandSet == true {
 				commandSet = false
-				err := st.Set(key, value)
+				err := st.store.Put(key, value, ds.ItemOptions{})
 				if err != nil {
 					return fmt.Errorf("unable to set data: %v", err)
 				}
