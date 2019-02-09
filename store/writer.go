@@ -10,6 +10,17 @@ type Writer struct {
 	file *os.File
 }
 
+// NewWriter provides initialization of the Writer
+func NewWriter(path string) (*Writer, error) {
+	f, err := os.OpenFile(path, os.O_CREATE|os.O_RDWR, 0666)
+	if err != nil {
+		return nil, err
+	}
+	return &Writer{
+		file: f,
+	}, nil
+}
+
 // AddSetCommand defines append data to log file with SET command
 func (w *Writer) AddSetCommand(key, value []byte) error {
 	if err := w.write([]byte("set;\n")); err != nil {
