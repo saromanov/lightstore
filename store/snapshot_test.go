@@ -5,9 +5,12 @@ import (
 )
 
 func TestSnapshot(t *testing.T) {
-	light := Open(nil)
+	light, err := Open(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
 	defer light.Close()
-	err := light.Write(func(txn *Txn) error {
+	err = light.Write(func(txn *Txn) error {
 		err := txn.Set([]byte("foo"), []byte("bar"))
 		if err != nil {
 			return err

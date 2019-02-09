@@ -50,11 +50,9 @@ func TestIteratorWithNoOptions(t *testing.T) {
 	it, _ := txn2.NewIterator(IteratorOptions{})
 	for it.First(); it.Valid(); it.Next() {
 		itm := it.Item()
-		err := itm.Value(func(v []byte) error {
-			return nil
-		})
-		if err != nil {
-			t.Fatalf("unable to get value: %v", err)
+		val := itm.Value()
+		if val == nil {
+			t.Fatal("unable to get value")
 		}
 	}
 }
@@ -72,7 +70,7 @@ func TestIteratorWithClosedTransaction(t *testing.T) {
 		}
 	}
 	txn.Commit()
-	_, err := txn.NewIterator(IteratorOptions{})
+	_, err = txn.NewIterator(IteratorOptions{})
 	assert.EqualError(t, err, errTransactionCompleted.Error(), "error response is not equal")
 }
 
@@ -91,13 +89,6 @@ func TestIteratorWithNoSize(t *testing.T) {
 	it, _ := txn2.NewIterator(IteratorOptions{})
 	count := 0
 	for it.First(); it.Valid(); it.Next() {
-		itm := it.Item()
-		err := itm.Value(func(v []byte) error {
-			return nil
-		})
-		if err != nil {
-			t.Fatalf("unable to get value: %v", err)
-		}
 		count++
 	}
 	assert.Equal(t, count, 1, "Count of return elements is not equal")
@@ -122,13 +113,6 @@ func TestIteratorWithLimit(t *testing.T) {
 	})
 	count := 0
 	for it.First(); it.Valid(); it.Next() {
-		itm := it.Item()
-		err := itm.Value(func(v []byte) error {
-			return nil
-		})
-		if err != nil {
-			t.Fatalf("unable to get value: %v", err)
-		}
 		count++
 	}
 	assert.Equal(t, count, 4, "Count of return elements is not equal")

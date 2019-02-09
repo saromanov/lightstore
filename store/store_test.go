@@ -5,14 +5,20 @@ import (
 )
 
 func TestOpen(t *testing.T) {
-	s := Open(nil)
+	s, err := Open(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
 	if !s.IsCreated() {
 		t.Fatalf("unable to create db")
 	}
 }
 
 func TestWrite(t *testing.T) {
-	s := newStore(nil)
+	s, err := newStore(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
 	if !s.IsCreated() {
 		t.Fatalf("unable to create db")
 	}
