@@ -24,7 +24,7 @@ func (w *Writer) AddSetCommand(key, value []byte) error {
 	if err := w.write(value); err != nil {
 		return err
 	}
-	return w.write([]byte("end;\n"))
+	return w.write([]byte("\nend;\n"))
 }
 
 func (w *Writer) write(data []byte) error {
