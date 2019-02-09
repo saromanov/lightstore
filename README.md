@@ -11,6 +11,11 @@ in Progress
 * [Getting Started](#getting-started)
     + [Installing](#installing)
     + [Create database](#create-database)
+    + [Write transactions](#write-transactions)
+    + [Read from DB](#read-from-db)
+    + [Iterator](#iterator)
+    + [Stapshots](#snapshots)
+* [Features](#features)
 
 ## Getting Started
 
@@ -45,11 +50,35 @@ if err != nil {
 }
 defer light.Close()
 ```
-## TODO
-Indexing
-Distributed (Consensus, Failure detection)
-Saving data on disk
-More rich API
-Documentation
-Tests
+
+### Write transactions
+
+For make new transaction, need to open new transaction and then commit changes
+```go
+err = light.Write(func(txn *store.Txn) error {
+		for i := 0; i < 20; i++ {
+			err := txn.Set([]byte(fmt.Sprintf("%d", i)), []byte(fmt.Sprintf("bar+%d", i)))
+			if err != nil {
+				return err
+			}
+		}
+		return txn.Commit()
+	})
+	if err != nil {
+		log.Fatalf("unable to write data: %v", err)
+    }
+```
+
+### Iterator
+
+```go
+light.View(func(txn *store.Txn) error {
+		it, _ := txn.NewIterator(store.IteratorOptions{})
+		for it.First(); it.Valid(); it.Next() {
+			itm := it.Item()
+			fmt.Println(string(itm.Key()), string(itm.Value()))
+		}
+		return nil
+})
+```
 
