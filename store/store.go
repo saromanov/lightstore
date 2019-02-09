@@ -2,6 +2,7 @@ package store
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"os"
 	"sync"
@@ -87,8 +88,18 @@ func loadData(path string) (*os.File, error) {
 	}
 
 	scanner := bufio.NewScanner(f)
+	var key, value []byte
+	var commandSet bool
 	for scanner.Scan() {
-		fmt.Println(scanner.Text())
+		line := scanner.Bytes()
+		if bytes.Compare(line, []byte("set;")) == 0 {
+			commandSet = true
+		}
+		if bytes.Compare(line, []byte("end;")) == 0 {
+			if commandSet == true {
+				commandSet = false
+			}
+		}
 	}
 	return f, nil
 }
