@@ -90,18 +90,27 @@ func loadData(st *Store, path string) (*os.File, error) {
 	scanner := bufio.NewScanner(f)
 	var key, value []byte
 	var commandSet bool
+	var inc int
 	for scanner.Scan() {
 		line := scanner.Bytes()
 		if bytes.Compare(line, []byte("set;")) == 0 {
 			commandSet = true
-		}
-		if bytes.Compare(line, []byte("end;")) == 0 {
+		} else if bytes.Compare(line, []byte("end;")) == 0 {
 			if commandSet == true {
 				commandSet = false
 				err := st.Set(key, value)
 				if err != nil {
 					return nil, fmt.Errorf("unable to set data: %v", err)
 				}
+			}
+		} else {
+			switch inc {
+			case 0:
+				key = line
+				inc++
+			case 1:
+				value = line
+
 			}
 		}
 	}
