@@ -3,14 +3,14 @@ package backend
 import (
 	"time"
 
-	"github.com/saromanov/lightstore/statistics"
+	"github.com/saromanov/lightstore/stats"
 )
 
 type Item struct {
 	id        int64
 	checksum  string
 	value     interface{}
-	stat      *statistics.ItemStatistics
+	stat      *stats.ItemStatistics
 	weights   int
 	priority  int
 	immutable bool
@@ -44,7 +44,7 @@ func NewItem(value interface{}) *Item {
 	item.priority = 0
 	item.immutable = false
 	item.numpastitems = 10
-	item.stat = statistics.InitItemStatistics()
+	item.stat = stats.InitItemStatistics()
 	item.pastitems = []*PastItem{}
 	item.checksum = Checksum(value.(string))
 	item.writetime = time.Now()

@@ -4,12 +4,12 @@ import (
 	"errors"
 
 	"github.com/ryszard/goskiplist/skiplist"
-	"github.com/saromanov/lightstore/statistics"
+	"github.com/saromanov/lightstore/stats"
 )
 
 type SkipList struct {
 	engine *skiplist.SkipList
-	stat   statistics.ItemStatistics
+	stat   stats.ItemStatistics
 	repair *Repair
 }
 

@@ -4,12 +4,12 @@ import (
 	"errors"
 
 	"github.com/saromanov/golib/hashmap"
-	"github.com/saromanov/lightstore/statistics"
+	"github.com/saromanov/lightstore/stats"
 )
 
 type Dict struct {
 	engine *hashmap.HashMap
-	stat   statistics.ItemStatistics
+	stat   stats.ItemStatistics
 	repair *Repair
 }
 

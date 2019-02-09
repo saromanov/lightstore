@@ -11,7 +11,7 @@ import (
 	ds "github.com/saromanov/lightstore/backend"
 	log "github.com/saromanov/lightstore/logging"
 	"github.com/saromanov/lightstore/monitoring"
-	"github.com/saromanov/lightstore/statistics"
+	"github.com/saromanov/lightstore/stats"
 )
 
 //Basic implmentation of key-value store(without assotiation with any db name)
@@ -33,7 +33,7 @@ type Store struct {
 	storename   string
 	keys        []string
 	lock        *sync.RWMutex
-	stat        *statistics.Statistics
+	stat        *stats.Statistics
 	index       *Indexing
 	config      *Config
 	pubsub      *Pubsub
@@ -64,7 +64,7 @@ func newStore(c *Config) (*Store, error) {
 	store.compression = c.Compression
 	store.dbs = make(map[string]*DB)
 	store.lock = mutex
-	store.stat = new(statistics.Statistics)
+	store.stat = new(stats.Statistics)
 	store.stat.Start = startTime
 	store.index = NewIndexing()
 	c.setMissedValues()
@@ -310,7 +310,7 @@ func (st *Store) Find(key []byte) interface{} {
 }
 
 // Stat retruns statistics on store
-func (st *Store) Stat() *statistics.Statistics {
+func (st *Store) Stat() *stats.Statistics {
 	return st.stat
 }
 
@@ -384,7 +384,7 @@ func InitStore(settings Settings) *Store {
 	store.keys = []string{}
 	store.dbs = make(map[string]*DB)
 	store.lock = mutex
-	store.stat = new(statistics.Statistics)
+	store.stat = new(stats.Statistics)
 	store.stat.Start = startTime
 	store.index = NewIndexing()
 	store.config = LoadConfigData("")
