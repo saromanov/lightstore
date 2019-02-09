@@ -8,9 +8,8 @@ import (
 //This module provides monitoring of lightstore
 
 type DBMonitoring struct {
-	dbstat     *Statistics
-	serverstat *ServerStat
-	lock       *sync.RWMutex
+	dbstat *Statistics
+	lock   *sync.RWMutex
 }
 
 //This struct provides basic statistics for all db
@@ -47,7 +46,6 @@ func InitDBMonitoring() *DBMonitoring {
 	start := time.Now()
 	return &DBMonitoring{
 		&Statistics{0, 0, start, 0, "localhost:8080", 0},
-		&ServerStat{start, 0},
 		&sync.RWMutex{},
 	}
 }
@@ -64,10 +62,4 @@ func (dbm *DBMonitoring) IncrReads() {
 	dbm.lock.RLock()
 	defer dbm.lock.RUnlock()
 	dbm.dbstat.NumReads++
-}
-
-//This struct provides information about server
-type ServerStat struct {
-	timeAlive   time.Time
-	numproblems int
 }
