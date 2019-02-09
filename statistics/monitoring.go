@@ -42,22 +42,14 @@ func InitItemStatistics() *ItemStatistics {
 	return itemstat
 }
 
-func InitDBMonitoring() *DBMonitoring {
-	start := time.Now()
-	return &DBMonitoring{
-		&Statistics{0, 0, start, 0, "localhost:8080", 0},
-		&sync.RWMutex{},
-	}
-}
-
-//IncrWrite provides increment of total number of writes
+//IncrWrites provides increment of total number of writes
 func (dbm *DBMonitoring) IncrWrites() {
 	dbm.lock.RLock()
 	defer dbm.lock.RUnlock()
 	dbm.dbstat.NumWrites++
 }
 
-//IncrRead provides increment of total number of reads
+//IncrReads provides increment of total number of reads
 func (dbm *DBMonitoring) IncrReads() {
 	dbm.lock.RLock()
 	defer dbm.lock.RUnlock()
