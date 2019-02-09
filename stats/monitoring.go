@@ -1,19 +1,13 @@
-package statistics
+package stats
 
 import (
 	"sync"
 	"time"
 )
 
-//This module provides monitoring of lightstore
-
-type DBMonitoring struct {
-	dbstat *Statistics
-	lock   *sync.RWMutex
-}
-
-//This struct provides basic statistics for all db
+//Statistics provides basic statistics for all db
 type Statistics struct {
+	lock *sync.RWMutex
 	//Total number of reads
 	NumReads int
 	//Total number of writes
@@ -22,8 +16,6 @@ type Statistics struct {
 	Start time.Time
 	//Number of active db
 	Dbnum int
-	//address of host
-	Host string
 	// NumFailedReads retruns number of failed reads
 	NumFailedReads int
 }
@@ -43,15 +35,15 @@ func InitItemStatistics() *ItemStatistics {
 }
 
 //IncrWrites provides increment of total number of writes
-func (dbm *DBMonitoring) IncrWrites() {
+func (dbm *Statistics) IncrWrites() {
 	dbm.lock.RLock()
 	defer dbm.lock.RUnlock()
-	dbm.dbstat.NumWrites++
+	dbm.NumWrites++
 }
 
 //IncrReads provides increment of total number of reads
-func (dbm *DBMonitoring) IncrReads() {
+func (dbm *Statistics) IncrReads() {
 	dbm.lock.RLock()
 	defer dbm.lock.RUnlock()
-	dbm.dbstat.NumReads++
+	dbm.NumReads++
 }
