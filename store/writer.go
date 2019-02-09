@@ -12,16 +12,19 @@ type Writer struct {
 
 // AddSetCommand defines append data to log file with SET command
 func (w *Writer) AddSetCommand(key, value []byte) error {
-	if err := w.write([]byte("set")); err != nil {
+	if err := w.write([]byte("set;\n")); err != nil {
 		return err
 	}
 	if err := w.write(key); err != nil {
 		return err
 	}
+	if err := w.write([]byte("\n")); err != nil {
+		return err
+	}
 	if err := w.write(value); err != nil {
 		return err
 	}
-	return w.write([]byte(";\n"))
+	return w.write([]byte("end;\n"))
 }
 
 func (w *Writer) write(data []byte) error {

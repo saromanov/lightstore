@@ -24,7 +24,7 @@ func put(cmd *cobra.Command, args []string) {
 	}
 	key := args[0]
 	value := args[1]
-	err := ls.Write(func(txn *store.Txn) error {
+	err = ls.Write(func(txn *store.Txn) error {
 		err := txn.Set([]byte(key), []byte(value))
 		if err != nil {
 			return err
