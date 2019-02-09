@@ -69,7 +69,7 @@ func newStore(c *Config) (*Store, error) {
 	store.index = NewIndexing()
 	c.setMissedValues()
 	store.config = c
-	fileStore, err := loadData(c.LoadPath)
+	fileStore, err := loadData(store, c.LoadPath)
 	if err != nil {
 		return nil, fmt.Errorf("unable to load data: %v", err)
 	}
@@ -78,7 +78,7 @@ func newStore(c *Config) (*Store, error) {
 }
 
 // loadData provides loading of data from path
-func loadData(path string) (*os.File, error) {
+func loadData(st *Store, path string) (*os.File, error) {
 	if path == "" {
 		return nil, nil
 	}
@@ -98,6 +98,10 @@ func loadData(path string) (*os.File, error) {
 		if bytes.Compare(line, []byte("end;")) == 0 {
 			if commandSet == true {
 				commandSet = false
+				err := st.Set(key, value)
+				if err != nil {
+					return nil, fmt.Errorf("unable to set data: %v", err)
+				}
 			}
 		}
 	}
