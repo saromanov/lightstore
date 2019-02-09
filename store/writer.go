@@ -10,8 +10,8 @@ type Writer struct {
 	file *os.File
 }
 
-// NewWriter provides initialization of the Writer
-func NewWriter(path string) (*Writer, error) {
+// newWriter provides initialization of the Writer
+func newWriter(path string) (*Writer, error) {
 	f, err := os.OpenFile(path, os.O_CREATE|os.O_RDWR, 0666)
 	if err != nil {
 		return nil, err

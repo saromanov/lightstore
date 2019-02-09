@@ -69,11 +69,14 @@ func newStore(c *Config) (*Store, error) {
 	store.index = NewIndexing()
 	c.setMissedValues()
 	store.config = c
-	fileStore, err := loadData(store, c.LoadPath)
+	_, err = loadData(store, c.LoadPath)
 	if err != nil {
 		return nil, fmt.Errorf("unable to load data: %v", err)
 	}
-	store.writer = &Writer{file: fileStore}
+	store.writer, err = newWriter(c.LoadPath)
+	if err != nil {
+		return nil, fmt.Errorf("unable to create writer: %v", err)
+	}
 	return store, nil
 }
 
@@ -86,6 +89,7 @@ func loadData(st *Store, path string) (*os.File, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer f.Close()
 
 	scanner := bufio.NewScanner(f)
 	var key, value []byte
