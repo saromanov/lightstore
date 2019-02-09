@@ -69,9 +69,11 @@ func newStore(c *Config) (*Store, error) {
 	store.index = NewIndexing()
 	c.setMissedValues()
 	store.config = c
-	err = loadData(store, c.LoadPath)
-	if err != nil {
-		return nil, fmt.Errorf("unable to load data: %v", err)
+	if c.LoadPath != "" {
+		err := loadData(store, c.LoadPath)
+		if err != nil {
+			return nil, fmt.Errorf("unable to load data: %v", err)
+		}
 	}
 	store.writer, err = newWriter(c.LoadPath)
 	if err != nil {
