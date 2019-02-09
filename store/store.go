@@ -124,13 +124,6 @@ func loadData(st *Store, path string) error {
 	return nil
 }
 
-//After understanding, that key is system, make some work with them
-func (st *Store) processSystemKey(key string) {
-	if key == "_index" {
-		st.CreateIndex(key)
-	}
-}
-
 // CreateIndex implements creational of the new index
 func (st *Store) CreateIndex(index string) {
 	if index == "" {
