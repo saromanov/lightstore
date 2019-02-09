@@ -68,6 +68,6 @@ func (dbm *DBMonitoring) IncrReads() {
 
 //This struct provides information about server
 type ServerStat struct {
-	timeAlive  time.Time
+	timeAlive   time.Time
 	numproblems int
 }

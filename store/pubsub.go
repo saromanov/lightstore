@@ -49,8 +49,8 @@ func (ps *Pubsub) Subscribe(si *SubscribeData, value *interface{}) error {
 			if err == nil {
 				fmt.Println(fmt.Sprintf("Receive from %s %s", si.Title, item.msg))
 				if item.once {
-					break
 					wg.Done()
+					break
 				}
 				item.msg = ""
 			}
