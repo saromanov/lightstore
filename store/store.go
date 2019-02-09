@@ -1,6 +1,7 @@
 package store
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"sync"
@@ -83,6 +84,11 @@ func loadData(path string) (*os.File, error) {
 	f, err := os.OpenFile(path, os.O_CREATE|os.O_RDWR, 0666)
 	if err != nil {
 		return nil, err
+	}
+
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
 	}
 	return f, nil
 }
