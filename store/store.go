@@ -69,7 +69,7 @@ func newStore(c *Config) (*Store, error) {
 	store.index = NewIndexing()
 	c.setMissedValues()
 	store.config = c
-	_, err = loadData(store, c.LoadPath)
+	err = loadData(store, c.LoadPath)
 	if err != nil {
 		return nil, fmt.Errorf("unable to load data: %v", err)
 	}
@@ -81,13 +81,13 @@ func newStore(c *Config) (*Store, error) {
 }
 
 // loadData provides loading of data from path
-func loadData(st *Store, path string) (*os.File, error) {
+func loadData(st *Store, path string) error {
 	if path == "" {
-		return nil, nil
+		return nil
 	}
 	f, err := os.OpenFile(path, os.O_CREATE|os.O_RDWR, 0666)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	defer f.Close()
 
@@ -104,7 +104,7 @@ func loadData(st *Store, path string) (*os.File, error) {
 				commandSet = false
 				err := st.Set(key, value)
 				if err != nil {
-					return nil, fmt.Errorf("unable to set data: %v", err)
+					return fmt.Errorf("unable to set data: %v", err)
 				}
 			}
 		} else {
@@ -118,7 +118,7 @@ func loadData(st *Store, path string) (*os.File, error) {
 			}
 		}
 	}
-	return f, nil
+	return nil
 }
 
 //After understanding, that key is system, make some work with them
