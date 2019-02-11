@@ -143,21 +143,6 @@ func (st *Store) CreateIndex(index string) error {
 	return nil
 }
 
-func (st *Store) CheckExistDB(value string) bool {
-	_, ok := st.dbs[value]
-	return ok
-}
-
-func (st *Store) CreateDB(dbname string) {
-	st.lock.Lock()
-	defer st.lock.Unlock()
-	_, ok := st.dbs[dbname]
-	st.dbs[dbname] = CreateNewDB(dbname)
-	if !ok {
-		st.stat.Dbnum++
-	}
-}
-
 // Get provides getting of the value by the key
 func (st *Store) Get(key []byte) []byte {
 	return st.get(key, "")
