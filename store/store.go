@@ -40,7 +40,7 @@ type Store struct {
 	compression bool
 	fileWatcher *watcher
 	writer      *Writer
-	indexes     [string]*index
+	indexes     map[string]*index
 }
 
 // newStore creates a new instance of lightstore
@@ -68,7 +68,7 @@ func newStore(c *Config) (*Store, error) {
 	store.stat = new(stats.Statistics)
 	store.stat.Start = startTime
 	store.index = NewIndexing()
-	store.indexes = make(map[string]index)
+	store.indexes = make(map[string]*index)
 	c.setMissedValues()
 	store.config = c
 	if c.LoadPath != "" {
