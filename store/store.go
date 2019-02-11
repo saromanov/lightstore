@@ -3,6 +3,7 @@ package store
 import (
 	"bufio"
 	"bytes"
+	"errors"
 	"fmt"
 	"os"
 	"sync"
@@ -20,6 +21,8 @@ const (
 	MaxKeySize   uint = 512
 	MaxValueSize uint = 32768
 )
+
+var errNoIndexName = errors.New("index name is not defined")
 
 type Settings struct {
 	Innerdata string
@@ -129,12 +132,15 @@ func loadData(st *Store, path string) error {
 }
 
 // CreateIndex implements creational of the new index
-func (st *Store) CreateIndex(index string) {
+func (st *Store) CreateIndex(index string) error {
 	if index == "" {
-		log.Info(fmt.Sprintf("New index %s can't be created", index))
-		return
+		return errNoIndexName
 	}
-	st.index.CreateIndex(index)
+	_, ok := st.indexes[index]
+	if ok {
+		return fmt.Errorf("index with name %s already exist", index)
+	}
+	return nil
 }
 
 func (st *Store) CheckExistDB(value string) bool {
