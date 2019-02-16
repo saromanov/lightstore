@@ -209,6 +209,10 @@ func (t *Txn) checkIndex(name, data string) error {
 	if name == "" || data == "" {
 		return errNoIndexNameOrData
 	}
+	_, ok := t.store.indexes[name]
+	if ok {
+		return errIndexExist
+	}
 	return nil
 }
 

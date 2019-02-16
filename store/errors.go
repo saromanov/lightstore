@@ -11,4 +11,5 @@ var (
 	errMaxValueSize      = errors.New("value size is greather then max")
 	errNoIndexName       = errors.New("index name is not defined")
 	errNoIndexNameOrData = errors.New("index name of data is not defined")
+	errIndexExist        = errors.New("index with this name already exist")
 )
