@@ -36,7 +36,6 @@ type Store struct {
 	keys        []string
 	lock        *sync.RWMutex
 	stat        *stats.Statistics
-	index       *Indexing
 	config      *Config
 	pubsub      *Pubsub
 	compression bool
@@ -379,7 +378,6 @@ func InitStore(settings Settings) *Store {
 	store.lock = mutex
 	store.stat = new(stats.Statistics)
 	store.stat.Start = startTime
-	store.index = NewIndexing()
 	store.config = LoadConfigData("")
 	store.pubsub = PubsubInit()
 	return store
