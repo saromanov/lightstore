@@ -3,7 +3,6 @@ package store
 import (
 	"bufio"
 	"bytes"
-	"errors"
 	"fmt"
 	"os"
 	"sync"
@@ -21,8 +20,6 @@ const (
 	MaxKeySize   uint = 512
 	MaxValueSize uint = 32768
 )
-
-var errNoIndexName = errors.New("index name is not defined")
 
 type Settings struct {
 	Innerdata string

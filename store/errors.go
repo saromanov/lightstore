@@ -9,4 +9,5 @@ var (
 	errNoStorage    = errors.New("storage is not defined or transaction was closed")
 	errMaxKeySize   = errors.New("key size is greather then max")
 	errMaxValueSize = errors.New("value size is greather then max")
+	errNoIndexName  = errors.New("index name is not defined")
 )
