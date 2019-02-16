@@ -17,7 +17,9 @@ import (
 //Basic implmentation of key-value store(without assotiation with any db name)
 
 const (
-	MaxKeySize   uint = 512
+	// MaxKeySize defines maximim size of the key
+	MaxKeySize uint = 512
+	// MaxValueSize defines maximim size of the value
 	MaxValueSize uint = 32768
 )
 
