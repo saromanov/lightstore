@@ -69,7 +69,6 @@ func newStore(c *Config) (*Store, error) {
 	store.lock = mutex
 	store.stat = new(stats.Statistics)
 	store.stat.Start = startTime
-	store.index = NewIndexing()
 	store.indexes = make(map[string]*index)
 	c.setMissedValues()
 	store.config = c
