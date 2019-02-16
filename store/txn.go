@@ -190,6 +190,18 @@ func (t *Txn) Set(key, value []byte) error {
 	return t.set(entry)
 }
 
+// CreateIndex provides creating of the index for collection
+func (t *Txn) CreateIndex(name, data string) error {
+	return err
+}
+
+// checkIndex before create a new one
+func (t *Txn) checkIndex(name, data string) error {
+	if name == "" || data == "" {
+		return errNoIndexNameOrData
+	}
+}
+
 // SetWithTTL provides setting of key with Time To Live(TTL)
 func (t *Txn) SetWithTTL(key, value []byte, duration time.Time) error {
 	entry := &Entry{
