@@ -192,14 +192,24 @@ func (t *Txn) Set(key, value []byte) error {
 
 // CreateIndex provides creating of the index for collection
 func (t *Txn) CreateIndex(name, data string) error {
-	return err
+	if err := t.checkIndex(name, data); err != nil {
+		return err
+	}
+	return nil
 }
 
 // checkIndex before create a new one
 func (t *Txn) checkIndex(name, data string) error {
+	if t.store == nil {
+		return errNoStorage
+	}
+	if t.complete {
+		return errTransactionCompleted
+	}
 	if name == "" || data == "" {
 		return errNoIndexNameOrData
 	}
+	return nil
 }
 
 // SetWithTTL provides setting of key with Time To Live(TTL)
