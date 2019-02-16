@@ -195,6 +195,12 @@ func (t *Txn) CreateIndex(name, data string) error {
 	if err := t.checkIndex(name, data); err != nil {
 		return err
 	}
+	idx := &index{
+		name:  name,
+		data:  data,
+		store: t.store,
+	}
+	t.store.indexes[name] = idx
 	return nil
 }
 

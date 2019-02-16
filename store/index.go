@@ -4,6 +4,6 @@ package store
 type index struct {
 	name  string
 	data  string
-	F     func(a, b []byte) bool
+	fnc   func(a, b []byte) bool
 	store *Store
 }
