@@ -5,6 +5,8 @@ import (
 	"os"
 )
 
+const defaultWritePath = "ligthstore.db"
+
 // Writer provides writing of data(operation log) to file
 type Writer struct {
 	file *os.File
@@ -12,6 +14,9 @@ type Writer struct {
 
 // newWriter provides initialization of the Writer
 func newWriter(path string) (*Writer, error) {
+	if path == "" {
+		path = defaultWritePath
+	}
 	f, err := os.OpenFile(path, os.O_CREATE|os.O_RDWR, 0666)
 	if err != nil {
 		return nil, err
