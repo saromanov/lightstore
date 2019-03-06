@@ -29,7 +29,6 @@ type Settings struct {
 
 // Store provides implementation of the main store
 type Store struct {
-	items       int
 	dbs         map[string]*DB
 	store       ds.Storage
 	storename   string
@@ -52,7 +51,6 @@ func newStore(c *Config) (*Store, error) {
 	mutex := &sync.RWMutex{}
 	store := new(Store)
 	startTime := time.Now().UTC()
-	store.items = 0
 	fileWatcher, err := newWatcher(".")
 	if err != nil {
 		log.Info(fmt.Sprintf("unable to init file watcher: %v", err))
@@ -369,7 +367,6 @@ func InitStore(settings Settings) *Store {
 	mutex := &sync.RWMutex{}
 	store := new(Store)
 	startTime := time.Now().UTC()
-	store.items = 0
 	store.store = checkDS(settings.Innerdata)
 	store.keys = []string{}
 	store.dbs = make(map[string]*DB)
