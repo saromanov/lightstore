@@ -76,8 +76,6 @@ func newStore(c *Config) (*Store, error) {
 		if err != nil {
 			return nil, fmt.Errorf("unable to load data: %v", err)
 		}
-	} else {
-		c.LoadPath = "lightstore.db"
 	}
 	store.writer, err = newWriter(c.LoadPath)
 	if err != nil {
