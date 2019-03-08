@@ -10,7 +10,7 @@ import (
 	"os"
 	"path"
 	"strings"
-
+	"github.com/pkg/errors"
 	log "github.com/saromanov/lightstore/logging"
 	"github.com/saromanov/lightstore/proto"
 )
@@ -44,7 +44,10 @@ func NewSnapshot(st *Store, path string) *SnapshotObject {
 func (so *SnapshotObject) Write(w io.Writer) error {
 	buf := new(bytes.Buffer)
 	txn := so.st.NewTransaction(false)
-	it, _ := txn.NewIterator(IteratorOptions{})
+	it, err := txn.NewIterator(IteratorOptions{})
+	if err != nil {
+		return errors.Wrap(err, "unable to make iterator")
+	}
 	for it.First(); it.Valid(); it.Next() {
 		itm := it.Item()
 		data := &protos.KVPair{
@@ -53,7 +56,7 @@ func (so *SnapshotObject) Write(w io.Writer) error {
 		}
 		err := binary.Write(buf, binary.LittleEndian, data)
 		if err != nil {
-			fmt.Println("binary.Write failed:", err)
+			return errors.Wrap(err, "unable to write data")
 		}
 		fmt.Printf("% x", buf.Bytes())
 	}
