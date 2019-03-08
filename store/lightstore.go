@@ -1,6 +1,11 @@
 package store
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
+
+var errFnIsNotDefined = errors.New("function is not defined")
 
 // Lightstore defines main struct for db
 type Lightstore struct {
@@ -31,6 +36,9 @@ func (l *Lightstore) IsCreated() bool {
 
 // View creates new read-only transaction
 func (l *Lightstore) View(fn func(*Txn) error) error {
+	if fn == nil {
+		return errFnIsNotDefined
+	}
 	t := l.store.NewTransaction(false)
 	err := fn(t)
 	if err != nil {
@@ -42,12 +50,20 @@ func (l *Lightstore) View(fn func(*Txn) error) error {
 
 // Write provides write transaction
 func (l *Lightstore) Write(fn func(*Txn) error) error {
+	if fn == nil {
+		return errFnIsNotDefined
+	}
 	t := l.store.NewTransaction(true)
 	err := fn(t)
 	if err != nil {
 		l.errTransactions = append(l.errTransactions, t.ID())
 		return fmt.Errorf("unable to apply transaction: %v", err)
 	}
+	return nil
+}
+
+// Merge provides cleanup and optimization of the data
+func (l *Lightstore) Merge() error {
 	return nil
 }
 
