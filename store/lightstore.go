@@ -1,11 +1,6 @@
 package store
 
-import (
-	"errors"
-	"fmt"
-)
-
-var errFnIsNotDefined = errors.New("function is not defined")
+import "fmt"
 
 // Lightstore defines main struct for db
 type Lightstore struct {
