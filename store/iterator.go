@@ -90,6 +90,7 @@ func (it *Iterator) Next() *Item {
 		return nil
 	}
 	if !it.checkPrefix(key) {
+		it.item = &Item{}
 		return nil
 	}
 	it.item = &Item{
