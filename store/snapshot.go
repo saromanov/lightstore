@@ -10,6 +10,7 @@ import (
 	"os"
 	"path"
 	"strings"
+
 	"github.com/pkg/errors"
 	log "github.com/saromanov/lightstore/logging"
 	"github.com/saromanov/lightstore/proto"
@@ -59,19 +60,6 @@ func (so *SnapshotObject) Write(w io.Writer) error {
 			return errors.Wrap(err, "unable to write data")
 		}
 		fmt.Printf("% x", buf.Bytes())
-	}
-	return nil
-}
-
-func (so *SnapshotObject) write(w io.Writer) error {
-	kv := &protos.KVPair{}
-	buf, err := kv.Marshal()
-	if err != nil {
-		return fmt.Errorf("unable to marshal data to snapshot: %v", err)
-	}
-	_, err = w.Write(buf)
-	if err != nil {
-		return fmt.Errorf("unable to write data to snapshot: %v", err)
 	}
 	return nil
 }
