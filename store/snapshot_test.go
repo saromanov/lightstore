@@ -1,6 +1,7 @@
 package store
 
 import (
+	"os"
 	"testing"
 )
 
@@ -21,8 +22,13 @@ func TestSnapshot(t *testing.T) {
 		t.Fatalf("unable to write data: %v", err)
 	}
 
+	f, err := os.Create("/tmp/dat2")
+	if err != nil {
+		t.Fatalf("unable to write data: %v", err)
+	}
+	defer f.Close()
 	snap := NewSnapshot(light.getStore(), "./snapshot1")
-	err = snap.Write(nil)
+	err = snap.Write(f)
 	if err != nil {
 		t.Fatalf("unable to write snapshot: %v", err)
 	}

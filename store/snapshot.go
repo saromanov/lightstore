@@ -50,7 +50,15 @@ func (so *Snapshot) Write(w io.Writer) error {
 			Key:   itm.Key(),
 			Value: itm.ValueData(),
 		}
-		err := binary.Write(buf, binary.LittleEndian, data)
+		err := binary.Write(w, binary.LittleEndian, uint64(data.Size()))
+		if err != nil {
+			return errors.Wrap(err, "unable to write size info")
+		}
+		bufWr, err := data.Marshal()
+		if err != nil {
+			return errors.Wrap(err, "unable to marshal data")
+		}
+		_, err = w.Write(bufWr)
 		if err != nil {
 			return errors.Wrap(err, "unable to write data")
 		}
