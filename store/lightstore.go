@@ -62,11 +62,6 @@ func (l *Lightstore) Write(fn func(*Txn) error) error {
 	return nil
 }
 
-// Merge provides cleanup and optimization of the data
-func (l *Lightstore) Merge() error {
-	return nil
-}
-
 // Close provides closing of Lightstore session
 func (l *Lightstore) Close() error {
 	if l != nil && l.store != nil {
