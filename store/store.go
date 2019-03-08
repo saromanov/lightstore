@@ -36,7 +36,6 @@ type Store struct {
 	lock        *sync.RWMutex
 	stat        *stats.Statistics
 	config      *Config
-	pubsub      *Pubsub
 	compression bool
 	fileWatcher *watcher
 	writer      *Writer
@@ -258,7 +257,6 @@ func (st *Store) set(dbname string, key []byte, value []byte, opt ds.ItemOptions
 			dbdata, _ := st.dbs[dbname]
 			dbdata.datacount += 1
 		}
-		st.PublishKeyValue(string(key), string(dbname))
 		st.stat.NumWrites += 1
 		fmt.Println(fmt.Sprintf("Stored in : %s", time.Since(startTime)))
 	}(store)
@@ -310,14 +308,6 @@ func (st *Store) SubscribeKey(item string) {
 
 }
 
-func (st *Store) PublishInfo(key string) {
-	st.pubsub.Publish(&PublishData{Title: key, Msg: "newmsg"})
-}
-
-func (st *Store) PublishKeyValue(key, value string) {
-	st.pubsub.Publish(&PublishData{Title: key, Msg: value})
-}
-
 // ISCreated returns true of store was created
 func (st *Store) IsCreated() bool {
 	return true
@@ -367,6 +357,5 @@ func InitStore(settings Settings) *Store {
 	store.stat = new(stats.Statistics)
 	store.stat.Start = startTime
 	store.config = LoadConfigData("")
-	store.pubsub = PubsubInit()
 	return store
 }
