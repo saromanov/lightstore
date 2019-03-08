@@ -59,7 +59,7 @@ func newStore(c *Config) (*Store, error) {
 		monitoring.Init()
 	}
 	store.fileWatcher = fileWatcher
-	store.store = checkDS("")
+	store.store = makeStorage("")
 	store.keys = []string{}
 	store.compression = c.Compression
 	store.dbs = make(map[string]*DB)
@@ -326,24 +326,17 @@ func (st *Store) IsCreated() bool {
 func (st *Store) makeSnapshot() {
 }
 
-//This private method provides checking inner datastructure for storing
-func checkDS(name string) (result ds.Storage) {
-	result = ds.NewDict()
-	/* SkipList datastructure as main store */
-	if name == "skiplist" {
-		result = ds.NewSkipList()
+// makeStorage provides creating of the engine for storage
+func makeStorage(name string) ds.Storage {
+	switch name {
+	case "skiplist":
+		return ds.NewSkipList()
+	case "dict":
+		return ds.NewDict()
+	case "b-tree":
+		return ds.InitBTree(10)
 	}
-
-	/* Simple map as main store */
-	if name == "dict" {
-		result = ds.NewDict()
-	}
-
-	/*B-tree structure as main store */
-	if name == "b-tree" {
-		result = ds.InitBTree(10)
-	}
-	return result
+	return ds.NewDict()
 }
 
 //Every provides doing some operation every n seconds/minutes
@@ -367,7 +360,7 @@ func InitStore(settings Settings) *Store {
 	mutex := &sync.RWMutex{}
 	store := new(Store)
 	startTime := time.Now().UTC()
-	store.store = checkDS(settings.Innerdata)
+	store.store = makeStorage(settings.Innerdata)
 	store.keys = []string{}
 	store.dbs = make(map[string]*DB)
 	store.lock = mutex
