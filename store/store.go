@@ -69,9 +69,9 @@ func newStore(c *Config) (*Store, error) {
 	c.setMissedValues()
 	store.config = c
 	if c.LoadPath != "" {
-		err := loadData(store, c.LoadPath)
-		if err != nil {
-			return nil, fmt.Errorf("unable to load data: %v", err)
+		errLoad := loadData(store, c.LoadPath)
+		if errLoad != nil {
+			return nil, fmt.Errorf("unable to load data: %v", errLoad)
 		}
 	}
 	store.writer, err = newWriter(c.LoadPath)
@@ -101,7 +101,7 @@ func loadData(st *Store, path string) error {
 		if bytes.Compare(line, []byte("set;")) == 0 {
 			commandSet = true
 		} else if bytes.Compare(line, []byte("end;")) == 0 {
-			if commandSet == true {
+			if commandSet {
 				commandSet = false
 				inc = 0
 				err := st.store.Put(key, value, ds.ItemOptions{})
@@ -231,40 +231,6 @@ func (st *Store) Exist(key []byte) bool {
 	return store.Exist(key)
 }
 
-func (st *Store) set(dbname string, key []byte, value []byte, opt ds.ItemOptions) bool {
-	st.lock.Lock()
-	defer st.lock.Unlock()
-	store := st.store
-	if dbname != "" {
-		//check db availability
-		dbdata, ok := st.dbs[dbname]
-		if !ok {
-			log.Info(fmt.Sprintf("db with name %s is not found", dbname))
-			return false
-		} else if !dbdata.isactive {
-			log.Info(fmt.Sprintf("db with name %s is not active", dbname))
-			return false
-		} else if dbdata.limit != -1 && (dbdata.limit-dbdata.datacount) == 0 {
-			log.Info(fmt.Sprintf("db with name %s not availability to write, because contains maxumum possible number of data objrct", dbname))
-			return false
-		}
-	}
-
-	go func(s ds.Storage) {
-		startTime := time.Now()
-		s.Put(key, value, ds.ItemOptions{})
-		if dbname != "" {
-			dbdata, _ := st.dbs[dbname]
-			dbdata.datacount += 1
-		}
-		st.stat.NumWrites += 1
-		fmt.Println(fmt.Sprintf("Stored in : %s", time.Since(startTime)))
-	}(store)
-
-	return true
-
-}
-
 //Remove provides clearning current key
 func (st *Store) Remove(key []byte) {
 	st.store.Delete(key)
@@ -302,10 +268,6 @@ func (st *Store) Stat() *stats.Statistics {
 
 func (st *Store) Close() {
 	fmt.Println("End working: ", time.Now())
-}
-
-func (st *Store) SubscribeKey(item string) {
-
 }
 
 // ISCreated returns true of store was created

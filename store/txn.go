@@ -44,7 +44,6 @@ func (a EntrySlice) Less(i, j int) bool { return a[i].timestamp < a[j].timestamp
 type pendingWritesIterator struct {
 	entries EntrySlice
 	nextIdx int
-	readTs  uint64
 }
 
 // Start is moving iteration to the start

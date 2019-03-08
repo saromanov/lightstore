@@ -28,7 +28,7 @@ func TestTxnStart(t *testing.T) {
 	if result == nil {
 		t.Fatal("result value is empty")
 	}
-	if bytes.Compare(result, []byte("bar")) != 0 {
+	if !bytes.Equal(result, []byte("bar")) {
 		t.Fatal("unable to get result")
 	}
 }

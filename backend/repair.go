@@ -40,5 +40,5 @@ func (rep *Repair) GetFromRepair(key, value string) (*RepairItem, error) {
 		}
 	}
 
-	return nil, errors.New("Repair: Element not found")
+	return nil, errors.New("repair: Element not found")
 }
