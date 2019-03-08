@@ -1,4 +1,3 @@
-// snapshot provides creating of shanpshots
 package store
 
 import (
@@ -16,13 +15,8 @@ import (
 	"github.com/saromanov/lightstore/proto"
 )
 
-//Basic snapshot for all data in ligtstore
-
-type snapshot interface {
-	Write(object SnapshotObject)
-}
-
-type SnapshotObject struct {
+// Snapshot provides creating of the new snapshoе
+type Snapshot struct {
 	Crc32 string
 	Data  string
 	Dir   string
@@ -30,19 +24,20 @@ type SnapshotObject struct {
 }
 
 //NewSnapshot object provides initialization od new snapshot
-func NewSnapshot(st *Store, path string) *SnapshotObject {
-	so := new(SnapshotObject)
-	so.Dir = "."
-	so.st = st
+func NewSnapshot(st *Store, path string) *Snapshot {
+	dir := "."
 	if path != "" {
-		so.Dir = path
+		dir = path
 	}
-	return so
+	return &Snapshot{
+		st:  st,
+		Dir: dir,
+	}
 }
 
 // Write is a method for writing of
 // snapshots with entries
-func (so *SnapshotObject) Write(w io.Writer) error {
+func (so *Snapshot) Write(w io.Writer) error {
 	buf := new(bytes.Buffer)
 	txn := so.st.NewTransaction(false)
 	it, err := txn.NewIterator(IteratorOptions{})
@@ -66,7 +61,7 @@ func (so *SnapshotObject) Write(w io.Writer) error {
 
 //Read provides reading snapshot and store data to lightstore
 //if name is ""(empty), load more recently snapshot
-func (so *SnapshotObject) Read(name string) {
+func (so *Snapshot) Read(name string) {
 	_, err := ioutil.ReadFile(path.Join(so.Dir, name))
 	if err != nil {
 		panic(fmt.Sprintf("Can't find snapshot with the name %s", name))
@@ -81,7 +76,7 @@ func (so *SnapshotObject) Read(name string) {
 }
 
 //Read newest provides reading most newest snapshot
-func (so *SnapshotObject) ReadNewest() {
+func (so *Snapshot) ReadNewest() {
 	snapshots := checkAvailableSnapshots(so.Dir)
 	if len(snapshots) == 0 {
 		log.Info("Can't find available snapshots")
